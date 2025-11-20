@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sign Up</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+            background: linear-gradient(135deg, #05050a 0%, #0a0a1a 50%, #0d0d26 100%);
+            color: #e0e0e0;
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #glow-canvas {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            display: block;
+            z-index: 0;
+            pointer-events: none;
+        }
+        .login-container {
+            background: rgba(20, 20, 30, 0.3);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 1.5rem;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            position: relative;
+            z-index: 1;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .login-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+        }
+     h2 {
+    font-size: 2.5rem;
+    font-weight: 300;              /* makes text thinner */
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: 1px;           /* slightly less spacing for narrower look */
+    text-shadow: 0 0 10px rgba(100, 100, 255, 0.5);
+}
+
+        .flash-messages {
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        .flash-messages p {
+            color: #ff5555;
+            font-size: 1rem;
+            font-weight: 500;
+            background: rgba(255, 85, 85, 0.1);
+            padding: 0.5rem;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 85, 85, 0.3);
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        label {
+            font-size: 1.1rem;
+            color: #d0d0ff;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            padding: 0.8rem;
+            font-size: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: #ffffff;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="password"]:focus {
+            outline: none;
+            border-color: #6464ff;
+            box-shadow: 0 0 10px rgba(100, 100, 255, 0.5);
+        }
+        input[type="submit"] {
+            padding: 0.8rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            background: linear-gradient(90deg, #6464ff, #ff64ff);
+            border: none;
+            border-radius: 8px;
+            color: #ffffff;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        input[type="submit"]:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(100, 100, 255, 0.7);
+        }
+        p {
+            text-align: center;
+            margin-top: 1.5rem;
+            font-size: 1rem;
+            color: #b0b0ff;
+        }
+        a {
+            color: #6464ff;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+        a:hover {
+            color: #ff64ff;
+            text-decoration: underline;
+        }
+        @media (max-width: 600px) {
+            .login-container {
+                padding: 2rem;
+                max-width: 90%;
+            }
+            h2 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="glow-canvas"></canvas>
+    <div class="login-container">
+        <h2>Sign Up</h2>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        <form method="POST">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+            <input type="submit" value="Sign Up">
+        </form>
+        <p>Already have an account? <a href="{{ url_for('app2.login') }}">Login</a></p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+(() => {
+    const canvas = document.getElementById('glow-canvas');
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setSize(window.innerWidth, window.innerHeight);
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 2000);
+    camera.position.z = 300;
+
+    const PARTICLE_COUNT = Math.min(12000, Math.floor((window.innerWidth * window.innerHeight) / 1000));
+    const BOUNDS = 500;
+
+    const geometry = new THREE.BufferGeometry();
+    const positions = new Float32Array(PARTICLE_COUNT * 3);
+    const speeds = new Float32Array(PARTICLE_COUNT);
+    const sizes = new Float32Array(PARTICLE_COUNT);
+    const seed = new Float32Array(PARTICLE_COUNT);
+
+    for (let i = 0; i < PARTICLE_COUNT; i++) {
+        const i3 = i * 3;
+        positions[i3] = (Math.random() - 0.5) * BOUNDS * 2;
+        positions[i3 + 1] = (Math.random() - 0.5) * BOUNDS;
+        positions[i3 + 2] = (Math.random() - 0.5) * BOUNDS * 0.5;
+        speeds[i] = 0.2 + Math.random() * 1.0;
+        sizes[i] = 1.0 + Math.random() * 2.5;
+        seed[i] = Math.random() * 1000.0;
+    }
+
+    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    geometry.setAttribute('aSpeed', new THREE.BufferAttribute(speeds, 1));
+    geometry.setAttribute('aSize', new THREE.BufferAttribute(sizes, 1));
+    geometry.setAttribute('aSeed', new THREE.BufferAttribute(seed, 1));
+
+    const vertexShader = `
+        uniform float uTime;
+        attribute float aSpeed;
+        attribute float aSize;
+        attribute float aSeed;
+        varying float vDepth;
+        varying float vSeed;
+
+        void main() {
+            vec3 pos = position;
+            float t = uTime * 0.15 * aSpeed + aSeed;
+            pos.x += sin(t * 0.8) * 20.0;
+            pos.y += cos(t * 1.0) * 15.0;
+            pos.z += sin(t * 0.6) * 8.0;
+
+            vDepth = (pos.z + ${BOUNDS.toFixed(1)}) / ${(BOUNDS * 2).toFixed(1)};
+            
+            vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
+            gl_Position = projectionMatrix * mvPosition;
+            gl_PointSize = (aSize * 2.0 + 6.0) * (250.0 / (250.0 + mvPosition.z));
+            vSeed = aSeed;
+        }
+    `;
+
+    const fragmentShader = `
+        precision highp float;
+        uniform float uTime;
+        varying float vDepth;
+        varying float vSeed;
+
+        void main() {
+            vec2 uv = gl_PointCoord - 0.5;
+            float dist = length(uv);
+            float alpha = smoothstep(0.5, 0.0, dist);
+            
+            float pulse = 0.5 + 0.5 * sin(uTime * 1.2 + vSeed * 4.0);
+            
+            vec3 colorA = vec3(0.39, 0.40, 0.95);
+            vec3 colorB = vec3(0.55, 0.36, 0.96);
+            vec3 colorC = vec3(0.93, 0.28, 0.60);
+            
+            float mixVal = smoothstep(0.0, 1.0, vDepth);
+            vec3 col = mix(colorA, colorB, mixVal);
+            col = mix(col, colorC, sin(uTime * 0.25 + vSeed) * 0.3);
+            
+            float halo = smoothstep(0.6, 0.0, dist);
+            float glow = pow(halo, 1.8) * alpha * pulse;
+            
+            gl_FragColor = vec4(col * glow, glow * 0.85);
+            if (dist > 0.5) discard;
+        }
+    `;
+
+    const uniforms = {
+        uTime: { value: 0 },
+        uResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) }
+    };
+
+    const material = new THREE.ShaderMaterial({
+        uniforms,
+        vertexShader,
+        fragmentShader,
+        transparent: true,
+        depthTest: true,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending
+    });
+
+    const points = new THREE.Points(geometry, material);
+    scene.add(points);
+
+    function onResize() {
+        const w = window.innerWidth;
+        const h = window.innerHeight;
+        renderer.setSize(w, h);
+        camera.aspect = w / h;
+        camera.updateProjectionMatrix();
+        uniforms.uResolution.value.set(w, h);
+    }
+    window.addEventListener('resize', onResize, { passive: true });
+
+    let mouseX = 0, mouseY = 0;
+    window.addEventListener('mousemove', (e) => {
+        mouseX = (e.clientX / window.innerWidth) - 0.5;
+        mouseY = (e.clientY / window.innerHeight) - 0.5;
+    }, { passive: true });
+
+    const clock = new THREE.Clock();
+    function animate() {
+        requestAnimationFrame(animate);
+        uniforms.uTime.value = clock.getElapsedTime();
+        
+        camera.position.x += (mouseX * 30 - camera.position.x) * 0.02;
+        camera.position.y += (-mouseY * 15 - camera.position.y) * 0.02;
+        camera.lookAt(0, 0, 0);
+        
+        points.rotation.y += 0.0006;
+        points.rotation.x += 0.0002;
+        
+        renderer.render(scene, camera);
+    }
+    animate();
+
+    window.addEventListener('pagehide', () => {
+        geometry.dispose();
+        material.dispose();
+        renderer.dispose();
+    });
+})();
+    </script>
+</body>
+</html>

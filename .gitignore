@@ -1,0 +1,16 @@
+
+.env
+
+*.db
+
+instance/
+
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+*.pth
+*.h5
+*.pt
+

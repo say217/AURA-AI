@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AURA - Cancer Tissue Classifier</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+    font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    background: #000000;
+    color: #b0b0b0;
+    overflow-x: hidden;
+    min-height: 100vh;
+}
+
+.nav-header {
+    background: #0a0a0a;
+    border-bottom: 1px solid #1a1a1a;
+    padding: 16px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.logo-section {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo-icon {
+    width: 32px;
+    height: 32px;
+    background: #ffffff;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo-icon i {
+    color: #000000;
+    font-size: 16px;
+}
+
+.logo-text {
+    font-size: 20px;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 2px;
+}
+
+.nav-menu {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+}
+
+.nav-link {
+    color: #666666;
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.nav-link i {
+    font-size: 14px;
+}
+
+.nav-link:hover {
+    background: #1a1a1a;
+    color: #ffffff;
+}
+
+.nav-link.active {
+    background: #ffffff;
+    color: #000000;
+}
+
+.logout-btn {
+    background: #1a1a1a;
+    color: #999999;
+}
+
+.logout-btn:hover {
+    background: #262626;
+    color: #ffffff;
+}
+
+.main-container {
+    display: flex;
+    min-height: calc(100vh - 64px);
+    gap: 0;
+}
+
+/* SWAPPED: Results on LEFT (65%) */
+.results-container {
+    flex: 0 0 65%;
+    background: #000000;
+    border-right: 1px solid #1a1a1a;
+    overflow-y: auto;
+    padding: 32px;
+    scrollbar-width: thin;
+    scrollbar-color: #262626 #0a0a0a;
+}
+
+.results-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.results-container::-webkit-scrollbar-track {
+    background: #0a0a0a;
+}
+
+.results-container::-webkit-scrollbar-thumb {
+    background: #262626;
+    border-radius: 6px;
+}
+
+.results-container::-webkit-scrollbar-thumb:hover {
+    background: #333333;
+}
+
+/* SWAPPED: Input on RIGHT (35%) */
+.input-container {
+    flex: 0 0 35%;
+    background: #0a0a0a;
+    padding: 32px;
+    position: sticky;
+    top: 64px;
+    height: calc(100vh - 64px);
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #262626 #0a0a0a;
+}
+
+.input-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.input-container::-webkit-scrollbar-track {
+    background: #0a0a0a;
+}
+
+.input-container::-webkit-scrollbar-thumb {
+    background: #262626;
+    border-radius: 6px;
+}
+
+.card {
+    background: #0a0a0a;
+    border: 1px solid #1a1a1a;
+    border-radius: 8px;
+    padding: 24px;
+    margin-bottom: 24px;
+    transition: all 0.2s ease;
+}
+
+.card:hover {
+    border-color: #333333;
+}
+
+.input-card {
+    background: transparent;
+    border: none;
+    padding: 0;
+}
+
+h1, h2, h3 {
+    color: #ffffff;
+    font-weight: 600;
+}
+
+h1 {
+    font-size: 24px;
+    margin-bottom: 8px;
+}
+
+h2 {
+    font-size: 18px;
+    margin-bottom: 16px;
+}
+
+h3 {
+    font-size: 16px;
+    margin-bottom: 12px;
+}
+
+input[type="file"] {
+    width: 100%;
+    padding: 12px;
+    background: #0a0a0a;
+    border: 1px solid #1a1a1a;
+    border-radius: 6px;
+    color: #b0b0b0;
+    margin-bottom: 20px;
+    font-size: 14px;
+    transition: all 0.2s ease;
+}
+
+input[type="file"]:focus {
+    outline: none;
+    border-color: #ffffff;
+}
+
+button {
+    background: linear-gradient(135deg, #ffffff 0%, #e0e0e0 100%);
+    color: #000000;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    width: 100%;
+}
+
+button:hover {
+    background: linear-gradient(135deg, #e0e0e0 0%, #cccccc 100%);
+    transform: translateY(-1px);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+.file-input-wrapper {
+    position: relative;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.file-input-label {
+    background: #0a0a0a;
+    border: 2px dashed #1a1a1a;
+    border-radius: 8px;
+    color: #666666;
+    cursor: pointer;
+    display: block;
+    padding: 32px 24px;
+    text-align: center;
+    transition: all 0.2s ease;
+}
+
+.file-input-label:hover {
+    border-color: #333333;
+    background: #0f0f0f;
+}
+
+.file-input-label input[type=file] {
+    position: absolute;
+    left: -9999px;
+}
+
+.file-input-label i {
+    font-size: 32px;
+    color: #ffffff;
+    margin-bottom: 12px;
+    display: block;
+}
+
+.file-input-label strong {
+    color: #ffffff;
+    font-size: 16px;
+    display: block;
+    margin: 8px 0;
+}
+
+.preview-gallery {
+    margin-top: 20px;
+}
+
+.preview-gallery h3 {
+    color: #ffffff;
+    font-size: 14px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.preview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.preview-thumbnail {
+    position: relative;
+    width: 100%;
+    height: 120px;
+    background: #0a0a0a;
+    border: 1px solid #1a1a1a;
+    border-radius: 6px;
+    overflow: hidden;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.preview-thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+.preview-thumbnail:hover {
+    border-color: #333333;
+}
+
+.delete-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: #ffffff;
+    color: #000000;
+    border: none;
+    border-radius: 4px;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: all 0.2s ease;
+    z-index: 10;
+    padding: 0;
+}
+
+.preview-thumbnail:hover .delete-btn {
+    opacity: 1;
+}
+
+.delete-btn:hover {
+    background: #cccccc;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.95);
+}
+
+.modal-content {
+    position: relative;
+    margin: auto;
+    padding: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    max-width: 90%;
+    max-height: 90%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal img {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 8px;
+}
+
+.close {
+    position: absolute;
+    top: 20px;
+    right: 40px;
+    color: #ffffff;
+    font-size: 36px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 2001;
+    transition: all 0.2s ease;
+}
+
+.close:hover {
+    color: #cccccc;
+}
+
+.result-item {
+    background: #0a0a0a;
+    border: 1px solid #1a1a1a;
+    border-radius: 8px;
+    padding: 24px;
+    margin-bottom: 24px;
+    transition: all 0.2s ease;
+}
+
+.result-item:hover {
+    border-color: #333333;
+}
+
+.explanation {
+    background: #000000;
+    border: 1px solid #1a1a1a;
+    padding: 20px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+}
+
+.explanation p {
+    margin: 0;
+    line-height: 1.7;
+    color: #808080;
+}
+
+.plot {
+    margin: 24px 0;
+    text-align: center;
+}
+
+.plot img {
+    max-width: 100%;
+    height: auto;
+    border: 1px solid #1a1a1a;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    background: #0a0a0a;
+}
+
+.plot img:hover {
+    border-color: #333333;
+}
+
+.flash-messages {
+    list-style-type: none;
+    padding: 0;
+    margin: 0 0 24px 0;
+}
+
+.flash-messages li {
+    background: #1a1a1a;
+    color: #999999;
+    padding: 12px 20px;
+    margin-bottom: 12px;
+    border-radius: 6px;
+    border: 1px solid #262626;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 64px 24px;
+    color: #666666;
+    background: #0a0a0a;
+    border-radius: 8px;
+    border: 1px solid #1a1a1a;
+}
+
+.empty-state i {
+    font-size: 48px;
+    color: #333333;
+    margin-bottom: 16px;
+}
+
+.empty-state h3 {
+    color: #999999;
+    font-weight: 500;
+    margin-bottom: 12px;
+}
+
+p {
+    color: #808080;
+    line-height: 1.6;
+}
+
+small {
+    color: #666666;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+    gap: 22px;
+    margin-top: 22px;
+}
+
+.card-grid {
+    background: #0a0a0a;
+    border: 1px solid #1a1a1a;
+    border-radius: 8px;
+    padding: 18px;
+    text-align: center;
+    transition: all 0.2s ease;
+}
+
+.card-grid:hover {
+    border-color: #333333;
+}
+
+.card-grid img {
+    max-width: 100%;
+    border-radius: 8px;
+    margin-top: 8px;
+    border: 1px solid #1a1a1a;
+}
+
+.card-grid p {
+    margin-top: 10px;
+    font-size: 0.9rem;
+    color: #808080;
+}
+
+.highlight {
+    background: #e74c3c;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.info-box {
+    background: #0a0a0a;
+    border-left: 5px solid #ffffff;
+    padding: 15px;
+    margin: 20px 0;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    border: 1px solid #1a1a1a;
+    border-radius: 6px;
+    color: #808080;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 18px;
+    font-size: 0.94rem;
+    background: #0a0a0a;
+    border: 1px solid #1a1a1a;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #1a1a1a;
+}
+
+th {
+    background: #1a1a1a;
+    color: #ffffff;
+    font-weight: 600;
+}
+
+tr:hover {
+    background: #0f0f0f;
+}
+
+tr.highlight-row {
+    background: #1a1a1a !important;
+    font-weight: 600;
+    color: #ffffff;
+}
+
+.back {
+    display: inline-block;
+    margin: 25px auto;
+    padding: 12px 24px;
+    background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+    color: #000000;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    text-align: center;
+    width: 100%;
+}
+
+.back:hover {
+    background: linear-gradient(135deg, #219a52 0%, #27ae60 100%);
+    transform: translateY(-1px);
+}
+
+.about-section {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid #1a1a1a;
+}
+
+.about-section h3 {
+    font-size: 14px;
+    color: #999999;
+    margin-bottom: 12px;
+}
+
+.about-section p {
+    font-size: 13px;
+    color: #666666;
+    margin: 8px 0;
+    line-height: 1.6;
+}
+
+.model-info {
+    background: #000000;
+    border: 1px solid #1a1a1a;
+    border-radius: 6px;
+    padding: 16px;
+    margin-top: 16px;
+}
+
+.model-info h4 {
+    font-size: 13px;
+    color: #ffffff;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.model-info ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.model-info li {
+    font-size: 12px;
+    color: #808080;
+    padding: 6px 0;
+    padding-left: 20px;
+    position: relative;
+}
+
+.model-info li:before {
+    content: "→";
+    position: absolute;
+    left: 0;
+    color: #666666;
+}
+
+@media (max-width: 968px) {
+    .main-container {
+        flex-direction: column-reverse;
+    }
+
+    .results-container,
+    .input-container {
+        flex: none;
+        width: 100%;
+        height: auto;
+        position: relative;
+        border: none;
+    }
+
+    .input-container {
+        height: auto;
+        top: 0;
+    }
+
+    .nav-menu {
+        flex-wrap: wrap;
+        gap: 4px;
+    }
+
+    .nav-link {
+        font-size: 13px;
+        padding: 6px 12px;
+    }
+
+    .preview-grid {
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        gap: 12px;
+    }
+
+    .preview-thumbnail {
+        height: 100px;
+    }
+
+    .grid {
+        grid-template-columns: 1fr;
+    }
+}
+    </style>
+</head>
+<body>
+    <div class="nav-header">
+        <div class="logo-section">
+            <div class="logo-icon">
+                <i class="fas fa-microscope"></i>
+            </div>
+            <div class="logo-text">AURA</div>
+        </div>
+        <nav class="nav-menu">
+            <a href="{{ url_for('app1.home') }}" class="nav-link"><i class="fas fa-home"></i> Home</a>
+            <a href="#results" class="nav-link active"><i class="fas fa-chart-line"></i> Results</a>
+            <a href="{{ url_for('app4.page') }}" class="nav-link"><i class="fas fa-flask"></i> App4</a>
+            <a href="{{ url_for('app3.page') }}" class="nav-link"><i class="fas fa-dna"></i> App3</a>
+            <a href="{{ url_for('app5.page') }}" class="nav-link"><i class="fas fa-pills"></i> App5</a>
+            <a href="{{ url_for('app2.logout') }}" class="nav-link logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </nav>
+    </div>
+
+    <div class="main-container">
+        <!-- LEFT SIDE: Results Container (65%) -->
+        <div class="results-container" id="results">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <ul class="flash-messages">
+                        {% for message in messages %}
+                            <li><i class="fas fa-exclamation-triangle"></i> {{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endwith %}
+
+            {% if report %}
+                <div class="result-item">
+                    <h2><i class="fas fa-file-medical-alt"></i> Cancer Tissue Analysis Report</h2>
+                    <div class="explanation">
+                        <h3><i class="fas fa-clipboard-list"></i> Final Prediction</h3>
+                        <p style="font-size: 1.5rem; text-align: center; margin: 12px 0; color: #ffffff;">
+                            <span class="highlight">{{ report.pred_class }}</span><br>
+                
+                            <em style="font-size:1.1rem; color: #b0b0b0;">{{ report.status }}</em>
+                        </p>
+                    </div>
+
+                    <div class="info-box">
+                        <strong><i class="fas fa-info-circle"></i> Understanding the Results</strong><br>
+                        The deep learning model has analyzed the uploaded histopathology image and is <strong>{{ "%.0f"|format(report.confidence*100) }}% confident</strong>
+                        that the tissue belongs to the class shown above. A <strong>Cancer Positive (+)</strong> result indicates malignant tissue patterns, 
+                        while <strong>Cancer Negative (–)</strong> indicates benign tissue. This analysis uses ResNet-18 architecture trained on extensive histopathological datasets.
+                    </div>
+
+                    <div class="grid">
+                        <div class="card-grid">
+                            <h3><i class="fas fa-image"></i> Original Image</h3>
+                            <img src="data:image/png;base64,{{ report.original_b64 }}" alt="original">
+                            <p>The exact histology slide you uploaded with preserved aspect ratio and color information.</p>
+                        </div>
+
+                        <div class="card-grid">
+                            <h3><i class="fas fa-cogs"></i> Processed (224×224)</h3>
+                            <img src="data:image/png;base64,{{ report.processed_b64 }}" alt="processed">
+                            <p>Resized and normalized image – the standardized format fed into the neural network for analysis.</p>
+                        </div>
+
+                        <div class="card-grid">
+                            <h3><i class="fas fa-fire"></i> Grad-CAM Heatmap Overlay</h3>
+                            <img src="data:image/png;base64,{{ report.overlay_b64 }}" alt="overlay">
+                            <p><strong>Red/warm areas</strong> indicate regions the model focused on most heavily when making its classification decision.
+                            This explainability feature helps verify that the AI is examining clinically relevant tissue structures.</p>
+                        </div>
+                    </div>
+
+                    <div class="plot">
+                        <h3><i class="fas fa-chart-bar"></i> Confidence Distribution Across All Classes</h3>
+                        <img src="data:image/png;base64,{{ report.bar_b64 }}"
+                             alt="confidence bar chart"
+                             style="display:block; margin:auto; max-width:100%; border:1px solid #1a1a1a; border-radius:8px;">
+
+                        <div class="info-box" style="margin-top:18px;">
+                            <strong><i class="fas fa-chart-pie"></i> Probability Interpretation</strong><br>
+                            This bar chart displays the probability the model assigned to each possible tissue classification. 
+                            The <strong style="color: #e74c3c;">red bar</strong> represents the final prediction with highest confidence. 
+                            Even with high-confidence predictions, the model may assign small probabilities to other classes – 
+                            this is normal behavior for deep neural networks and represents the model's uncertainty distribution.
+                        </div>
+                    </div>
+
+                    <div class="explanation">
+                        <h3><i class="fas fa-table"></i> Detailed Class-wise Probabilities</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Tissue Classification</th>
+                                    <th>Probability Score</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for cls, prob in report.probabilities %}
+                                <tr {% if cls == report.pred_class %} class="highlight-row" {% endif %}>
+                                    <td>{{ cls }}</td>
+                                    <td>{{ "%.2f"|format(prob * 100) }}%</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                        <p style="margin-top: 12px; font-size: 13px; color: #666666;">
+                            <i class="fas fa-lightbulb"></i> The highlighted row shows the model's final classification decision based on maximum probability.
+                        </p>
+                    </div>
+
+                    <div class="info-box">
+                        <strong><i class="fas fa-exclamation-circle"></i> Clinical Disclaimer</strong><br>
+                        This AI-powered tool is designed to assist in tissue classification and should be used as a supplementary diagnostic aid. 
+                        All results must be reviewed and validated by qualified medical professionals. This tool does not replace expert pathological examination 
+                        and should not be used as the sole basis for clinical decisions.
+                    </div>
+
+                    <a href="{{ url_for('app3.page') }}" class="back"><i class="fas fa-redo"></i> Analyze Another Image</a>
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <i class="fas fa-microscope"></i>
+                    <h3>Ready for Analysis</h3>
+                    <p>Upload a histopathology image using the panel on the right to begin cancer tissue classification.</p>
+                    <p style="margin-top: 12px; font-size: 13px;">
+                        The AI model will analyze cellular patterns, tissue morphology, and structural features to provide a classification with confidence scores.
+                    </p>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- RIGHT SIDE: Input Container (35%) -->
+        <div class="input-container">
+            <div class="input-card" id="description">
+                <h1><i class="fas fa-brain"></i> Cancer Tissue Classification</h1>
+                <p style="margin-bottom: 24px;">Upload histopathological tissue images to obtain cancer-positive or cancer-negative classifications from our deep learning model trained with ResNet-18 architecture.</p>
+                
+                <form method="POST" enctype="multipart/form-data" id="uploadForm">
+                    <div class="file-input-wrapper">
+                        <label for="imageInput" class="file-input-label">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <strong>Choose Histology Image</strong><br>
+                            <small>Select a tissue sample image for analysis</small>
+                            <input type="file" id="imageInput" name="images" accept="image/*" required>
+                        </label>
+                    </div>
+                    
+                    <div class="preview-gallery" id="previewGallery" style="display: none;">
+                        <h3><i class="fas fa-images"></i> Selected Image</h3>
+                        <div class="preview-grid" id="previewGrid"></div>
+                    </div>
+                    
+                    <button type="submit" id="classifyBtn">
+                        <i class="fas fa-magic"></i> Classify Tissue
+                    </button>
+                </form>
+
+                <div class="about-section">
+                    <h3><i class="fas fa-info-circle"></i> About This Tool</h3>
+                    <p>
+                        This advanced diagnostic tool utilizes a ResNet-18 deep learning model to analyze histopathology images 
+                        and classify tissue samples into five distinct categories covering both colon and lung tissue types.
+                    </p>
+
+                    <div class="model-info">
+                        <h4><i class="fas fa-cogs"></i> Model Capabilities</h4>
+                        <ul>
+                            <li>Colon Adenocarcinoma Detection</li>
+                            <li>Colon Benign Tissue Identification</li>
+                            <li>Lung Adenocarcinoma Detection</li>
+                            <li>Lung Benign Tissue Identification</li>
+                            <li>Lung Squamous Cell Carcinoma Detection</li>
+                        </ul>
+                    </div>
+
+                    <div class="model-info" style="margin-top: 12px;">
+                        <h4><i class="fas fa-chart-line"></i> Analysis Features</h4>
+                        <ul>
+                            <li>Confidence probability scores for each class</li>
+                            <li>Grad-CAM visualization showing diagnostic regions</li>
+                            <li>Detailed probability distribution analysis</li>
+                            <li>Real-time processing with GPU acceleration</li>
+                        </ul>
+                    </div>
+
+                    <p style="margin-top: 16px; font-size: 12px; color: #666666;">
+                        <i class="fas fa-shield-alt"></i> Results are generated using state-of-the-art computer vision techniques 
+                        but require validation by medical professionals for clinical use.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Image Modal -->
+    <div id="imageModal" class="modal">
+        <span class="close">&times;</span>
+        <div class="modal-content">
+            <img id="modalImg" src="" alt="Full Image Preview">
+        </div>
+    </div>
+
+    <script>
+    const imageInput = document.getElementById('imageInput');
+    const previewGallery = document.getElementById('previewGallery');
+    const previewGrid = document.getElementById('previewGrid');
+    const imageModal = document.getElementById('imageModal');
+    const modalImg = document.getElementById('modalImg');
+    const closeModal = document.querySelector('.close');
+    let selectedFiles = [];
+    let fileReaders = [];
+
+    function generatePreviews(files) {
+        previewGrid.innerHTML = '';
+        fileReaders.forEach(reader => reader.abort());
+        fileReaders = [];
+
+        if (files.length === 0) {
+            previewGallery.style.display = 'none';
+            return;
+        }
+
+        previewGallery.style.display = 'block';
+
+        files.forEach((file, index) => {
+            const reader = new FileReader();
+            fileReaders.push(reader);
+            reader.onload = function(e) {
+                const thumbnail = document.createElement('div');
+                thumbnail.className = 'preview-thumbnail';
+                thumbnail.innerHTML = `
+                    <img src="${e.target.result}" alt="Thumbnail ${index}">
+                    <button class="delete-btn" data-index="${index}"><i class="fas fa-times"></i></button>
+                `;
+                previewGrid.appendChild(thumbnail);
+
+                const imgElement = thumbnail.querySelector('img');
+                imgElement.addEventListener('click', () => {
+                    modalImg.src = e.target.result;
+                    imageModal.style.display = 'flex';
+                });
+
+                attachDeleteListeners();
+            };
+            reader.onerror = function() {
+                console.error('Error reading file:', file.name);
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+
+    function attachDeleteListeners() {
+        const deleteBtns = previewGrid.querySelectorAll('.delete-btn');
+        deleteBtns.forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const index = parseInt(this.dataset.index);
+                selectedFiles.splice(index, 1);
+                updateFileInput();
+                generatePreviews(selectedFiles);
+            });
+        });
+    }
+
+    imageInput.addEventListener('change', function(event) {
+        selectedFiles = Array.from(event.target.files);
+        generatePreviews(selectedFiles);
+    });
+
+    function updateFileInput() {
+        const dataTransfer = new DataTransfer();
+        selectedFiles.forEach(file => dataTransfer.items.add(file));
+        imageInput.files = dataTransfer.files;
+    }
+
+    closeModal.addEventListener('click', () => {
+        imageModal.style.display = 'none';
+    });
+
+    imageModal.addEventListener('click', (event) => {
+        if (event.target === imageModal) {
+            imageModal.style.display = 'none';
+        }
+    });
+
+    attachDeleteListeners();
+    </script>
+</body>
+</html>

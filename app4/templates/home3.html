@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AURA - Breast Cancer Classification</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+    font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    background: #000000;
+    overflow-x: hidden;
+    min-height: 100vh;
+}
+
+.nav-header {
+    background: #0a0a0a;
+    border-bottom: 1px solid #1a1a1a;
+    padding: 16px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.logo-section {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo-icon {
+    width: 32px;
+    height: 32px;
+    background: #ffffff;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo-icon i {
+    color: #000000;
+    font-size: 16px;
+}
+
+.logo-text {
+    font-size: 20px;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 2px;
+}
+
+.nav-menu {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+}
+
+.nav-link {
+    color: #666666;
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.nav-link i {
+    font-size: 14px;
+}
+
+.nav-link:hover {
+    background: #1a1a1a;
+    color: #ffffff;
+}
+
+.nav-link.active {
+    background: #ffffff;
+    color: #000000;
+}
+
+.logout-btn {
+    background: #1a1a1a;
+    color: #999999;
+}
+
+.logout-btn:hover {
+    background: #262626;
+    color: #ffffff;
+}
+
+.main-container {
+    display: flex;
+    min-height: calc(100vh - 64px);
+    gap: 0;
+}
+
+.results-container {
+    flex: 0 0 65%;
+    background: #000000;
+    border-right: 1px solid #1a1a1a;
+    overflow-y: auto;
+    padding: 32px;
+    scrollbar-width: thin;
+    scrollbar-color: #262626 #0a0a0a;
+    scroll-behavior: smooth;
+}
+
+.results-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.results-container::-webkit-scrollbar-track {
+    background: #0a0a0a;
+}
+
+.results-container::-webkit-scrollbar-thumb {
+    background: #262626;
+    border-radius: 6px;
+}
+
+.results-container::-webkit-scrollbar-thumb:hover {
+    background: #333333;
+}
+
+.input-container {
+    flex: 0 0 35%;
+    background: #0a0a0a;
+    padding: 32px;
+    position: sticky;
+    top: 64px;
+    height: calc(100vh - 64px);
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #262626 #0a0a0a;
+    scroll-behavior: smooth;
+}
+
+.input-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.input-container::-webkit-scrollbar-track {
+    background: #0a0a0a;
+}
+
+.input-container::-webkit-scrollbar-thumb {
+    background: #262626;
+    border-radius: 6px;
+}
+
+.input-card {
+    background: transparent;
+    border: none;
+    padding: 0;
+}
+
+.result-item {
+    background: #0a0a0a;
+    border: 1px solid #1a1a1a;
+    border-radius: 8px;
+    padding: 24px;
+    margin-bottom: 24px;
+    transition: all 0.2s ease;
+}
+
+.result-item:hover {
+    border-color: #333333;
+}
+
+h1, h2, h3 {
+    color: #ffffff;
+    font-weight: 600;
+}
+
+h1 {
+    font-size: 24px;
+    margin-bottom: 8px;
+}
+
+h2 {
+    font-size: 18px;
+    margin-bottom: 16px;
+}
+
+h3 {
+    font-size: 16px;
+    margin-bottom: 12px;
+}
+
+.guide-box {
+    background: #0a0a0a;
+    border-left: 3px solid #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 24px;
+}
+
+.guide-box h3 {
+    color: #ffffff;
+    margin-bottom: 12px;
+}
+
+.guide-box ul {
+    list-style-position: inside;
+    color: #808080;
+    line-height: 1.8;
+}
+
+.guide-box li {
+    margin-bottom: 8px;
+}
+
+.explanation-box {
+    background: #000000;
+    border-left: 3px solid #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 20px 0;
+}
+
+.xai-section {
+    background: #0a0a0a;
+    border: 1px solid #1a1a1a;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 20px 0;
+}
+
+.xai-section h3 {
+    color: #ffffff;
+    margin-bottom: 12px;
+}
+
+input[type="file"] {
+    width: 100%;
+    padding: 12px;
+    background: #0a0a0a;
+    border: 1px solid #1a1a1a;
+    border-radius: 6px;
+    color: #b0b0b0;
+    margin-bottom: 20px;
+    font-size: 14px;
+    transition: all 0.2s ease;
+}
+
+input[type="file"]:focus {
+    outline: none;
+    border-color: #ffffff;
+}
+
+input[type="submit"] {
+    background: linear-gradient(135deg, #ffffff 0%, #e0e0e0 100%);
+    color: #000000;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    width: 100%;
+}
+
+input[type="submit"]:hover {
+    background: linear-gradient(135deg, #e0e0e0 0%, #cccccc 100%);
+    transform: translateY(-1px);
+}
+
+button {
+    background: linear-gradient(135deg, #ffffff 0%, #e0e0e0 100%);
+    color: #000000;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    margin: 5px 0;
+}
+
+button:hover {
+    background: linear-gradient(135deg, #e0e0e0 0%, #cccccc 100%);
+    transform: translateY(-1px);
+}
+
+.download-buttons {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid #1a1a1a;
+}
+
+.download-buttons h3 {
+    font-size: 14px;
+    color: #999999;
+    margin-bottom: 8px;
+}
+
+.download-buttons p {
+    font-size: 13px;
+    color: #666666;
+    margin-bottom: 12px;
+}
+
+.intro-box {
+    background: #0a0a0a;
+    border-left: 3px solid #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 24px;
+}
+
+.intro-box h3 {
+    color: #ffffff;
+    margin-bottom: 12px;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.95);
+}
+
+.modal-content {
+    position: relative;
+    margin: auto;
+    padding: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    max-width: 90%;
+    max-height: 90%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal img {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 8px;
+}
+
+.close {
+    position: absolute;
+    top: 20px;
+    right: 40px;
+    color: #ffffff;
+    font-size: 36px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 2001;
+    transition: all 0.2s ease;
+}
+
+.close:hover {
+    color: #cccccc;
+}
+
+.error {
+    background: #1a1a1a;
+    color: #999999;
+    padding: 12px 20px;
+    margin-bottom: 12px;
+    border-radius: 6px;
+    border: 1px solid #262626;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 64px 24px;
+    color: #666666;
+    background: #0a0a0a;
+    border-radius: 8px;
+    border: 1px solid #1a1a1a;
+}
+
+.empty-state i {
+    font-size: 48px;
+    color: #333333;
+    margin-bottom: 16px;
+}
+
+.empty-state h3 {
+    color: #999999;
+    font-weight: 500;
+    margin-bottom: 12px;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    border: 1px solid #1a1a1a;
+    border-radius: 8px;
+    margin: 10px 0;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+img:hover {
+    border-color: #333333;
+}
+
+p {
+    color: #808080;
+    line-height: 1.6;
+    margin: 8px 0;
+}
+
+strong {
+    color: #b0b0b0;
+}
+
+hr {
+    border: none;
+    border-top: 1px solid #1a1a1a;
+    margin: 24px 0;
+}
+
+.preview-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 20px 0;
+    padding: 10px;
+    background: #0a0a0a;
+    border-radius: 8px;
+    border: 1px solid #1a1a1a;
+}
+
+.preview-card {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    background: #000000;
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid #1a1a1a;
+    transition: all 0.2s ease;
+}
+
+.preview-card:hover {
+    border-color: #333333;
+}
+
+.preview-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border: none;
+    border-radius: 6px;
+}
+
+.preview-card .delete-btn {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    background: #ffffff;
+    color: #000000;
+    border: none;
+    border-radius: 4px;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    padding: 0;
+    margin: 0;
+}
+
+.preview-card .delete-btn:hover {
+    background: #cccccc;
+    transform: scale(1.1);
+}
+
+.preview-container:empty {
+    display: none;
+}
+
+@media (max-width: 968px) {
+    .main-container {
+        flex-direction: column;
+    }
+
+    .results-container,
+    .input-container {
+        flex: none;
+        width: 100%;
+        height: auto;
+        position: relative;
+    }
+
+    .input-container {
+        order: -1;
+        height: auto;
+        top: 0;
+    }
+
+    .nav-menu {
+        flex-wrap: wrap;
+        gap: 4px;
+    }
+
+    .nav-link {
+        font-size: 13px;
+        padding: 6px 12px;
+    }
+}
+    </style>
+</head>
+<body>
+
+    <div class="nav-header">
+        <div class="logo-section">
+            <div class="logo-icon">
+                <i class="fas fa-ribbon"></i>
+            </div>
+            <div class="logo-text">AURA</div>
+        </div>
+        <nav class="nav-menu">
+            <a href="{{ url_for('app1.home') }}" class="nav-link"><i class="fas fa-home"></i> Home</a>
+            <a href="#results" class="nav-link active"><i class="fas fa-chart-line"></i> Results</a>
+            <a href="{{ url_for('app4.page') }}" class="nav-link"><i class="fas fa-flask"></i> App4</a>
+            <a href="{{ url_for('app3.page') }}" class="nav-link"><i class="fas fa-microscope"></i> App3</a>
+            <a href="{{ url_for('app5.page') }}" class="nav-link"><i class="fas fa-dna"></i> App5</a>
+            <a href="{{ url_for('app2.logout') }}" class="nav-link logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </nav>
+    </div>
+
+    <div class="main-container">
+        <div class="results-container" id="results">
+            <h1 style="font-size: 28px; margin-bottom: 16px;"><i class="fas fa-chart-bar"></i> Classification Results</h1>
+            
+            <div class="guide-box">
+                <h3><i class="fas fa-info-circle"></i> How to Interpret Results</h3>
+                <p style="margin-bottom: 12px;">
+                    The results below show the model's analysis of your uploaded images. Each result includes:
+                </p>
+                <ul>
+                    <li><strong>Predicted Class:</strong> IDC(+) (Cancer Positive) or IDC(-) (Cancer Negative)</li>
+                    <li><strong>Confidence:</strong> Model's certainty expressed as a percentage</li>
+                    <li><strong>Probabilities:</strong> Likelihood shown in the probability distribution chart</li>
+                    <li><strong>Image Analysis:</strong> Original, preprocessed, and Grad-CAM heatmap views</li>
+                </ul>
+                <p style="margin-top: 12px; color: #ffffff; font-weight: 600;">
+                    <i class="fas fa-exclamation-triangle"></i> Note: These results are AI-generated and for informational purposes only. Always consult a medical professional for definitive diagnosis.
+                </p>
+            </div>
+
+            {% if error %}
+                <div class="error"><i class="fas fa-exclamation-triangle"></i> {{ error }}</div>
+            {% endif %}
+
+            {% if results %}
+                {% for res in results %}
+                <div class="result-item">
+                    <h2><i class="fas fa-file-medical"></i> Analysis for {{ res.filename }}</h2>
+                    
+                    <p style="font-size: 15px; margin: 12px 0;">
+                        <strong>Predicted Class:</strong>
+                        <span style="color: {% if res.cancer_status == 'Cancer Positive' %}#999999{% else %}#ffffff{% endif %}; font-weight: 700;">
+                            {{ res.predicted_class }} ({{ res.cancer_status }})
+                        </span>
+                    </p>
+                    
+                    <p><strong>Confidence:</strong> {{ res.confidence }}</p>
+                    <p><strong>Probability IDC(-):</strong> {{ res.prob_idc_neg }}</p>
+                    <p><strong>Probability IDC(+):</strong> {{ res.prob_idc_pos }}</p>
+
+             
+                    {% if res.explanation_text %}
+                        <div class="explanation-box" style="color: #ffffff;">
+                            <h3><i class="fas fa-clipboard-list"></i> Detailed Explanation</h3>
+                            <div style="color: #ffffff;">
+                                {{ res.explanation_text | safe }}
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% if res.image_plot %}
+                        <div style="margin: 24px 0;">
+                            <h3><i class="fas fa-microscope"></i> Image Analysis</h3>
+                            <img src="data:image/png;base64,{{ res.image_plot }}" alt="Image Analysis for {{ res.filename }}">
+                        </div>
+                    {% endif %}
+
+                    {% if res.cam_image %}
+                        <div class="xai-section">
+                            <h3><i class="fas fa-brain"></i> Explainable AI (Grad-CAM)</h3>
+                            <p style="color: white;">
+                                The Grad-CAM heatmap visualizes regions the model focused on. 
+                                Brighter areas (red/yellow) strongly influenced the prediction, while darker areas (blue) had less impact.
+                                This reveals which tissue areas are most relevant for detecting Invasive Ductal Carcinoma (IDC).
+                            </p>
+                            <img src="{{ url_for('static', filename=res.cam_image) }}" alt="Grad-CAM Heatmap" style="margin-top: 12px;">
+                        </div>
+                    {% endif %}
+
+                    {% if res.prob_plot %}
+                        <div style="margin: 24px 0;">
+                            <h3><i class="fas fa-chart-bar"></i> Probability Distribution</h3>
+                            <p style="font-size: 13px; margin-bottom: 12px;">
+                                Bar heights represent classification probabilities for IDC(-) or IDC(+). Taller bars indicate higher likelihood.
+                            </p>
+                            <img src="data:image/png;base64,{{ res.prob_plot }}" alt="Probability Distribution for {{ res.filename }}">
+                        </div>
+                    {% endif %}
+
+                    <hr>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-state">
+                    <i class="fas fa-file-medical-alt"></i>
+                    <h3>No Analysis Results Yet</h3>
+                    <p>Upload histopathological images to get started with AI-powered breast cancer IDC classification.</p>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="input-container">
+            <div class="input-card">
+                <h1><i class="fas fa-ribbon"></i> Breast Cancer IDC Classification</h1>
+                
+                <div class="intro-box">
+                    <h3><i class="fas fa-info-circle"></i> About This Tool</h3>
+                    <p>
+                        This application uses a deep learning model (ResNet-18) to classify histopathology images for breast cancer detection, 
+                        specifically identifying Invasive Ductal Carcinoma (IDC). Upload images to receive predictions with confidence scores, 
+                        probability distributions, and Grad-CAM heatmaps showing influential areas.
+                    </p>
+                    <p style="margin-top: 10px; color: #ffffff; font-weight: 600;">
+                        <i class="fas fa-shield-alt"></i> Important: For research and educational purposes only. Not a replacement for professional medical advice.
+                    </p>
+                </div>
+                
+              <form class="upload-form" method="POST" enctype="multipart/form-data" id="uploadForm">
+    <label style="display: block; margin-bottom: 8px; color: #b0b0b0; font-weight: 500;">
+        <i class="fas fa-upload"></i> Select Histopathology Images
+    </label>
+    <input type="file" name="images" accept="image/*" multiple required>
+    <div class="preview-container" id="previewContainer"></div>
+    <input type="submit" value="Upload and Classify" id="classifyBtn">
+</form>
+
+                <div class="download-buttons">
+                    <h3><i class="fas fa-download"></i> Download Test Images</h3>
+                    <p>Try the model with example histopathology images to see how it performs.</p>
+                    <a href="{{ url_for('app4.static', filename='examples/example0.png') }}" download>
+                        <button type="button"><i class="fas fa-file-download"></i> Download Example 1</button>
+                    </a>
+                    <a href="{{ url_for('app4.static', filename='examples/example1.png') }}" download>
+                        <button type="button"><i class="fas fa-file-download"></i> Download Example 2</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="imageModal" class="modal">
+        <span class="close">&times;</span>
+        <div class="modal-content">
+            <img id="modalImg" src="" alt="Full Image Preview">
+        </div>
+    </div>
+<script>
+document.getElementById('uploadForm').querySelector('input[type="file"]').addEventListener('change', function(e) {
+    const files = e.target.files;
+    const previewContainer = document.getElementById('previewContainer');
+    previewContainer.innerHTML = ''; // Clear existing previews
+
+    Array.from(files).forEach((file, index) => {
+        if (file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const previewCard = document.createElement('div');
+                previewCard.className = 'preview-card';
+                previewCard.innerHTML = `
+                    <img src="${e.target.result}" alt="Preview ${file.name}">
+                    <button class="delete-btn" title="Remove image">×</button>
+                `;
+                previewContainer.appendChild(previewCard);
+
+                // Handle delete button click
+                previewCard.querySelector('.delete-btn').addEventListener('click', function() {
+                    previewCard.remove();
+                    // Update the file input to remove the deleted file
+                    const dt = new DataTransfer();
+                    Array.from(files).forEach((f, i) => {
+                        if (i !== index) dt.items.add(f);
+                    });
+                    e.target.files = dt.files;
+                });
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+});
+</script>
+</body>
+</html>
