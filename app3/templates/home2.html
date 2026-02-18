@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
 * {
@@ -16,24 +16,55 @@
   padding: 0;
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
+:root {
+    --bg-0: #070605;
+    --bg-1: #0e0c0a;
+    --bg-2: #14110e;
+    --stroke-1: rgba(255, 255, 255, 0.08);
+    --stroke-2: rgba(255, 255, 255, 0.16);
+    --text-1: #f4f2ef;
+    --text-2: #d7d2cc;
+    --text-3: #a69f97;
+    --text-4: #7a7268;
+    --accent: #b28a5b;
+    --accent-soft: rgba(178, 138, 91, 0.18);
+    --glass-bg: rgba(20, 16, 12, 0.66);
+    --glass-bg-strong: rgba(20, 16, 12, 0.84);
+    --shadow-soft: 0 20px 50px rgba(0, 0, 0, 0.45);
+    --shadow-glow: 0 12px 30px rgba(178, 138, 91, 0.18);
+    --radius-lg: 16px;
+    --radius-md: 12px;
+    --radius-sm: 10px;
+}
+
 body {
-    font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-    background: #000000;
-    color: #b0b0b0;
+    font-family: 'Sora', "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background: radial-gradient(1400px 900px at 10% -15%, rgba(178, 138, 91, 0.08), transparent 60%),
+                radial-gradient(1000px 700px at 90% 0%, rgba(255, 255, 255, 0.05), transparent 65%),
+                linear-gradient(180deg, #070605 0%, #0b0907 45%, #0f0c09 100%);
+    color: var(--text-2);
     overflow-x: hidden;
     min-height: 100vh;
+    font-size: 14px;
+    letter-spacing: 0.1px;
 }
 
 .nav-header {
-    background: #0a0a0a;
-    border-bottom: 1px solid #1a1a1a;
-    padding: 16px 32px;
+    background: var(--glass-bg-strong);
+    border-bottom: 1px solid var(--stroke-1);
+    padding: 14px 32px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     position: sticky;
     top: 0;
     z-index: 1000;
+    backdrop-filter: blur(14px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
 }
 
 .logo-section {
@@ -43,25 +74,26 @@ body {
 }
 
 .logo-icon {
-    width: 32px;
-    height: 32px;
-    background: #ffffff;
-    border-radius: 6px;
+    width: 30px;
+    height: 30px;
+    background: rgba(242, 244, 247, 0.92);
+    border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
+    box-shadow: var(--shadow-soft);
 }
 
 .logo-icon i {
-    color: #000000;
-    font-size: 16px;
+    color: #0b0d12;
+    font-size: 14px;
 }
 
 .logo-text {
-    font-size: 20px;
-    font-weight: 700;
-    color: #ffffff;
-    letter-spacing: 2px;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-1);
+    letter-spacing: 3px;
 }
 
 .nav-menu {
@@ -71,40 +103,44 @@ body {
 }
 
 .nav-link {
-    color: #666666;
+    color: var(--text-4);
     text-decoration: none;
-    padding: 8px 16px;
-    border-radius: 6px;
-    font-size: 14px;
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-size: 12px;
     font-weight: 500;
     transition: all 0.2s ease;
     display: flex;
     align-items: center;
     gap: 6px;
+    border: 1px solid transparent;
 }
 
 .nav-link i {
-    font-size: 14px;
+    font-size: 12px;
 }
 
 .nav-link:hover {
-    background: #1a1a1a;
-    color: #ffffff;
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--text-1);
+    border-color: var(--stroke-1);
 }
 
 .nav-link.active {
-    background: #ffffff;
-    color: #000000;
+    background: var(--accent-soft);
+    color: var(--text-1);
+    border-color: rgba(178, 138, 91, 0.5);
+    box-shadow: var(--shadow-glow);
 }
 
 .logout-btn {
-    background: #1a1a1a;
-    color: #999999;
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--text-3);
 }
 
 .logout-btn:hover {
-    background: #262626;
-    color: #ffffff;
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text-1);
 }
 
 .main-container {
@@ -116,12 +152,12 @@ body {
 /* SWAPPED: Results on LEFT (65%) */
 .results-container {
     flex: 0 0 65%;
-    background: #000000;
-    border-right: 1px solid #1a1a1a;
+    background: transparent;
+    border-right: 1px solid var(--stroke-1);
     overflow-y: auto;
     padding: 32px;
     scrollbar-width: thin;
-    scrollbar-color: #262626 #0a0a0a;
+    scrollbar-color: #2a2a2a #0a0a0a;
 }
 
 .results-container::-webkit-scrollbar {
@@ -133,19 +169,19 @@ body {
 }
 
 .results-container::-webkit-scrollbar-thumb {
-    background: #262626;
+    background: #2a2a2a;
     border-radius: 6px;
 }
 
 .results-container::-webkit-scrollbar-thumb:hover {
-    background: #333333;
+    background: #3a3a3a;
 }
 
 /* SWAPPED: Input on RIGHT (35%) */
 .input-container {
     flex: 0 0 35%;
-    background: #0a0a0a;
-    padding: 32px;
+    background: transparent;
+    padding: 18px;
     position: sticky;
     top: 64px;
     height: calc(100vh - 64px);
@@ -163,21 +199,23 @@ body {
 }
 
 .input-container::-webkit-scrollbar-thumb {
-    background: #262626;
+    background: #2a2a2a;
     border-radius: 6px;
 }
 
 .card {
-    background: #0a0a0a;
-    border: 1px solid #1a1a1a;
-    border-radius: 8px;
+    background: var(--glass-bg);
+    border: 1px solid var(--stroke-1);
+    border-radius: var(--radius-lg);
     padding: 24px;
     margin-bottom: 24px;
     transition: all 0.2s ease;
+    box-shadow: var(--shadow-soft);
+    backdrop-filter: blur(16px);
 }
 
 .card:hover {
-    border-color: #333333;
+    border-color: var(--stroke-2);
 }
 
 .input-card {
@@ -187,62 +225,93 @@ body {
 }
 
 h1, h2, h3 {
-    color: #ffffff;
+    color: var(--text-1);
     font-weight: 600;
 }
 
 h1 {
-    font-size: 24px;
+    font-size: 20px;
     margin-bottom: 8px;
 }
 
 h2 {
-    font-size: 18px;
-    margin-bottom: 16px;
+    font-size: 16px;
+    margin-bottom: 14px;
 }
 
 h3 {
-    font-size: 16px;
-    margin-bottom: 12px;
+    font-size: 14px;
+    margin-bottom: 10px;
 }
 
 input[type="file"] {
     width: 100%;
     padding: 12px;
-    background: #0a0a0a;
-    border: 1px solid #1a1a1a;
-    border-radius: 6px;
-    color: #b0b0b0;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--stroke-1);
+    border-radius: var(--radius-sm);
+    color: var(--text-2);
     margin-bottom: 20px;
-    font-size: 14px;
+    font-size: 13px;
     transition: all 0.2s ease;
 }
 
 input[type="file"]:focus {
     outline: none;
-    border-color: #ffffff;
+    border-color: rgba(178, 138, 91, 0.6);
+    box-shadow: 0 0 0 3px rgba(178, 138, 91, 0.16);
 }
 
 button {
-    background: linear-gradient(135deg, #ffffff 0%, #e0e0e0 100%);
-    color: #000000;
+    background: linear-gradient(135deg, rgba(178, 138, 91, 0.95) 0%, rgba(178, 138, 91, 0.75) 100%);
+    color: #120e0a;
     padding: 12px 24px;
     border: none;
-    border-radius: 6px;
+    border-radius: 4px;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 600;
     transition: all 0.2s ease;
     width: 100%;
+    letter-spacing: 0.2px;
+    box-shadow: var(--shadow-glow);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
 }
 
 button:hover {
-    background: linear-gradient(135deg, #e0e0e0 0%, #cccccc 100%);
+    background: linear-gradient(135deg, rgba(178, 138, 91, 1) 0%, rgba(178, 138, 91, 0.82) 100%);
     transform: translateY(-1px);
 }
 
 button:active {
     transform: translateY(0);
+}
+
+button.is-loading {
+    pointer-events: none;
+}
+
+.btn-loader {
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(18, 14, 10, 0.35);
+    border-top-color: #120e0a;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    display: none;
+}
+
+button.is-loading .btn-loader {
+    display: inline-block;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 .file-input-wrapper {
@@ -252,20 +321,21 @@ button:active {
 }
 
 .file-input-label {
-    background: #0a0a0a;
-    border: 2px dashed #1a1a1a;
-    border-radius: 8px;
-    color: #666666;
+    background: var(--glass-bg);
+    border: 1px dashed var(--stroke-1);
+    border-radius: var(--radius-md);
+    color: var(--text-4);
     cursor: pointer;
     display: block;
     padding: 32px 24px;
     text-align: center;
     transition: all 0.2s ease;
+    backdrop-filter: blur(12px);
 }
 
 .file-input-label:hover {
-    border-color: #333333;
-    background: #0f0f0f;
+    border-color: var(--stroke-2);
+    background: rgba(255, 255, 255, 0.03);
 }
 
 .file-input-label input[type=file] {
@@ -274,15 +344,15 @@ button:active {
 }
 
 .file-input-label i {
-    font-size: 32px;
-    color: #ffffff;
+    font-size: 28px;
+    color: var(--text-1);
     margin-bottom: 12px;
     display: block;
 }
 
 .file-input-label strong {
-    color: #ffffff;
-    font-size: 16px;
+    color: var(--text-1);
+    font-size: 14px;
     display: block;
     margin: 8px 0;
 }
@@ -292,9 +362,9 @@ button:active {
 }
 
 .preview-gallery h3 {
-    color: #ffffff;
-    font-size: 14px;
-    margin-bottom: 16px;
+    color: var(--text-1);
+    font-size: 13px;
+    margin-bottom: 14px;
     display: flex;
     align-items: center;
     gap: 8px;
@@ -311,31 +381,32 @@ button:active {
     position: relative;
     width: 100%;
     height: 120px;
-    background: #0a0a0a;
-    border: 1px solid #1a1a1a;
-    border-radius: 6px;
+    background: var(--glass-bg);
+    border: 1px solid var(--stroke-1);
+    border-radius: var(--radius-sm);
     overflow: hidden;
     transition: all 0.2s ease;
     cursor: pointer;
+    backdrop-filter: blur(10px);
 }
 
 .preview-thumbnail img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    border-radius: 6px;
+    border-radius: var(--radius-sm);
 }
 
 .preview-thumbnail:hover {
-    border-color: #333333;
+    border-color: var(--stroke-2);
 }
 
 .delete-btn {
     position: absolute;
     top: 8px;
     right: 8px;
-    background: #ffffff;
-    color: #000000;
+    background: rgba(242, 244, 247, 0.9);
+    color: #0b0d12;
     border: none;
     border-radius: 4px;
     width: 24px;
@@ -356,7 +427,7 @@ button:active {
 }
 
 .delete-btn:hover {
-    background: #cccccc;
+    background: #e6e9ed;
 }
 
 .modal {
@@ -386,14 +457,14 @@ button:active {
 .modal img {
     max-width: 100%;
     max-height: 100%;
-    border-radius: 8px;
+    border-radius: var(--radius-md);
 }
 
 .close {
     position: absolute;
     top: 20px;
     right: 40px;
-    color: #ffffff;
+    color: var(--text-1);
     font-size: 36px;
     font-weight: bold;
     cursor: pointer;
@@ -402,34 +473,37 @@ button:active {
 }
 
 .close:hover {
-    color: #cccccc;
+    color: #d0d0d0;
 }
 
 .result-item {
-    background: #0a0a0a;
-    border: 1px solid #1a1a1a;
-    border-radius: 8px;
+    background: var(--glass-bg);
+    border: 1px solid var(--stroke-1);
+    border-radius: var(--radius-lg);
     padding: 24px;
     margin-bottom: 24px;
     transition: all 0.2s ease;
+    box-shadow: var(--shadow-soft);
+    backdrop-filter: blur(16px);
 }
 
 .result-item:hover {
-    border-color: #333333;
+    border-color: var(--stroke-2);
 }
 
 .explanation {
-    background: #000000;
-    border: 1px solid #1a1a1a;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--stroke-1);
     padding: 20px;
-    border-radius: 6px;
+    border-radius: var(--radius-md);
     margin-bottom: 20px;
+    backdrop-filter: blur(12px);
 }
 
 .explanation p {
     margin: 0;
     line-height: 1.7;
-    color: #808080;
+    color: var(--text-3);
 }
 
 .plot {
@@ -440,15 +514,15 @@ button:active {
 .plot img {
     max-width: 100%;
     height: auto;
-    border: 1px solid #1a1a1a;
-    border-radius: 6px;
+    border: 1px solid var(--stroke-1);
+    border-radius: var(--radius-md);
     transition: all 0.2s ease;
     cursor: pointer;
-    background: #0a0a0a;
+    background: rgba(255, 255, 255, 0.02);
 }
 
 .plot img:hover {
-    border-color: #333333;
+    border-color: var(--stroke-2);
 }
 
 .flash-messages {
@@ -458,179 +532,193 @@ button:active {
 }
 
 .flash-messages li {
-    background: #1a1a1a;
-    color: #999999;
+    background: rgba(255, 255, 255, 0.03);
+    color: var(--text-3);
     padding: 12px 20px;
     margin-bottom: 12px;
-    border-radius: 6px;
-    border: 1px solid #262626;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--stroke-1);
+    backdrop-filter: blur(10px);
 }
 
 .empty-state {
     text-align: center;
     padding: 64px 24px;
-    color: #666666;
-    background: #0a0a0a;
-    border-radius: 8px;
-    border: 1px solid #1a1a1a;
+    color: var(--text-4);
+    background: var(--glass-bg);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--stroke-1);
+    box-shadow: var(--shadow-soft);
+    backdrop-filter: blur(16px);
 }
 
 .empty-state i {
-    font-size: 48px;
-    color: #333333;
+    font-size: 40px;
+    color: #2f2f2f;
     margin-bottom: 16px;
 }
 
 .empty-state h3 {
-    color: #999999;
+    color: var(--text-2);
     font-weight: 500;
     margin-bottom: 12px;
 }
 
 p {
-    color: #808080;
+    color: var(--text-3);
     line-height: 1.6;
+    font-size: 13px;
 }
 
 small {
-    color: #666666;
+    color: var(--text-4);
+    font-size: 12px;
 }
 
 .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap: 22px;
     margin-top: 22px;
 }
 
 .card-grid {
-    background: #0a0a0a;
-    border: 1px solid #1a1a1a;
-    border-radius: 8px;
-    padding: 18px;
+    background: var(--glass-bg);
+    border: 1px solid var(--stroke-1);
+    border-radius: var(--radius-lg);
+    padding: 14px;
     text-align: center;
     transition: all 0.2s ease;
+    box-shadow: var(--shadow-soft);
+    backdrop-filter: blur(14px);
 }
 
 .card-grid:hover {
-    border-color: #333333;
+    border-color: var(--stroke-2);
 }
 
 .card-grid img {
-    max-width: 100%;
-    border-radius: 8px;
+    width: 100%;
+    max-height: 180px;
+    border-radius: var(--radius-md);
     margin-top: 8px;
-    border: 1px solid #1a1a1a;
+    border: 1px solid var(--stroke-1);
+    object-fit: cover;
 }
 
 .card-grid p {
     margin-top: 10px;
-    font-size: 0.9rem;
-    color: #808080;
+    font-size: 12px;
+    color: var(--text-3);
 }
 
 .highlight {
-    background: #e74c3c;
-    color: #fff;
-    padding: 5px 10px;
-    border-radius: 5px;
-    font-weight: bold;
+    background: var(--accent-soft);
+    color: var(--text-1);
+    padding: 6px 10px;
+    border-radius: 8px;
+    font-weight: 600;
+    border: 1px solid rgba(178, 138, 91, 0.5);
 }
 
 .info-box {
-    background: #0a0a0a;
-    border-left: 5px solid #ffffff;
-    padding: 15px;
+    background: rgba(255, 255, 255, 0.03);
+    border-left: 3px solid var(--accent);
+    padding: 16px;
     margin: 20px 0;
-    font-size: 0.95rem;
-    line-height: 1.5;
-    border: 1px solid #1a1a1a;
-    border-radius: 6px;
-    color: #808080;
+    font-size: 12px;
+    line-height: 1.6;
+    border: 1px solid var(--stroke-1);
+    border-radius: var(--radius-md);
+    color: var(--text-3);
+    backdrop-filter: blur(12px);
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 18px;
-    font-size: 0.94rem;
-    background: #0a0a0a;
-    border: 1px solid #1a1a1a;
-    border-radius: 6px;
+    font-size: 12px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--stroke-1);
+    border-radius: var(--radius-md);
     overflow: hidden;
+    backdrop-filter: blur(10px);
 }
 
 th, td {
-    padding: 12px;
+    padding: 11px 12px;
     text-align: left;
-    border-bottom: 1px solid #1a1a1a;
+    border-bottom: 1px solid var(--stroke-1);
 }
 
 th {
-    background: #1a1a1a;
-    color: #ffffff;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-1);
     font-weight: 600;
 }
 
 tr:hover {
-    background: #0f0f0f;
+    background: #121212;
 }
 
 tr.highlight-row {
-    background: #1a1a1a !important;
+    background: rgba(178, 138, 91, 0.12) !important;
     font-weight: 600;
-    color: #ffffff;
+    color: var(--text-1);
 }
 
 .back {
     display: inline-block;
     margin: 25px auto;
     padding: 12px 24px;
-    background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
-    color: #000000;
+    background: linear-gradient(135deg, rgba(178, 138, 91, 0.95) 0%, rgba(178, 138, 91, 0.75) 100%);
+    color: #120e0a;
     text-decoration: none;
-    border-radius: 6px;
+    border-radius: var(--radius-sm);
     font-weight: 600;
     transition: all 0.2s ease;
     text-align: center;
     width: 100%;
+    box-shadow: var(--shadow-glow);
 }
 
 .back:hover {
-    background: linear-gradient(135deg, #219a52 0%, #27ae60 100%);
+    background: linear-gradient(135deg, rgba(178, 138, 91, 1) 0%, rgba(178, 138, 91, 0.82) 100%);
     transform: translateY(-1px);
 }
 
 .about-section {
     margin-top: 24px;
     padding-top: 20px;
-    border-top: 1px solid #1a1a1a;
+    border-top: 1px solid var(--stroke-1);
 }
 
 .about-section h3 {
-    font-size: 14px;
-    color: #999999;
+    font-size: 12px;
+    color: var(--text-3);
     margin-bottom: 12px;
 }
 
 .about-section p {
-    font-size: 13px;
-    color: #666666;
+    font-size: 12px;
+    color: var(--text-4);
     margin: 8px 0;
     line-height: 1.6;
 }
 
 .model-info {
-    background: #000000;
-    border: 1px solid #1a1a1a;
-    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--stroke-1);
+    border-radius: var(--radius-md);
     padding: 16px;
     margin-top: 16px;
+    backdrop-filter: blur(12px);
 }
 
 .model-info h4 {
-    font-size: 13px;
-    color: #ffffff;
+    font-size: 12px;
+    color: var(--text-1);
     margin-bottom: 8px;
     font-weight: 600;
 }
@@ -642,8 +730,8 @@ tr.highlight-row {
 }
 
 .model-info li {
-    font-size: 12px;
-    color: #808080;
+    font-size: 11px;
+    color: var(--text-3);
     padding: 6px 0;
     padding-left: 20px;
     position: relative;
@@ -653,7 +741,251 @@ tr.highlight-row {
     content: "→";
     position: absolute;
     left: 0;
-    color: #666666;
+    color: var(--text-4);
+}
+
+.text-soft {
+    color: var(--text-3);
+}
+
+.text-quiet {
+    color: var(--text-4);
+}
+
+.prediction-summary {
+    font-size: 1.12rem;
+    text-align: center;
+    margin: 12px 0;
+    color: var(--text-1);
+}
+
+.prediction-status {
+    font-size: 0.95rem;
+    color: var(--text-2);
+}
+
+.helper-text {
+    margin-top: 12px;
+    font-size: 12px;
+    color: var(--text-4);
+}
+
+.section-gap {
+    margin-top: 18px;
+}
+
+.intro-text {
+    margin-bottom: 24px;
+}
+
+.fine-print {
+    margin-top: 16px;
+    font-size: 11px;
+    color: var(--text-4);
+}
+
+.fade-up {
+    animation: fadeUp 0.6s ease both;
+}
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .fade-up {
+        animation: none;
+    }
+    * {
+        scroll-behavior: auto;
+    }
+}
+
+/* Skeleton Loader Styles */
+.skeleton-loader {
+    display: none;
+}
+
+.skeleton-loader.active {
+    display: block;
+}
+
+.skeleton-item {
+    background: var(--glass-bg);
+    border: 1px solid var(--stroke-1);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    margin-bottom: 24px;
+    backdrop-filter: blur(16px);
+}
+
+.skeleton-header {
+    height: 24px;
+    width: 60%;
+    background: linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.03) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 6px;
+    margin-bottom: 16px;
+}
+
+.skeleton-text {
+    height: 14px;
+    background: linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.03) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+.skeleton-text.short {
+    width: 40%;
+}
+
+.skeleton-text.medium {
+    width: 70%;
+}
+
+.skeleton-text.long {
+    width: 90%;
+}
+
+.skeleton-box {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--stroke-1);
+    border-radius: var(--radius-md);
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.skeleton-box-inner {
+    height: 16px;
+    width: 40%;
+    background: linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.03) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 4px;
+    margin: 0 auto 12px;
+}
+
+.skeleton-box-text {
+    height: 12px;
+    width: 60%;
+    background: linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.03) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 4px;
+    margin: 0 auto;
+}
+
+.skeleton-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+    margin: 22px 0;
+}
+
+.skeleton-card {
+    background: var(--glass-bg);
+    border: 1px solid var(--stroke-1);
+    border-radius: var(--radius-lg);
+    padding: 14px;
+    text-align: center;
+}
+
+.skeleton-card-title {
+    height: 16px;
+    width: 60%;
+    margin: 0 auto 12px;
+    background: linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.03) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 4px;
+}
+
+.skeleton-card-image {
+    height: 180px;
+    background: linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.03) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: var(--radius-md);
+    margin-bottom: 10px;
+}
+
+.skeleton-card-desc {
+    height: 12px;
+    width: 80%;
+    margin: 0 auto;
+    background: linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.03) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 4px;
+}
+
+.skeleton-plot {
+    height: 250px;
+    background: linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.03) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: var(--radius-md);
+    margin: 24px 0;
+}
+
+.skeleton-table {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--stroke-1);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    margin-top: 18px;
+}
+
+.skeleton-table-row {
+    display: flex;
+    gap: 16px;
+    padding: 11px 0;
+    border-bottom: 1px solid var(--stroke-1);
+}
+
+.skeleton-table-row:last-child {
+    border-bottom: none;
+}
+
+.skeleton-table-cell {
+    flex: 1;
+    height: 14px;
+    background: linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.03) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 4px;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+.fas {
+    font-weight: 400;
+    opacity: 0.9;
+}
+
+.nav-link:focus-visible,
+button:focus-visible,
+input[type="file"]:focus-visible,
+.file-input-label:focus-within {
+    outline: 2px solid rgba(178, 138, 91, 0.6);
+    outline-offset: 2px;
 }
 
 @media (max-width: 968px) {
@@ -673,6 +1005,7 @@ tr.highlight-row {
     .input-container {
         height: auto;
         top: 0;
+        padding: 16px;
     }
 
     .nav-menu {
@@ -681,7 +1014,7 @@ tr.highlight-row {
     }
 
     .nav-link {
-        font-size: 13px;
+        font-size: 12px;
         padding: 6px 12px;
     }
 
@@ -711,9 +1044,12 @@ tr.highlight-row {
         <nav class="nav-menu">
             <a href="{{ url_for('app1.home') }}" class="nav-link"><i class="fas fa-home"></i> Home</a>
             <a href="#results" class="nav-link active"><i class="fas fa-chart-line"></i> Results</a>
-            <a href="{{ url_for('app4.page') }}" class="nav-link"><i class="fas fa-flask"></i> App4</a>
-            <a href="{{ url_for('app3.page') }}" class="nav-link"><i class="fas fa-dna"></i> App3</a>
+            <a href="{{ url_for('app3.page') }}" class="nav-link"><i class="fas fa-dna"></i> Lung</a>
+            <a href="{{ url_for('app4.page') }}" class="nav-link"><i class="fas fa-flask"></i>Breast </a>
+         
             <a href="{{ url_for('app5.page') }}" class="nav-link"><i class="fas fa-pills"></i> App5</a>
+            <a href="{{ url_for('app6.page') }}" class="nav-link"><i class="fas fa-vial"></i> App6</a>
+            <a href="{{ url_for('app7.page') }}" class="nav-link"><i class="fas fa-notes-medical"></i> App7</a>
             <a href="{{ url_for('app2.logout') }}" class="nav-link logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
         </nav>
     </div>
@@ -721,6 +1057,51 @@ tr.highlight-row {
     <div class="main-container">
         <!-- LEFT SIDE: Results Container (65%) -->
         <div class="results-container" id="results">
+            <!-- Skeleton Loader -->
+            <div class="skeleton-loader" id="skeletonLoader">
+                <div class="skeleton-item">
+                    <div class="skeleton-header"></div>
+                    <div class="skeleton-box">
+                        <div class="skeleton-box-inner"></div>
+                        <div class="skeleton-box-text"></div>
+                    </div>
+                    <div class="skeleton-text long"></div>
+                    <div class="skeleton-text medium"></div>
+                    <div class="skeleton-grid">
+                        <div class="skeleton-card">
+                            <div class="skeleton-card-title"></div>
+                            <div class="skeleton-card-image"></div>
+                            <div class="skeleton-card-desc"></div>
+                        </div>
+                        <div class="skeleton-card">
+                            <div class="skeleton-card-title"></div>
+                            <div class="skeleton-card-image"></div>
+                            <div class="skeleton-card-desc"></div>
+                        </div>
+                        <div class="skeleton-card">
+                            <div class="skeleton-card-title"></div>
+                            <div class="skeleton-card-image"></div>
+                            <div class="skeleton-card-desc"></div>
+                        </div>
+                    </div>
+                    <div class="skeleton-plot"></div>
+                    <div class="skeleton-table">
+                        <div class="skeleton-table-row">
+                            <div class="skeleton-table-cell"></div>
+                            <div class="skeleton-table-cell"></div>
+                        </div>
+                        <div class="skeleton-table-row">
+                            <div class="skeleton-table-cell"></div>
+                            <div class="skeleton-table-cell"></div>
+                        </div>
+                        <div class="skeleton-table-row">
+                            <div class="skeleton-table-cell"></div>
+                            <div class="skeleton-table-cell"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             {% with messages = get_flashed_messages() %}
                 {% if messages %}
                     <ul class="flash-messages">
@@ -732,14 +1113,13 @@ tr.highlight-row {
             {% endwith %}
 
             {% if report %}
-                <div class="result-item">
+                <div class="result-item fade-up">
                     <h2><i class="fas fa-file-medical-alt"></i> Cancer Tissue Analysis Report</h2>
                     <div class="explanation">
                         <h3><i class="fas fa-clipboard-list"></i> Final Prediction</h3>
-                        <p style="font-size: 1.5rem; text-align: center; margin: 12px 0; color: #ffffff;">
+                        <p class="prediction-summary">
                             <span class="highlight">{{ report.pred_class }}</span><br>
-                
-                            <em style="font-size:1.1rem; color: #b0b0b0;">{{ report.status }}</em>
+                            <em class="prediction-status">{{ report.status }}</em>
                         </p>
                     </div>
 
@@ -753,19 +1133,19 @@ tr.highlight-row {
                     <div class="grid">
                         <div class="card-grid">
                             <h3><i class="fas fa-image"></i> Original Image</h3>
-                            <img src="data:image/png;base64,{{ report.original_b64 }}" alt="original">
+                            <img src="{{ report.original_url }}" alt="original">
                             <p>The exact histology slide you uploaded with preserved aspect ratio and color information.</p>
                         </div>
 
                         <div class="card-grid">
                             <h3><i class="fas fa-cogs"></i> Processed (224×224)</h3>
-                            <img src="data:image/png;base64,{{ report.processed_b64 }}" alt="processed">
+                            <img src="{{ report.processed_url }}" alt="processed">
                             <p>Resized and normalized image – the standardized format fed into the neural network for analysis.</p>
                         </div>
 
                         <div class="card-grid">
                             <h3><i class="fas fa-fire"></i> Grad-CAM Heatmap Overlay</h3>
-                            <img src="data:image/png;base64,{{ report.overlay_b64 }}" alt="overlay">
+                            <img src="{{ report.overlay_url }}" alt="overlay">
                             <p><strong>Red/warm areas</strong> indicate regions the model focused on most heavily when making its classification decision.
                             This explainability feature helps verify that the AI is examining clinically relevant tissue structures.</p>
                         </div>
@@ -773,14 +1153,13 @@ tr.highlight-row {
 
                     <div class="plot">
                         <h3><i class="fas fa-chart-bar"></i> Confidence Distribution Across All Classes</h3>
-                        <img src="data:image/png;base64,{{ report.bar_b64 }}"
-                             alt="confidence bar chart"
-                             style="display:block; margin:auto; max-width:100%; border:1px solid #1a1a1a; border-radius:8px;">
+                            <img src="{{ report.bar_url }}"
+                             alt="confidence bar chart">
 
-                        <div class="info-box" style="margin-top:18px;">
+                        <div class="info-box section-gap">
                             <strong><i class="fas fa-chart-pie"></i> Probability Interpretation</strong><br>
                             This bar chart displays the probability the model assigned to each possible tissue classification. 
-                            The <strong style="color: #e74c3c;">red bar</strong> represents the final prediction with highest confidence. 
+                            The <strong>highlighted bar</strong> represents the final prediction with highest confidence. 
                             Even with high-confidence predictions, the model may assign small probabilities to other classes – 
                             this is normal behavior for deep neural networks and represents the model's uncertainty distribution.
                         </div>
@@ -804,7 +1183,7 @@ tr.highlight-row {
                             {% endfor %}
                             </tbody>
                         </table>
-                        <p style="margin-top: 12px; font-size: 13px; color: #666666;">
+                        <p class="helper-text">
                             <i class="fas fa-lightbulb"></i> The highlighted row shows the model's final classification decision based on maximum probability.
                         </p>
                     </div>
@@ -819,11 +1198,11 @@ tr.highlight-row {
                     <a href="{{ url_for('app3.page') }}" class="back"><i class="fas fa-redo"></i> Analyze Another Image</a>
                 </div>
             {% else %}
-                <div class="empty-state">
+                <div class="empty-state fade-up">
                     <i class="fas fa-microscope"></i>
                     <h3>Ready for Analysis</h3>
                     <p>Upload a histopathology image using the panel on the right to begin cancer tissue classification.</p>
-                    <p style="margin-top: 12px; font-size: 13px;">
+                    <p class="helper-text">
                         The AI model will analyze cellular patterns, tissue morphology, and structural features to provide a classification with confidence scores.
                     </p>
                 </div>
@@ -832,9 +1211,9 @@ tr.highlight-row {
 
         <!-- RIGHT SIDE: Input Container (35%) -->
         <div class="input-container">
-            <div class="input-card" id="description">
-                <h1><i class="fas fa-brain"></i> Cancer Tissue Classification</h1>
-                <p style="margin-bottom: 24px;">Upload histopathological tissue images to obtain cancer-positive or cancer-negative classifications from our deep learning model trained with ResNet-18 architecture.</p>
+            <div class="input-card fade-up" id="description">
+                <h1><i class="fas fa-brain"></i> Lung Cancer Tissue Classification</h1>
+                <p class="intro-text">Multiclass Classification, upload histopathological tissue images to obtain cancer-positive or cancer-negative classifications from our deep learning model trained with ResNet-18 architecture.</p>
                 
                 <form method="POST" enctype="multipart/form-data" id="uploadForm">
                     <div class="file-input-wrapper">
@@ -852,7 +1231,9 @@ tr.highlight-row {
                     </div>
                     
                     <button type="submit" id="classifyBtn">
-                        <i class="fas fa-magic"></i> Classify Tissue
+                        <i class="fas fa-magic"></i>
+                        <span class="btn-text">Classify Tissue</span>
+                        <span class="btn-loader" aria-hidden="true"></span>
                     </button>
                 </form>
 
@@ -874,7 +1255,7 @@ tr.highlight-row {
                         </ul>
                     </div>
 
-                    <div class="model-info" style="margin-top: 12px;">
+                    <div class="model-info section-gap">
                         <h4><i class="fas fa-chart-line"></i> Analysis Features</h4>
                         <ul>
                             <li>Confidence probability scores for each class</li>
@@ -884,7 +1265,7 @@ tr.highlight-row {
                         </ul>
                     </div>
 
-                    <p style="margin-top: 16px; font-size: 12px; color: #666666;">
+                    <p class="fine-print">
                         <i class="fas fa-shield-alt"></i> Results are generated using state-of-the-art computer vision techniques 
                         but require validation by medical professionals for clinical use.
                     </p>
@@ -908,6 +1289,8 @@ tr.highlight-row {
     const imageModal = document.getElementById('imageModal');
     const modalImg = document.getElementById('modalImg');
     const closeModal = document.querySelector('.close');
+    const uploadForm = document.getElementById('uploadForm');
+    const classifyBtn = document.getElementById('classifyBtn');
     let selectedFiles = [];
     let fileReaders = [];
 
@@ -966,6 +1349,22 @@ tr.highlight-row {
     imageInput.addEventListener('change', function(event) {
         selectedFiles = Array.from(event.target.files);
         generatePreviews(selectedFiles);
+    });
+
+    uploadForm.addEventListener('submit', () => {
+        classifyBtn.classList.add('is-loading');
+        const skeletonLoader = document.getElementById('skeletonLoader');
+        const emptyState = document.querySelector('.empty-state');
+        const resultItem = document.querySelector('.result-item');
+        
+        skeletonLoader.classList.add('active');
+        
+        if (emptyState) {
+            emptyState.style.display = 'none';
+        }
+        if (resultItem) {
+            resultItem.style.display = 'none';
+        }
     });
 
     function updateFileInput() {

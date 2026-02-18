@@ -3,156 +3,180 @@
 <head>
     <title>Email Verification</title>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-            background: linear-gradient(135deg, #05050a 0%, #0a0a1a 50%, #0d0d26 100%);
-            color: #e0e0e0;
-            overflow-x: hidden;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        #glow-canvas {
-            position: fixed;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            display: block;
-            z-index: 0;
-            pointer-events: none;
-        }
-
-        .verify-container {
-            background: rgba(20, 20, 30, 0.3);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 2rem;
-            width: 100%;
-            max-width: 450px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-            position: relative;
-            z-index: 1;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .verify-container:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
-        }
-
-     h2 {
-    font-size: 2.5rem;
-    font-weight: 300;              /* makes text thinner */
-    text-align: center;
-    margin-bottom: 2rem;
-    color: #ffffff;
-    text-transform: uppercase;
-    letter-spacing: 1px;           /* slightly less spacing for narrower look */
-    text-shadow: 0 0 10px rgba(100, 100, 255, 0.5);
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
+html {
+        scroll-behavior: smooth;
+}
 
-        .flash-messages {
-            margin-bottom: 1.5rem;
-            text-align: center;
-        }
+:root {
+        --bg-0: #070605;
+        --bg-1: #0e0c0a;
+        --bg-2: #14110e;
+        --stroke-1: rgba(255, 255, 255, 0.08);
+        --stroke-2: rgba(255, 255, 255, 0.16);
+        --text-1: #f4f2ef;
+        --text-2: #d7d2cc;
+        --text-3: #a69f97;
+        --text-4: #7a7268;
+        --accent: #b28a5b;
+        --accent-soft: rgba(178, 138, 91, 0.18);
+        --glass-bg: rgba(20, 16, 12, 0.66);
+        --glass-bg-strong: rgba(20, 16, 12, 0.84);
+        --shadow-soft: 0 20px 50px rgba(0, 0, 0, 0.45);
+        --shadow-glow: 0 12px 30px rgba(178, 138, 91, 0.18);
+        --radius-lg: 16px;
+        --radius-md: 12px;
+        --radius-sm: 10px;
+}
 
-        .flash-messages p {
-            color: #ff5555;
-            font-size: 1rem;
-            font-weight: 500;
-            background: rgba(255, 85, 85, 0.1);
-            padding: 0.5rem;
-            border-radius: 8px;
-            border: 1px solid rgba(255, 85, 85, 0.3);
-        }
+body {
+    font-family: 'Sora', "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background: radial-gradient(1400px 900px at 10% -15%, rgba(178, 138, 91, 0.08), transparent 60%),
+                radial-gradient(1000px 700px at 90% 0%, rgba(255, 255, 255, 0.05), transparent 65%),
+                linear-gradient(180deg, #070605 0%, #0b0907 45%, #0f0c09 100%);
+    color: var(--text-2);
+    overflow-x: hidden;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    letter-spacing: 0.1px;
+}
 
-        label {
-            font-size: 1.1rem;
-            color: #d0d0ff;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-            display: block;
-        }
+#glow-canvas {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    z-index: 0;
+    pointer-events: none;
+}
 
-        .code-input-container {
-            display: flex;
-            justify-content: center;
-            gap: 0.75rem;
-            margin-bottom: 1.5rem;
-        }
+.verify-container {
+    background: transparent;
+    border: none;
+    border-radius: var(--radius-lg);
+    padding: 1.1rem 1.25rem;
+    width: 100%;
+    max-width: 360px;
+    box-shadow: none;
+    position: relative;
+    z-index: 1;
+    backdrop-filter: none;
+}
 
-        .code-input {
-            width: 3rem;
-            height: 3.5rem;
-            text-align: center;
-            font-size: 1.5rem;
-            font-weight: 600;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 8px;
-            color: #ffffff;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-            text-transform: uppercase;
-        }
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
 
-        .code-input:focus {
-            outline: none;
-            border-color: #6464ff;
-            box-shadow: 0 0 10px rgba(100, 100, 255, 0.5);
-        }
+h2 {
+    font-size: 1.6rem;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 1.25rem;
+    color: var(--text-1);
+    letter-spacing: 0.6px;
+}
 
-        input[type="submit"] {
-            padding: 0.8rem;
-            font-size: 1.1rem;
-            font-weight: 600;
-            background: linear-gradient(90deg, #6464ff, #ff64ff);
-            border: none;
-            border-radius: 8px;
-            color: #ffffff;
-            cursor: pointer;
-            width: 100%;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
+.flash-messages {
+    margin-bottom: 1rem;
+    text-align: center;
+}
 
-        input[type="submit"]:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 15px rgba(100, 100, 255, 0.7);
-        }
+.flash-messages p {
+    color: #f4b7b7;
+    font-size: 0.95rem;
+    background: transparent;
+    padding: 0.25rem 0;
+    border-radius: var(--radius-sm);
+    border: none;
+}
 
-        p {
-            text-align: center;
-            margin-top: 1.5rem;
-            font-size: 1rem;
-            color: #b0b0ff;
-        }
+label {
+    font-size: 0.95rem;
+    color: var(--text-3);
+    margin-bottom: 0.2rem;
+    font-weight: 500;
+    display: block;
+}
 
-        @media (max-width: 600px) {
-            .verify-container {
-                padding: 1.5rem;
-                max-width: 90%;
-            }
+.code-input-container {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+}
 
-            h2 {
-                font-size: 2rem;
-            }
+.code-input {
+    width: 3rem;
+    height: 3.3rem;
+    text-align: center;
+    font-size: 1.25rem;
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--stroke-1);
+    border-radius: var(--radius-sm);
+    color: var(--text-1);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    text-transform: uppercase;
+}
 
-            .code-input {
-                width: 2.5rem;
-                height: 3rem;
-                font-size: 1.2rem;
-            }
-        }
+.code-input:focus {
+    outline: none;
+    border-color: rgba(178, 138, 91, 0.7);
+    box-shadow: 0 0 0 3px rgba(178, 138, 91, 0.2);
+}
+
+input[type="submit"] {
+    padding: 0.7rem 0.75rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    background: linear-gradient(135deg, rgba(178, 138, 91, 0.95) 0%, rgba(178, 138, 91, 0.75) 100%);
+    border: none;
+    border-radius: var(--radius-sm);
+    color: #120e0a;
+    cursor: pointer;
+    width: 100%;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: var(--shadow-glow);
+}
+
+input[type="submit"]:hover {
+    transform: translateY(-1px);
+}
+
+p {
+    text-align: center;
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    color: var(--text-3);
+}
+
+@media (max-width: 600px) {
+    .verify-container {
+        max-width: 92%;
+        padding: 1rem;
+    }
+
+    h2 {
+        font-size: 1.4rem;
+    }
+
+    .code-input {
+        width: 2.5rem;
+        height: 3rem;
+        font-size: 1.1rem;
+    }
+}
     </style>
 </head>
 <body>
@@ -168,8 +192,8 @@
                 </div>
             {% endif %}
         {% endwith %}
-        <p>Please enter the verification code sent to your email</p>
         <form method="POST">
+            <p>Please enter the verification code sent to your email</p>
             <label for="code">Verification Code:</label>
             <div class="code-input-container">
                 <input type="text" class="code-input" name="code[]" maxlength="1" required>
@@ -183,152 +207,154 @@
         </form>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script>
 (() => {
-    const canvas = document.getElementById('glow-canvas');
-    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    const canvas = document.getElementById("glow-canvas");
+    if (!canvas) return;
 
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 2000);
-    camera.position.z = 300;
+    const ctx = canvas.getContext("2d");
+    const squareSize = 80;
+    const fadeDelay = 500;
+    const fadeStep = 0.02;
 
-    const PARTICLE_COUNT = Math.min(12000, Math.floor((window.innerWidth * window.innerHeight) / 1000));
-    const BOUNDS = 500;
+    let dpr = window.devicePixelRatio || 1;
+    let cols = 0;
+    let rows = 0;
+    let grid = [];
+    let active = new Set();
 
-    const geometry = new THREE.BufferGeometry();
-    const positions = new Float32Array(PARTICLE_COUNT * 3);
-    const speeds = new Float32Array(PARTICLE_COUNT);
-    const sizes = new Float32Array(PARTICLE_COUNT);
-    const seed = new Float32Array(PARTICLE_COUNT);
+    function resize() {
+        dpr = window.devicePixelRatio || 1;
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+        canvas.width = Math.floor(width * dpr);
+        canvas.height = Math.floor(height * dpr);
+        canvas.style.width = `${width}px`;
+        canvas.style.height = `${height}px`;
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-    for (let i = 0; i < PARTICLE_COUNT; i++) {
-        const i3 = i * 3;
-        positions[i3] = (Math.random() - 0.5) * BOUNDS * 2;
-        positions[i3 + 1] = (Math.random() - 0.5) * BOUNDS;
-        positions[i3 + 2] = (Math.random() - 0.5) * BOUNDS * 0.5;
-        speeds[i] = 0.2 + Math.random() * 1.0;
-        sizes[i] = 1.0 + Math.random() * 2.5;
-        seed[i] = Math.random() * 1000.0;
+        cols = Math.ceil(width / squareSize);
+        rows = Math.ceil(height / squareSize);
+        grid = new Array(cols * rows).fill(null).map((_, i) => {
+            const x = (i % cols) * squareSize;
+            const y = Math.floor(i / cols) * squareSize;
+            return { x, y, alpha: 0, lastTouched: 0 };
+        });
+        active.clear();
     }
 
-    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-    geometry.setAttribute('aSpeed', new THREE.BufferAttribute(speeds, 1));
-    geometry.setAttribute('aSize', new THREE.BufferAttribute(sizes, 1));
-    geometry.setAttribute('aSeed', new THREE.BufferAttribute(seed, 1));
-
-    const vertexShader = `
-        uniform float uTime;
-        attribute float aSpeed;
-        attribute float aSize;
-        attribute float aSeed;
-        varying float vDepth;
-        varying float vSeed;
-
-        void main() {
-            vec3 pos = position;
-            float t = uTime * 0.15 * aSpeed + aSeed;
-            pos.x += sin(t * 0.8) * 20.0;
-            pos.y += cos(t * 1.0) * 15.0;
-            pos.z += sin(t * 0.6) * 8.0;
-
-            vDepth = (pos.z + ${BOUNDS.toFixed(1)}) / ${(BOUNDS * 2).toFixed(1)};
-            
-            vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
-            gl_Position = projectionMatrix * mvPosition;
-            gl_PointSize = (aSize * 2.0 + 6.0) * (250.0 / (250.0 + mvPosition.z));
-            vSeed = aSeed;
-        }
-    `;
-
-    const fragmentShader = `
-        precision highp float;
-        uniform float uTime;
-        varying float vDepth;
-        varying float vSeed;
-
-        void main() {
-            vec2 uv = gl_PointCoord - 0.5;
-            float dist = length(uv);
-            float alpha = smoothstep(0.5, 0.0, dist);
-            
-            float pulse = 0.5 + 0.5 * sin(uTime * 1.2 + vSeed * 4.0);
-            
-            vec3 colorA = vec3(0.39, 0.40, 0.95);
-            vec3 colorB = vec3(0.55, 0.36, 0.96);
-            vec3 colorC = vec3(0.93, 0.28, 0.60);
-            
-            float mixVal = smoothstep(0.0, 1.0, vDepth);
-            vec3 col = mix(colorA, colorB, mixVal);
-            col = mix(col, colorC, sin(uTime * 0.25 + vSeed) * 0.3);
-            
-            float halo = smoothstep(0.6, 0.0, dist);
-            float glow = pow(halo, 1.8) * alpha * pulse;
-            
-            gl_FragColor = vec4(col * glow, glow * 0.85);
-            if (dist > 0.5) discard;
-        }
-    `;
-
-    const uniforms = {
-        uTime: { value: 0 },
-        uResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) }
-    };
-
-    const material = new THREE.ShaderMaterial({
-        uniforms,
-        vertexShader,
-        fragmentShader,
-        transparent: true,
-        depthTest: true,
-        depthWrite: false,
-        blending: THREE.AdditiveBlending
-    });
-
-    const points = new THREE.Points(geometry, material);
-    scene.add(points);
-
-    function onResize() {
-        const w = window.innerWidth;
-        const h = window.innerHeight;
-        renderer.setSize(w, h);
-        camera.aspect = w / h;
-        camera.updateProjectionMatrix();
-        uniforms.uResolution.value.set(w, h);
+    function touchCell(x, y) {
+        const col = Math.floor(x / squareSize);
+        const row = Math.floor(y / squareSize);
+        if (col < 0 || row < 0 || col >= cols || row >= rows) return;
+        const idx = row * cols + col;
+        const cell = grid[idx];
+        if (!cell) return;
+        cell.alpha = 1;
+        cell.lastTouched = performance.now();
+        active.add(idx);
     }
-    window.addEventListener('resize', onResize, { passive: true });
 
-    let mouseX = 0, mouseY = 0;
-    window.addEventListener('mousemove', (e) => {
-        mouseX = (e.clientX / window.innerWidth) - 0.5;
-        mouseY = (e.clientY / window.innerHeight) - 0.5;
+    function drawCell(cell) {
+        if (cell.alpha <= 0) return;
+        const cx = cell.x + squareSize / 2;
+        const cy = cell.y + squareSize / 2;
+        const gradient = ctx.createRadialGradient(cx, cy, 0, cx, cy, squareSize * 0.75);
+        gradient.addColorStop(0, `rgba(255, 255, 255, ${cell.alpha})`);
+        gradient.addColorStop(1, `rgba(255, 255, 255, 0)`);
+
+        ctx.strokeStyle = gradient;
+        ctx.lineWidth = 1.6;
+        ctx.strokeRect(cell.x + 0.5, cell.y + 0.5, squareSize - 1, squareSize - 1);
+    }
+
+    function drawCube(cx, cy, size, depth, alpha) {
+        const s = size;
+        const d = depth;
+        ctx.strokeStyle = `rgba(255, 255, 255, ${alpha})`;
+        ctx.lineWidth = 1;
+
+        ctx.beginPath();
+        ctx.rect(cx - s / 2, cy - s / 2, s, s);
+        ctx.rect(cx - s / 2 + d, cy - s / 2 - d, s, s);
+        ctx.moveTo(cx - s / 2, cy - s / 2);
+        ctx.lineTo(cx - s / 2 + d, cy - s / 2 - d);
+        ctx.moveTo(cx + s / 2, cy - s / 2);
+        ctx.lineTo(cx + s / 2 + d, cy - s / 2 - d);
+        ctx.moveTo(cx - s / 2, cy + s / 2);
+        ctx.lineTo(cx - s / 2 + d, cy + s / 2 - d);
+        ctx.moveTo(cx + s / 2, cy + s / 2);
+        ctx.lineTo(cx + s / 2 + d, cy + s / 2 - d);
+        ctx.stroke();
+    }
+
+    function drawCubeFormation(width, height) {
+        const centerX = width * 0.5;
+        const centerY = height * 0.5;
+        const base = Math.min(width, height) * 0.18;
+        drawCube(centerX - base * 1.2, centerY + base * 0.2, base, base * 0.28, 0.18);
+        drawCube(centerX + base * 1.1, centerY - base * 0.1, base * 0.9, base * 0.25, 0.16);
+        drawCube(centerX, centerY - base * 0.9, base * 0.75, base * 0.22, 0.14);
+        drawCube(centerX, centerY + base * 0.9, base * 0.65, base * 0.2, 0.12);
+        drawCube(centerX + base * 0.2, centerY + base * 1.6, base * 0.5, base * 0.18, 0.1);
+    }
+
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawCubeFormation(window.innerWidth, window.innerHeight);
+        const now = performance.now();
+        const nextActive = new Set();
+
+        active.forEach((idx) => {
+            const cell = grid[idx];
+            if (!cell) return;
+            if (now - cell.lastTouched > fadeDelay) {
+                cell.alpha = Math.max(0, cell.alpha - fadeStep);
+            }
+            if (cell.alpha > 0) {
+                drawCell(cell);
+                nextActive.add(idx);
+            }
+        });
+
+        active = nextActive;
+        requestAnimationFrame(animate);
+    }
+
+    function seedPattern() {
+        const now = performance.now();
+        const maxLines = Math.min(cols, rows, 10);
+        for (let i = 0; i < maxLines; i += 2) {
+            const idxA = i * cols + i;
+            const idxB = (rows - 1 - i) * cols + i;
+            if (grid[idxA]) {
+                grid[idxA].alpha = 0.6;
+                grid[idxA].lastTouched = now;
+                active.add(idxA);
+            }
+            if (grid[idxB]) {
+                grid[idxB].alpha = 0.45;
+                grid[idxB].lastTouched = now;
+                active.add(idxB);
+            }
+        }
+    }
+
+    window.addEventListener("resize", resize, { passive: true });
+    window.addEventListener("mousemove", (event) => {
+        touchCell(event.clientX, event.clientY);
+    }, { passive: true });
+    window.addEventListener("touchmove", (event) => {
+        if (event.touches && event.touches.length > 0) {
+            const touch = event.touches[0];
+            touchCell(touch.clientX, touch.clientY);
+        }
     }, { passive: true });
 
-    const clock = new THREE.Clock();
-    function animate() {
-        requestAnimationFrame(animate);
-        uniforms.uTime.value = clock.getElapsedTime();
-        
-        camera.position.x += (mouseX * 30 - camera.position.x) * 0.02;
-        camera.position.y += (-mouseY * 15 - camera.position.y) * 0.02;
-        camera.lookAt(0, 0, 0);
-        
-        points.rotation.y += 0.0006;
-        points.rotation.x += 0.0002;
-        
-        renderer.render(scene, camera);
-    }
+    resize();
+    seedPattern();
     animate();
 
-    window.addEventListener('pagehide', () => {
-        geometry.dispose();
-        material.dispose();
-        renderer.dispose();
-    });
-
-    // JavaScript for handling code input behavior
     const inputs = document.querySelectorAll('.code-input');
     inputs.forEach((input, index) => {
         input.addEventListener('input', (e) => {

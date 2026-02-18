@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>App 7</title>
+</head>
+<body>
+        <a href="{{ url_for('app1.home') }}" class="nav-link"><i class="fas fa-home"></i> Home</a>
+            <a href="#results" class="nav-link active"><i class="fas fa-chart-line"></i> Results</a>
+            <a href="{{ url_for('app3.page') }}" class="nav-link"><i class="fas fa-dna"></i> Lung</a>
+            <a href="{{ url_for('app4.page') }}" class="nav-link"><i class="fas fa-flask"></i>Breast </a>
+         
+            <a href="{{ url_for('app5.page') }}" class="nav-link"><i class="fas fa-pills"></i> App5</a>
+            <a href="{{ url_for('app6.page') }}" class="nav-link"><i class="fas fa-vial"></i> App6</a>
+            <a href="{{ url_for('app7.page') }}" class="nav-link"><i class="fas fa-notes-medical"></i> App7</a>
+            <a href="{{ url_for('app2.logout') }}" class="nav-link logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    <h1>App 7</h1>
+    <p>Blueprint is wired and ready.</p>
+</body>
+</html>

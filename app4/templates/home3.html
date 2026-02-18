@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
 * {
@@ -16,23 +16,55 @@
   padding: 0;
 }
 
+html {
+        scroll-behavior: smooth;
+}
+
+:root {
+        --bg-0: #070605;
+        --bg-1: #0e0c0a;
+        --bg-2: #14110e;
+        --stroke-1: rgba(255, 255, 255, 0.08);
+        --stroke-2: rgba(255, 255, 255, 0.16);
+        --text-1: #f4f2ef;
+        --text-2: #d7d2cc;
+        --text-3: #a69f97;
+        --text-4: #7a7268;
+        --accent: #b28a5b;
+        --accent-soft: rgba(178, 138, 91, 0.18);
+        --glass-bg: rgba(20, 16, 12, 0.66);
+        --glass-bg-strong: rgba(20, 16, 12, 0.84);
+        --shadow-soft: 0 20px 50px rgba(0, 0, 0, 0.45);
+        --shadow-glow: 0 12px 30px rgba(178, 138, 91, 0.18);
+        --radius-lg: 16px;
+        --radius-md: 12px;
+        --radius-sm: 10px;
+}
+
 body {
-    font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-    background: #000000;
+    font-family: 'Sora', "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background: radial-gradient(1400px 900px at 10% -15%, rgba(178, 138, 91, 0.08), transparent 60%),
+                radial-gradient(1000px 700px at 90% 0%, rgba(255, 255, 255, 0.05), transparent 65%),
+                linear-gradient(180deg, #070605 0%, #0b0907 45%, #0f0c09 100%);
+    color: var(--text-2);
     overflow-x: hidden;
     min-height: 100vh;
+    font-size: 14px;
+    letter-spacing: 0.1px;
 }
 
 .nav-header {
-    background: #0a0a0a;
-    border-bottom: 1px solid #1a1a1a;
-    padding: 16px 32px;
+    background: var(--glass-bg-strong);
+    border-bottom: 1px solid var(--stroke-1);
+    padding: 14px 32px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     position: sticky;
     top: 0;
     z-index: 1000;
+    backdrop-filter: blur(14px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
 }
 
 .logo-section {
@@ -42,25 +74,26 @@ body {
 }
 
 .logo-icon {
-    width: 32px;
-    height: 32px;
-    background: #ffffff;
-    border-radius: 6px;
+    width: 30px;
+    height: 30px;
+    background: rgba(242, 244, 247, 0.92);
+    border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
+    box-shadow: var(--shadow-soft);
 }
 
 .logo-icon i {
-    color: #000000;
-    font-size: 16px;
+    color: #0b0d12;
+    font-size: 14px;
 }
 
 .logo-text {
-    font-size: 20px;
-    font-weight: 700;
-    color: #ffffff;
-    letter-spacing: 2px;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-1);
+    letter-spacing: 3px;
 }
 
 .nav-menu {
@@ -70,40 +103,44 @@ body {
 }
 
 .nav-link {
-    color: #666666;
+    color: var(--text-4);
     text-decoration: none;
-    padding: 8px 16px;
-    border-radius: 6px;
-    font-size: 14px;
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-size: 12px;
     font-weight: 500;
     transition: all 0.2s ease;
     display: flex;
     align-items: center;
     gap: 6px;
+    border: 1px solid transparent;
 }
 
 .nav-link i {
-    font-size: 14px;
+    font-size: 12px;
 }
 
 .nav-link:hover {
-    background: #1a1a1a;
-    color: #ffffff;
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--text-1);
+    border-color: var(--stroke-1);
 }
 
 .nav-link.active {
-    background: #ffffff;
-    color: #000000;
+    background: var(--accent-soft);
+    color: var(--text-1);
+    border-color: rgba(178, 138, 91, 0.5);
+    box-shadow: var(--shadow-glow);
 }
 
 .logout-btn {
-    background: #1a1a1a;
-    color: #999999;
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--text-3);
 }
 
 .logout-btn:hover {
-    background: #262626;
-    color: #ffffff;
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text-1);
 }
 
 .main-container {
@@ -114,13 +151,12 @@ body {
 
 .results-container {
     flex: 0 0 65%;
-    background: #000000;
-    border-right: 1px solid #1a1a1a;
+    background: transparent;
+    border-right: 1px solid var(--stroke-1);
     overflow-y: auto;
     padding: 32px;
     scrollbar-width: thin;
     scrollbar-color: #262626 #0a0a0a;
-    scroll-behavior: smooth;
 }
 
 .results-container::-webkit-scrollbar {
@@ -142,15 +178,14 @@ body {
 
 .input-container {
     flex: 0 0 35%;
-    background: #0a0a0a;
-    padding: 32px;
+    background: transparent;
+    padding: 18px;
     position: sticky;
     top: 64px;
     height: calc(100vh - 64px);
     overflow-y: auto;
     scrollbar-width: thin;
     scrollbar-color: #262626 #0a0a0a;
-    scroll-behavior: smooth;
 }
 
 .input-container::-webkit-scrollbar {
@@ -173,12 +208,78 @@ body {
 }
 
 .result-item {
-    background: #0a0a0a;
-    border: 1px solid #1a1a1a;
-    border-radius: 8px;
+    background: var(--glass-bg);
+    border: 1px solid var(--stroke-1);
+    border-radius: var(--radius-lg);
     padding: 24px;
     margin-bottom: 24px;
     transition: all 0.2s ease;
+    box-shadow: var(--shadow-soft);
+    backdrop-filter: blur(16px);
+}
+
+.result-header {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 16px;
+}
+
+.result-subtitle {
+    color: var(--text-4);
+    font-size: 12px;
+}
+
+.section-title {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--text-4);
+    margin: 18px 0 10px;
+}
+
+.summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.summary-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--stroke-1);
+    border-radius: var(--radius-md);
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    backdrop-filter: blur(12px);
+}
+
+.summary-label {
+    font-size: 11px;
+    color: var(--text-4);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+}
+
+.summary-value {
+    font-size: 16px;
+    color: var(--text-1);
+    font-weight: 600;
+}
+
+.summary-meta {
+    font-size: 12px;
+    color: var(--text-3);
+}
+
+.result-points {
+    margin: 12px 0 0;
+    padding-left: 18px;
+    color: var(--text-3);
+    line-height: 1.6;
+    font-size: 12px;
 }
 
 .result-item:hover {
@@ -186,41 +287,43 @@ body {
 }
 
 h1, h2, h3 {
-    color: #ffffff;
+    color: var(--text-1);
     font-weight: 600;
 }
 
 h1 {
-    font-size: 24px;
+    font-size: 20px;
     margin-bottom: 8px;
 }
 
 h2 {
-    font-size: 18px;
-    margin-bottom: 16px;
+    font-size: 16px;
+    margin-bottom: 14px;
 }
 
 h3 {
-    font-size: 16px;
-    margin-bottom: 12px;
+    font-size: 14px;
+    margin-bottom: 10px;
 }
 
 .guide-box {
-    background: #0a0a0a;
-    border-left: 3px solid #ffffff;
+    background: var(--glass-bg);
+    border-left: 3px solid var(--accent);
     padding: 20px;
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     margin-bottom: 24px;
+    border: 1px solid var(--stroke-1);
+    backdrop-filter: blur(12px);
 }
 
 .guide-box h3 {
-    color: #ffffff;
+    color: var(--text-1);
     margin-bottom: 12px;
 }
 
 .guide-box ul {
     list-style-position: inside;
-    color: #808080;
+    color: var(--text-3);
     line-height: 1.8;
 }
 
@@ -229,107 +332,196 @@ h3 {
 }
 
 .explanation-box {
-    background: #000000;
-    border-left: 3px solid #ffffff;
+    background: rgba(255, 255, 255, 0.03);
+    border-left: 3px solid var(--accent);
     padding: 20px;
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     margin: 20px 0;
+    border: 1px solid var(--stroke-1);
+    backdrop-filter: blur(12px);
 }
 
 .xai-section {
-    background: #0a0a0a;
-    border: 1px solid #1a1a1a;
+    background: var(--glass-bg);
+    border: 1px solid var(--stroke-1);
     padding: 20px;
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     margin: 20px 0;
+    box-shadow: var(--shadow-soft);
+    backdrop-filter: blur(12px);
 }
 
 .xai-section h3 {
-    color: #ffffff;
+    color: var(--text-1);
     margin-bottom: 12px;
 }
 
 input[type="file"] {
     width: 100%;
     padding: 12px;
-    background: #0a0a0a;
-    border: 1px solid #1a1a1a;
-    border-radius: 6px;
-    color: #b0b0b0;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--stroke-1);
+    border-radius: var(--radius-sm);
+    color: var(--text-2);
     margin-bottom: 20px;
-    font-size: 14px;
+    font-size: 13px;
     transition: all 0.2s ease;
+}
+
+.file-input-wrapper {
+    position: relative;
+    width: 100%;
+    margin-bottom: 18px;
+}
+
+.file-input-wrapper .preview-container {
+    margin-top: 12px;
+}
+
+.file-input-label {
+    background: var(--glass-bg);
+    border: 1px dashed var(--stroke-1);
+    border-radius: var(--radius-md);
+    color: var(--text-4);
+    cursor: pointer;
+    display: block;
+    padding: 28px 22px;
+    text-align: center;
+    transition: all 0.2s ease;
+    backdrop-filter: blur(12px);
+}
+
+.file-input-label:hover {
+    border-color: var(--stroke-2);
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.file-input-label input[type="file"] {
+    position: absolute;
+    left: -9999px;
+}
+
+.file-input-label i {
+    font-size: 24px;
+    color: var(--text-1);
+    margin-bottom: 10px;
+    display: block;
+}
+
+.file-input-label strong {
+    color: var(--text-1);
+    font-size: 14px;
+    display: block;
+    margin: 6px 0;
 }
 
 input[type="file"]:focus {
     outline: none;
-    border-color: #ffffff;
+    border-color: rgba(178, 138, 91, 0.6);
+    box-shadow: 0 0 0 3px rgba(178, 138, 91, 0.16);
 }
 
 input[type="submit"] {
-    background: linear-gradient(135deg, #ffffff 0%, #e0e0e0 100%);
-    color: #000000;
+    background: linear-gradient(135deg, rgba(178, 138, 91, 0.95) 0%, rgba(178, 138, 91, 0.75) 100%);
+    color: #120e0a;
     padding: 12px 24px;
     border: none;
-    border-radius: 6px;
+    border-radius: 4px;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 600;
     transition: all 0.2s ease;
     width: 100%;
+    letter-spacing: 0.2px;
+    box-shadow: var(--shadow-glow);
 }
 
 input[type="submit"]:hover {
-    background: linear-gradient(135deg, #e0e0e0 0%, #cccccc 100%);
+    background: linear-gradient(135deg, rgba(178, 138, 91, 1) 0%, rgba(178, 138, 91, 0.82) 100%);
     transform: translateY(-1px);
 }
 
+.submit-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.submit-btn.is-loading {
+    pointer-events: none;
+}
+
+.btn-loader {
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(18, 14, 10, 0.35);
+    border-top-color: #120e0a;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    display: none;
+}
+
+.submit-btn.is-loading .btn-loader {
+    display: inline-block;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
 button {
-    background: linear-gradient(135deg, #ffffff 0%, #e0e0e0 100%);
-    color: #000000;
+    background: linear-gradient(135deg, rgba(178, 138, 91, 0.95) 0%, rgba(178, 138, 91, 0.75) 100%);
+    color: #120e0a;
     padding: 10px 20px;
     border: none;
-    border-radius: 6px;
+    border-radius: 4px;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 600;
     transition: all 0.2s ease;
     margin: 5px 0;
+    letter-spacing: 0.2px;
+    box-shadow: var(--shadow-glow);
 }
 
 button:hover {
-    background: linear-gradient(135deg, #e0e0e0 0%, #cccccc 100%);
+    background: linear-gradient(135deg, rgba(178, 138, 91, 1) 0%, rgba(178, 138, 91, 0.82) 100%);
     transform: translateY(-1px);
 }
 
 .download-buttons {
     margin-top: 24px;
     padding-top: 20px;
-    border-top: 1px solid #1a1a1a;
+    border-top: 1px solid var(--stroke-1);
 }
 
 .download-buttons h3 {
-    font-size: 14px;
-    color: #999999;
+    font-size: 12px;
+    color: var(--text-3);
     margin-bottom: 8px;
 }
 
 .download-buttons p {
-    font-size: 13px;
-    color: #666666;
+    font-size: 12px;
+    color: var(--text-4);
     margin-bottom: 12px;
 }
 
 .intro-box {
-    background: #0a0a0a;
-    border-left: 3px solid #ffffff;
+    background: var(--glass-bg);
+    border-left: 3px solid var(--accent);
     padding: 20px;
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     margin-bottom: 24px;
+    border: 1px solid var(--stroke-1);
+    backdrop-filter: blur(12px);
 }
 
 .intro-box h3 {
-    color: #ffffff;
+    color: var(--text-1);
     margin-bottom: 12px;
 }
 
@@ -360,14 +552,14 @@ button:hover {
 .modal img {
     max-width: 100%;
     max-height: 100%;
-    border-radius: 8px;
+    border-radius: var(--radius-md);
 }
 
 .close {
     position: absolute;
     top: 20px;
     right: 40px;
-    color: #ffffff;
+    color: var(--text-1);
     font-size: 36px;
     font-weight: bold;
     cursor: pointer;
@@ -376,35 +568,38 @@ button:hover {
 }
 
 .close:hover {
-    color: #cccccc;
+    color: #e0d7cd;
 }
 
 .error {
-    background: #1a1a1a;
-    color: #999999;
+    background: rgba(255, 255, 255, 0.03);
+    color: var(--text-3);
     padding: 12px 20px;
     margin-bottom: 12px;
-    border-radius: 6px;
-    border: 1px solid #262626;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--stroke-1);
+    backdrop-filter: blur(10px);
 }
 
 .empty-state {
     text-align: center;
     padding: 64px 24px;
-    color: #666666;
-    background: #0a0a0a;
-    border-radius: 8px;
-    border: 1px solid #1a1a1a;
+    color: var(--text-4);
+    background: var(--glass-bg);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--stroke-1);
+    box-shadow: var(--shadow-soft);
+    backdrop-filter: blur(16px);
 }
 
 .empty-state i {
-    font-size: 48px;
-    color: #333333;
+    font-size: 40px;
+    color: #3a3026;
     margin-bottom: 16px;
 }
 
 .empty-state h3 {
-    color: #999999;
+    color: var(--text-2);
     font-weight: 500;
     margin-bottom: 12px;
 }
@@ -412,30 +607,32 @@ button:hover {
 img {
     max-width: 100%;
     height: auto;
-    border: 1px solid #1a1a1a;
-    border-radius: 8px;
+    border: 1px solid var(--stroke-1);
+    border-radius: var(--radius-md);
     margin: 10px 0;
     transition: all 0.2s ease;
     cursor: pointer;
+    background: rgba(255, 255, 255, 0.02);
 }
 
 img:hover {
-    border-color: #333333;
+    border-color: var(--stroke-2);
 }
 
 p {
-    color: #808080;
+    color: var(--text-3);
     line-height: 1.6;
     margin: 8px 0;
+    font-size: 13px;
 }
 
 strong {
-    color: #b0b0b0;
+    color: var(--text-2);
 }
 
 hr {
     border: none;
-    border-top: 1px solid #1a1a1a;
+    border-top: 1px solid var(--stroke-1);
     margin: 24px 0;
 }
 
@@ -445,24 +642,25 @@ hr {
     gap: 12px;
     margin: 20px 0;
     padding: 10px;
-    background: #0a0a0a;
-    border-radius: 8px;
-    border: 1px solid #1a1a1a;
+    background: var(--glass-bg);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--stroke-1);
+    backdrop-filter: blur(12px);
 }
 
 .preview-card {
     position: relative;
     width: 100px;
     height: 100px;
-    background: #000000;
-    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: var(--radius-sm);
     overflow: hidden;
-    border: 1px solid #1a1a1a;
+    border: 1px solid var(--stroke-1);
     transition: all 0.2s ease;
 }
 
 .preview-card:hover {
-    border-color: #333333;
+    border-color: var(--stroke-2);
 }
 
 .preview-card img {
@@ -470,37 +668,160 @@ hr {
     height: 100%;
     object-fit: cover;
     border: none;
-    border-radius: 6px;
+    border-radius: var(--radius-sm);
+    margin: 0;
 }
 
-.preview-card .delete-btn {
+.preview-card .close-btn {
     position: absolute;
     top: 4px;
     right: 4px;
-    background: #ffffff;
-    color: #000000;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
     border: none;
-    border-radius: 4px;
-    width: 24px;
-    height: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 12px;
-    font-weight: 600;
     cursor: pointer;
-    transition: all 0.2s ease;
+    background: rgba(0, 0, 0, 0.45);
+    color: white;
+    font-size: 12px;
+    line-height: 20px;
+    text-align: center;
+    transition: all 0.25s ease;
     padding: 0;
     margin: 0;
 }
 
-.preview-card .delete-btn:hover {
-    background: #cccccc;
-    transform: scale(1.1);
+.preview-card .close-btn:hover {
+    background: rgba(255, 255, 255, 0.9);
+    color: black;
+    transform: scale(1.08);
+}
+
+.fas {
+    font-weight: 400;
+    opacity: 0.9;
+}
+
+.nav-link:focus-visible,
+button:focus-visible,
+input[type="file"]:focus-visible,
+input[type="submit"]:focus-visible {
+    outline: 2px solid rgba(178, 138, 91, 0.6);
+    outline-offset: 2px;
 }
 
 .preview-container:empty {
     display: none;
+}
+
+/* Skeleton Loader Styles */
+.skeleton-loader {
+    display: none;
+}
+
+.skeleton-loader.active {
+    display: block;
+}
+
+.skeleton-item {
+    background: var(--glass-bg);
+    border: 1px solid var(--stroke-1);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    margin-bottom: 24px;
+    backdrop-filter: blur(16px);
+}
+
+.skeleton-header {
+    height: 24px;
+    width: 60%;
+    background: linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.03) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 6px;
+    margin-bottom: 16px;
+}
+
+.skeleton-text {
+    height: 14px;
+    background: linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.03) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+.skeleton-text.short {
+    width: 40%;
+}
+
+.skeleton-text.medium {
+    width: 70%;
+}
+
+.skeleton-text.long {
+    width: 90%;
+}
+
+.skeleton-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+    margin: 16px 0;
+}
+
+.skeleton-card {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--stroke-1);
+    border-radius: var(--radius-md);
+    padding: 14px;
+    height: 80px;
+}
+
+.skeleton-card-inner {
+    height: 12px;
+    width: 50%;
+    background: linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.03) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 4px;
+    margin-bottom: 8px;
+}
+
+.skeleton-card-value {
+    height: 20px;
+    width: 70%;
+    background: linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.03) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 4px;
+}
+
+.skeleton-image {
+    height: 180px;
+    background: linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.03) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: var(--radius-md);
+    margin: 16px 0;
+}
+
+.skeleton-plot {
+    height: 200px;
+    background: linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.03) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: var(--radius-md);
+    margin: 16px 0;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
 }
 
 @media (max-width: 968px) {
@@ -520,6 +841,7 @@ hr {
         order: -1;
         height: auto;
         top: 0;
+        padding: 16px;
     }
 
     .nav-menu {
@@ -528,7 +850,7 @@ hr {
     }
 
     .nav-link {
-        font-size: 13px;
+        font-size: 12px;
         padding: 6px 12px;
     }
 }
@@ -544,59 +866,97 @@ hr {
             <div class="logo-text">AURA</div>
         </div>
         <nav class="nav-menu">
-            <a href="{{ url_for('app1.home') }}" class="nav-link"><i class="fas fa-home"></i> Home</a>
+        <a href="{{ url_for('app1.home') }}" class="nav-link"><i class="fas fa-home"></i> Home</a>
             <a href="#results" class="nav-link active"><i class="fas fa-chart-line"></i> Results</a>
-            <a href="{{ url_for('app4.page') }}" class="nav-link"><i class="fas fa-flask"></i> App4</a>
-            <a href="{{ url_for('app3.page') }}" class="nav-link"><i class="fas fa-microscope"></i> App3</a>
-            <a href="{{ url_for('app5.page') }}" class="nav-link"><i class="fas fa-dna"></i> App5</a>
+            <a href="{{ url_for('app3.page') }}" class="nav-link"><i class="fas fa-dna"></i> Lung</a>
+            <a href="{{ url_for('app4.page') }}" class="nav-link"><i class="fas fa-flask"></i>Breast </a>
+         
+            <a href="{{ url_for('app5.page') }}" class="nav-link"><i class="fas fa-pills"></i> App5</a>
+            <a href="{{ url_for('app6.page') }}" class="nav-link"><i class="fas fa-vial"></i> App6</a>
+            <a href="{{ url_for('app7.page') }}" class="nav-link"><i class="fas fa-notes-medical"></i> App7</a>
             <a href="{{ url_for('app2.logout') }}" class="nav-link logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
-        </nav>
+           </nav>
     </div>
 
     <div class="main-container">
         <div class="results-container" id="results">
-            <h1 style="font-size: 28px; margin-bottom: 16px;"><i class="fas fa-chart-bar"></i> Classification Results</h1>
+            <h1 style="font-size: 28px; margin-bottom: 16px;">Classification Results</h1>
             
-            <div class="guide-box">
-                <h3><i class="fas fa-info-circle"></i> How to Interpret Results</h3>
-                <p style="margin-bottom: 12px;">
-                    The results below show the model's analysis of your uploaded images. Each result includes:
-                </p>
-                <ul>
-                    <li><strong>Predicted Class:</strong> IDC(+) (Cancer Positive) or IDC(-) (Cancer Negative)</li>
-                    <li><strong>Confidence:</strong> Model's certainty expressed as a percentage</li>
-                    <li><strong>Probabilities:</strong> Likelihood shown in the probability distribution chart</li>
-                    <li><strong>Image Analysis:</strong> Original, preprocessed, and Grad-CAM heatmap views</li>
-                </ul>
-                <p style="margin-top: 12px; color: #ffffff; font-weight: 600;">
-                    <i class="fas fa-exclamation-triangle"></i> Note: These results are AI-generated and for informational purposes only. Always consult a medical professional for definitive diagnosis.
-                </p>
+            <!-- Skeleton Loader -->
+            <div class="skeleton-loader" id="skeletonLoader">
+                <div class="skeleton-item">
+                    <div class="skeleton-header"></div>
+                    <div class="skeleton-text long"></div>
+                    <div class="skeleton-grid">
+                        <div class="skeleton-card">
+                            <div class="skeleton-card-inner"></div>
+                            <div class="skeleton-card-value"></div>
+                        </div>
+                        <div class="skeleton-card">
+                            <div class="skeleton-card-inner"></div>
+                            <div class="skeleton-card-value"></div>
+                        </div>
+                        <div class="skeleton-card">
+                            <div class="skeleton-card-inner"></div>
+                            <div class="skeleton-card-value"></div>
+                        </div>
+                        <div class="skeleton-card">
+                            <div class="skeleton-card-inner"></div>
+                            <div class="skeleton-card-value"></div>
+                        </div>
+                    </div>
+                    <div class="skeleton-image"></div>
+                    <div class="skeleton-image"></div>
+                    <div class="skeleton-plot"></div>
+                    <div class="skeleton-text medium"></div>
+                </div>
             </div>
 
             {% if error %}
-                <div class="error"><i class="fas fa-exclamation-triangle"></i> {{ error }}</div>
+                <div class="error">{{ error }}</div>
             {% endif %}
 
             {% if results %}
                 {% for res in results %}
                 <div class="result-item">
-                    <h2><i class="fas fa-file-medical"></i> Analysis for {{ res.filename }}</h2>
-                    
-                    <p style="font-size: 15px; margin: 12px 0;">
-                        <strong>Predicted Class:</strong>
-                        <span style="color: {% if res.cancer_status == 'Cancer Positive' %}#999999{% else %}#ffffff{% endif %}; font-weight: 700;">
-                            {{ res.predicted_class }} ({{ res.cancer_status }})
-                        </span>
-                    </p>
-                    
-                    <p><strong>Confidence:</strong> {{ res.confidence }}</p>
-                    <p><strong>Probability IDC(-):</strong> {{ res.prob_idc_neg }}</p>
-                    <p><strong>Probability IDC(+):</strong> {{ res.prob_idc_pos }}</p>
+                    <div class="result-header">
+                        <h2>Analysis for {{ res.filename }}</h2>
+                        <p class="result-subtitle">Prediction summary and probability scores.</p>
+                    </div>
+
+                    <div class="section-title">Prediction Summary</div>
+                    <div class="summary-grid">
+                        <div class="summary-card">
+                            <span class="summary-label">Predicted Class</span>
+                            <span class="summary-value">{{ res.predicted_class }}</span>
+                            <span class="summary-meta">{{ res.cancer_status }}</span>
+                        </div>
+                        <div class="summary-card">
+                            <span class="summary-label">Confidence</span>
+                            <span class="summary-value">{{ res.confidence }}</span>
+                            <span class="summary-meta">Model certainty score</span>
+                        </div>
+                        <div class="summary-card">
+                            <span class="summary-label">Probability IDC(-)</span>
+                            <span class="summary-value">{{ res.prob_idc_neg }}</span>
+                            <span class="summary-meta">Benign likelihood</span>
+                        </div>
+                        <div class="summary-card">
+                            <span class="summary-label">Probability IDC(+)</span>
+                            <span class="summary-value">{{ res.prob_idc_pos }}</span>
+                            <span class="summary-meta">Malignant likelihood</span>
+                        </div>
+                    </div>
+
+                    <ul class="result-points">
+                        <li>Highest probability indicates the predicted class.</li>
+                        <li>Grad-CAM highlights areas that influenced the decision.</li>
+                    </ul>
 
              
                     {% if res.explanation_text %}
                         <div class="explanation-box" style="color: #ffffff;">
-                            <h3><i class="fas fa-clipboard-list"></i> Detailed Explanation</h3>
+                            <h3>Detailed Explanation</h3>
                             <div style="color: #ffffff;">
                                 {{ res.explanation_text | safe }}
                             </div>
@@ -605,14 +965,14 @@ hr {
 
                     {% if res.image_plot %}
                         <div style="margin: 24px 0;">
-                            <h3><i class="fas fa-microscope"></i> Image Analysis</h3>
-                            <img src="data:image/png;base64,{{ res.image_plot }}" alt="Image Analysis for {{ res.filename }}">
+                            <h3>Image Analysis</h3>
+                            <img src="{{ res.image_plot }}" alt="Image Analysis for {{ res.filename }}">
                         </div>
                     {% endif %}
 
                     {% if res.cam_image %}
                         <div class="xai-section">
-                            <h3><i class="fas fa-brain"></i> Explainable AI (Grad-CAM)</h3>
+                            <h3>Explainable AI (Grad-CAM)</h3>
                             <p style="color: white;">
                                 The Grad-CAM heatmap visualizes regions the model focused on. 
                                 Brighter areas (red/yellow) strongly influenced the prediction, while darker areas (blue) had less impact.
@@ -624,11 +984,11 @@ hr {
 
                     {% if res.prob_plot %}
                         <div style="margin: 24px 0;">
-                            <h3><i class="fas fa-chart-bar"></i> Probability Distribution</h3>
+                            <h3>Probability Distribution</h3>
                             <p style="font-size: 13px; margin-bottom: 12px;">
                                 Bar heights represent classification probabilities for IDC(-) or IDC(+). Taller bars indicate higher likelihood.
                             </p>
-                            <img src="data:image/png;base64,{{ res.prob_plot }}" alt="Probability Distribution for {{ res.filename }}">
+                            <img src="{{ res.prob_plot }}" alt="Probability Distribution for {{ res.filename }}">
                         </div>
                     {% endif %}
 
@@ -637,7 +997,6 @@ hr {
                 {% endfor %}
             {% else %}
                 <div class="empty-state">
-                    <i class="fas fa-file-medical-alt"></i>
                     <h3>No Analysis Results Yet</h3>
                     <p>Upload histopathological images to get started with AI-powered breast cancer IDC classification.</p>
                 </div>
@@ -646,37 +1005,42 @@ hr {
 
         <div class="input-container">
             <div class="input-card">
-                <h1><i class="fas fa-ribbon"></i> Breast Cancer IDC Classification</h1>
+                <h1>Breast Cancer IDC Classification</h1>
                 
                 <div class="intro-box">
-                    <h3><i class="fas fa-info-circle"></i> About This Tool</h3>
+                    <h3>About This Tool</h3>
                     <p>
-                        This application uses a deep learning model (ResNet-18) to classify histopathology images for breast cancer detection, 
-                        specifically identifying Invasive Ductal Carcinoma (IDC). Upload images to receive predictions with confidence scores, 
+                     
+                        Specifically identifying Invasive Ductal Carcinoma (IDC). Upload images to receive predictions with confidence scores, 
                         probability distributions, and Grad-CAM heatmaps showing influential areas.
                     </p>
-                    <p style="margin-top: 10px; color: #ffffff; font-weight: 600;">
-                        <i class="fas fa-shield-alt"></i> Important: For research and educational purposes only. Not a replacement for professional medical advice.
-                    </p>
+              
                 </div>
                 
-              <form class="upload-form" method="POST" enctype="multipart/form-data" id="uploadForm">
-    <label style="display: block; margin-bottom: 8px; color: #b0b0b0; font-weight: 500;">
-        <i class="fas fa-upload"></i> Select Histopathology Images
-    </label>
-    <input type="file" name="images" accept="image/*" multiple required>
-    <div class="preview-container" id="previewContainer"></div>
-    <input type="submit" value="Upload and Classify" id="classifyBtn">
-</form>
+                <form class="upload-form" method="POST" enctype="multipart/form-data" id="uploadForm">
+                    <div class="file-input-wrapper">
+                        <label for="imageInput" class="file-input-label">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <strong>Choose Histology Image</strong><br>
+                            <small>Select a tissue sample image for analysis</small>
+                            <input type="file" id="imageInput" name="images" accept="image/*" multiple required>
+                        </label>
+                        <div class="preview-container" id="previewContainer"></div>
+                    </div>
+                    <button type="submit" id="classifyBtn" class="submit-btn">
+                        <span class="btn-text">Upload and Classify</span>
+                        <span class="btn-loader" aria-hidden="true"></span>
+                    </button>
+                </form>
 
                 <div class="download-buttons">
-                    <h3><i class="fas fa-download"></i> Download Test Images</h3>
+                    <h3>Download Test Images</h3>
                     <p>Try the model with example histopathology images to see how it performs.</p>
                     <a href="{{ url_for('app4.static', filename='examples/example0.png') }}" download>
-                        <button type="button"><i class="fas fa-file-download"></i> Download Example 1</button>
+                        <button type="button">Download Example 1</button>
                     </a>
                     <a href="{{ url_for('app4.static', filename='examples/example1.png') }}" download>
-                        <button type="button"><i class="fas fa-file-download"></i> Download Example 2</button>
+                        <button type="button">Download Example 2</button>
                     </a>
                 </div>
             </div>
@@ -690,36 +1054,69 @@ hr {
         </div>
     </div>
 <script>
-document.getElementById('uploadForm').querySelector('input[type="file"]').addEventListener('change', function(e) {
-    const files = e.target.files;
-    const previewContainer = document.getElementById('previewContainer');
-    previewContainer.innerHTML = ''; // Clear existing previews
+const fileInput = document.getElementById('imageInput');
+const previewContainer = document.getElementById('previewContainer');
+const uploadLabel = document.querySelector('.file-input-label');
+let currentFiles = [];
 
-    Array.from(files).forEach((file, index) => {
-        if (file.type.startsWith('image/')) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const previewCard = document.createElement('div');
-                previewCard.className = 'preview-card';
-                previewCard.innerHTML = `
-                    <img src="${e.target.result}" alt="Preview ${file.name}">
-                    <button class="delete-btn" title="Remove image">×</button>
-                `;
-                previewContainer.appendChild(previewCard);
+function updateUploadVisibility() {
+    if (currentFiles.length > 0) {
+        uploadLabel.style.display = 'none';
+    } else {
+        uploadLabel.style.display = 'block';
+    }
+}
 
-                // Handle delete button click
-                previewCard.querySelector('.delete-btn').addEventListener('click', function() {
-                    previewCard.remove();
-                    // Update the file input to remove the deleted file
-                    const dt = new DataTransfer();
-                    Array.from(files).forEach((f, i) => {
-                        if (i !== index) dt.items.add(f);
-                    });
-                    e.target.files = dt.files;
-                });
-            };
-            reader.readAsDataURL(file);
-        }
+function updateFileInput() {
+    const dt = new DataTransfer();
+    currentFiles.forEach(f => dt.items.add(f));
+    fileInput.files = dt.files;
+}
+
+function renderPreviews() {
+    previewContainer.innerHTML = '';
+    currentFiles.forEach((file, index) => {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const previewCard = document.createElement('div');
+            previewCard.className = 'preview-card';
+            previewCard.innerHTML = `
+                <img src="${e.target.result}" alt="Preview ${file.name}">
+                <button class="close-btn" title="Remove image">✕</button>
+            `;
+            previewContainer.appendChild(previewCard);
+
+            previewCard.querySelector('.close-btn').addEventListener('click', function() {
+                currentFiles.splice(index, 1);
+                updateFileInput();
+                renderPreviews();
+                updateUploadVisibility();
+            });
+        };
+        reader.readAsDataURL(file);
+    });
+}
+
+fileInput.addEventListener('change', function(e) {
+    currentFiles = Array.from(e.target.files).filter(f => f.type.startsWith('image/'));
+    renderPreviews();
+    updateUploadVisibility();
+});
+
+document.getElementById('uploadForm').addEventListener('submit', function() {
+    const classifyBtn = document.getElementById('classifyBtn');
+    const skeletonLoader = document.getElementById('skeletonLoader');
+    const emptyState = document.querySelector('.empty-state');
+    const resultItems = document.querySelectorAll('.result-item');
+    
+    classifyBtn.classList.add('is-loading');
+    skeletonLoader.classList.add('active');
+    
+    if (emptyState) {
+        emptyState.style.display = 'none';
+    }
+    resultItems.forEach(item => {
+        item.style.display = 'none';
     });
 });
 </script>

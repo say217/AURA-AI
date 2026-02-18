@@ -1,11 +1,11 @@
 # routes.py
-import base64
 import io
 import os
+import uuid
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-from flask import Blueprint, render_template, session, redirect, url_for, request, flash
+from flask import Blueprint, flash, redirect, render_template, request, send_from_directory, session, url_for
 from functools import wraps
 import torch
 import torch.nn.functional as F
@@ -17,6 +17,9 @@ import cv2
 from io import BytesIO
 
 bp = Blueprint('app3', __name__, template_folder='templates')
+
+INSTANCE_DIR = os.path.join(os.path.dirname(__file__), 'instance')
+MAX_IMAGE_SIZE = 10 * 1024 * 1024
 
 # --------------------------------------------------------------- #
 # 1. Login decorator
@@ -141,10 +144,31 @@ gradcam = GradCAM(model, model.layer4[-1])
 # --------------------------------------------------------------- #
 # 2.5  Helper functions
 # --------------------------------------------------------------- #
-def pil_to_b64(img: Image.Image) -> str:
-    buf = io.BytesIO()
-    img.save(buf, format='PNG')
-    return base64.b64encode(buf.getvalue()).decode()
+def _ensure_instance_dir():
+    os.makedirs(INSTANCE_DIR, exist_ok=True)
+
+
+def _clear_instance_dir():
+    _ensure_instance_dir()
+    for name in os.listdir(INSTANCE_DIR):
+        path = os.path.join(INSTANCE_DIR, name)
+        if os.path.isfile(path):
+            os.remove(path)
+
+
+def _save_pil(img: Image.Image, filename: str) -> str:
+    _ensure_instance_dir()
+    path = os.path.join(INSTANCE_DIR, filename)
+    img.save(path, format='PNG')
+    return path
+
+
+def _save_plot(fig, filename: str) -> str:
+    _ensure_instance_dir()
+    path = os.path.join(INSTANCE_DIR, filename)
+    fig.savefig(path, format='png', dpi=140, bbox_inches='tight')
+    plt.close(fig)
+    return path
 
 def denormalize(tensor):
     mean = np.array([0.485, 0.456, 0.406])
@@ -152,6 +176,12 @@ def denormalize(tensor):
     t = tensor.detach().cpu().numpy().transpose(1, 2, 0)
     t = std * t + mean
     return np.clip(t, 0, 1)
+
+
+@bp.route('/instance/<path:filename>')
+def instance_file(filename):
+    _ensure_instance_dir()
+    return send_from_directory(INSTANCE_DIR, filename)
 
 # --------------------------------------------------------------- #
 # 3. Route – GET = form, POST = analyse
@@ -171,6 +201,15 @@ def page():
             return redirect(request.url)
 
         try:
+            file.stream.seek(0, os.SEEK_END)
+            file_size = file.stream.tell()
+            file.stream.seek(0)
+            if file_size > MAX_IMAGE_SIZE:
+                flash('File too large. Maximum size is 10 MB.')
+                return redirect(request.url)
+
+            _clear_instance_dir()
+
             # ---- Load image -------------------------------------------------
             raw_image = Image.open(file.stream).convert('RGB')
 
@@ -200,31 +239,40 @@ def page():
 
             # ---- Bar chart --------------------------------------------------
             probs_cpu = probs.detach().cpu().numpy()
-            plt.figure(figsize=(11, 6.5))
+            fig, ax = plt.subplots(figsize=(11, 6.5), facecolor="#000000")
+            ax.set_facecolor("#000000")
             bars = plt.bar(classes, probs_cpu,
-                           color='#b3e2ff', edgecolor='navy', linewidth=1.5)
-            bars[pred_idx].set_color('#e74c3c')
-            plt.title("Model Confidence per Class", fontsize=19, weight='bold', pad=20)
-            plt.ylabel("Probability", fontsize=14)
+                           color="#f4f2ef", edgecolor="#2b2b2b", linewidth=1.2)
+            bars[pred_idx].set_color("#b28a5b")
+            plt.title("Model Confidence per Class", fontsize=19, weight='bold', pad=20, color="#f4f2ef")
+            plt.ylabel("Probability", fontsize=14, color="#f4f2ef")
             plt.ylim(0, 1.05)
-            plt.xticks(rotation=30, ha='right', fontsize=11)
-            plt.yticks(fontsize=11)
+            plt.xticks(rotation=30, ha='right', fontsize=11, color="#d7d2cc")
+            plt.yticks(fontsize=11, color="#d7d2cc")
             for i, p in enumerate(probs_cpu):
                 plt.text(i, p + 0.02, f"{p:.1%}", ha='center', va='bottom',
-                         fontsize=11, weight='bold')
-            plt.grid(axis='y', linestyle='--', alpha=0.35)
+                         fontsize=11, weight='bold', color="#f4f2ef")
+            plt.grid(axis='y', linestyle='--', alpha=0.35, color="#2b2b2b")
+            for spine in ax.spines.values():
+                spine.set_color("#2b2b2b")
             plt.tight_layout()
-            buf = io.BytesIO()
-            plt.savefig(buf, format='png', dpi=140, bbox_inches='tight')
-            plt.close()
-            bar_b64 = base64.b64encode(buf.getvalue()).decode()
+
+            original_name = f"original_{uuid.uuid4().hex}.png"
+            processed_name = f"processed_{uuid.uuid4().hex}.png"
+            overlay_name = f"overlay_{uuid.uuid4().hex}.png"
+            bar_name = f"bar_{uuid.uuid4().hex}.png"
+
+            _save_pil(raw_image, original_name)
+            _save_pil(Image.fromarray(processed_np), processed_name)
+            _save_pil(overlay_pil, overlay_name)
+            _save_plot(fig, bar_name)
 
             # ---- Build report -----------------------------------------------
             report = {
-                'original_b64' : pil_to_b64(raw_image),
-                'processed_b64': pil_to_b64(Image.fromarray(processed_np)),
-                'overlay_b64'   : pil_to_b64(overlay_pil),
-                'bar_b64'       : bar_b64,
+                'original_url' : url_for('app3.instance_file', filename=original_name),
+                'processed_url': url_for('app3.instance_file', filename=processed_name),
+                'overlay_url'  : url_for('app3.instance_file', filename=overlay_name),
+                'bar_url'      : url_for('app3.instance_file', filename=bar_name),
                 'pred_class'    : pred_class,
                 'confidence'    : confidence,
                 'status'        : cancer_status.get(pred_class, "Unknown"),

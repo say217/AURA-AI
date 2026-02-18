@@ -3,6 +3,8 @@ from app2 import create_app as create_app2
 from app3 import create_app as create_app3
 from app4 import create_app as create_app4
 from app5 import create_app as create_app5
+from app6 import create_app as create_app6
+from app7 import create_app as create_app7
 from flask import Flask, redirect, url_for, session
 from flask_mail import Mail
 from flask_migrate import Migrate
@@ -12,6 +14,7 @@ from dotenv import load_dotenv
 
 
 load_dotenv()
+DEBUG_MODE = os.getenv('FLASK_DEBUG', '1').lower() in {'1', 'true', 'on'}
 
 app = Flask(__name__)
 
@@ -39,6 +42,8 @@ app.register_blueprint(create_app2(), url_prefix='/app2')
 app.register_blueprint(create_app3(), url_prefix='/app3')
 app.register_blueprint(create_app4(), url_prefix='/app4')
 app.register_blueprint(create_app5(), url_prefix='/app5')
+app.register_blueprint(create_app6(), url_prefix='/app6')
+app.register_blueprint(create_app7(), url_prefix='/app7')
 
 @app.route('/')
 def index():
@@ -47,4 +52,14 @@ def index():
     return redirect(url_for('app2.login'))
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    # Disable the Werkzeug reloader so model inference does not restart mid-request.
+    app.run(debug=DEBUG_MODE, use_reloader=False)
+    
+    
+    
+    
+    
+    
+    
+    
+    

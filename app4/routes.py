@@ -1,5 +1,5 @@
 # rpoutes.py
-from flask import Blueprint, render_template, session, redirect, url_for, request, current_app
+from flask import Blueprint, render_template, session, redirect, url_for, request, current_app, send_from_directory, flash
 from functools import wraps
 import torch
 import torch.nn as nn
@@ -10,8 +10,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
 import io
-import base64
 import os
+import uuid
 import cv2
 
 bp = Blueprint(
@@ -20,6 +20,9 @@ bp = Blueprint(
     template_folder='templates',
     static_folder='static'
 )
+
+INSTANCE_DIR = os.path.join(os.path.dirname(__file__), 'instance')
+MAX_IMAGE_SIZE = 10 * 1024 * 1024
 
 # ------------------------
 # Login required decorator
@@ -49,59 +52,52 @@ class ResNetModel(nn.Module):
 # Grad-CAM Implementation
 # ------------------------
 class GradCAM:
-    def __init__(self, model, target_layer=None, device='cpu'):
+    def __init__(self, model, target_layer):
         self.model = model
-        self.model.eval()
-        self.device = device
-        if target_layer is None:
-            target_layer = self.model.resnet.layer4
         self.target_layer = target_layer
         self.activations = None
         self.gradients = None
+        target_layer.register_forward_hook(self._save_activation)
+        target_layer.register_full_backward_hook(self._save_gradient)
 
-        def forward_hook(module, input, output):
-            self.activations = output.detach()
+    def _save_activation(self, module, inputs, output):
+        self.activations = output.detach()
 
-        def backward_hook(module, grad_input, grad_output):
-            self.gradients = grad_output[0].detach()
+    def _save_gradient(self, module, grad_input, grad_output):
+        grad = grad_output[0] if isinstance(grad_output, tuple) else grad_output
+        if grad is not None:
+            self.gradients = grad.detach()
 
-        if isinstance(self.target_layer, nn.Sequential):
-            module_to_hook = self.target_layer[-1]
-        else:
-            module_to_hook = self.target_layer
+    def __call__(self, input_tensor, class_idx=None):
+        if input_tensor.dim() == 3:
+            input_tensor = input_tensor.unsqueeze(0)
 
-        module_to_hook.register_forward_hook(forward_hook)
-        module_to_hook.register_backward_hook(backward_hook)
+        input_tensor = input_tensor.clone().detach().requires_grad_(True).to(device)
 
-    def generate_cam(self, input_tensor, target_class=None):
-        output = self.model(input_tensor)
-        if target_class is None:
-            target_class = int(output.argmax(dim=1).item())
+        outputs = self.model(input_tensor)
+        if class_idx is None:
+            class_idx = outputs.argmax(dim=1).item()
+
         self.model.zero_grad()
-        score = output[0, target_class]
-        score.backward(retain_graph=True)
+        outputs[:, class_idx].sum().backward(retain_graph=True)
 
-        if self.activations is None or self.gradients is None:
-            raise RuntimeError("Grad-CAM hooks did not collect activations/gradients.")
+        if self.gradients is None or self.activations is None:
+            raise RuntimeError("Grad-CAM hooks failed")
 
-        activations = self.activations[0]
-        gradients = self.gradients[0]
+        grads = self.gradients[0].cpu().numpy()
+        acts = self.activations[0].cpu().numpy()
+        weights = np.mean(grads, axis=(1, 2))
 
-        weights = gradients.mean(dim=(1, 2))
-        cam = torch.zeros(activations.shape[1:], dtype=torch.float32).to(self.device)
-        for i, w in enumerate(weights):
-            cam += w * activations[i]
+        cam = np.zeros(acts.shape[1:], dtype=np.float32)
+        for idx, weight in enumerate(weights):
+            cam += weight * acts[idx]
 
-        cam = F.relu(cam)
-        cam_np = cam.cpu().numpy()
-        if cam_np.max() != 0:
-            cam_np = cam_np - cam_np.min()
-            cam_np = cam_np / (cam_np.max() + 1e-9)
-        else:
-            cam_np = np.zeros_like(cam_np)
+        cam = np.maximum(cam, 0)
+        if cam.max() > 0:
+            cam /= (cam.max() + 1e-8)
 
-        return cam_np
-
+        cam = cv2.resize(cam, (input_tensor.shape[3], input_tensor.shape[2]))
+        return cam
 # ------------------------
 # Device setup
 # ------------------------
@@ -124,30 +120,65 @@ model = ResNetModel(num_classes=2).to(device)
 model.load_state_dict(torch.load(model_path, map_location=device))
 model.eval()
 
-gradcam = GradCAM(model=model, target_layer=model.resnet.layer4, device=device)
+gradcam = GradCAM(model, model.resnet.layer4[-1])
 
 # ------------------------
 # Helpers
 # ------------------------
-def plot_to_base64(fig):
-    buf = io.BytesIO()
-    fig.savefig(buf, format='png', bbox_inches='tight')
-    buf.seek(0)
-    img_base64 = base64.b64encode(buf.getvalue()).decode('utf-8')
-    buf.close()
-    return img_base64
+def _ensure_instance_dir():
+    os.makedirs(INSTANCE_DIR, exist_ok=True)
 
-def create_cam_overlay(original_pil, cam_map, out_path, alpha=0.5, colormap=cv2.COLORMAP_JET):
-    orig = np.array(original_pil)
-    orig_bgr = orig[..., ::-1].copy()
-    cam_resized = cv2.resize(cam_map, (orig.shape[1], orig.shape[0]))
-    cam_uint8 = np.uint8(255 * cam_resized)
-    heatmap = cv2.applyColorMap(cam_uint8, colormap)
-    overlay_bgr = cv2.addWeighted(heatmap, alpha, orig_bgr, 1 - alpha, 0)
-    overlay_rgb = overlay_bgr[..., ::-1]
-    overlay_pil = Image.fromarray(overlay_rgb)
-    overlay_pil.save(out_path)
+
+def _clear_instance_dir():
+    _ensure_instance_dir()
+    for name in os.listdir(INSTANCE_DIR):
+        path = os.path.join(INSTANCE_DIR, name)
+        if os.path.isfile(path):
+            os.remove(path)
+
+
+def _save_plot(fig, filename):
+    _ensure_instance_dir()
+    path = os.path.join(INSTANCE_DIR, filename)
+    fig.savefig(path, format='png', bbox_inches='tight')
+    plt.close(fig)
+    return path
+
+def create_cam_overlay(original_pil, cam_map, out_path, alpha=0.45):
+    """Blend Grad-CAM map with original image using a simple gradient colormap."""
+    orig = np.array(original_pil).astype(np.float32) / 255.0
+    h, w = orig.shape[:2]
+
+    cam_resized = cv2.resize(cam_map, (w, h))
+    cam_resized -= cam_resized.min()
+    cam_resized /= (cam_resized.max() + 1e-8)
+
+    cmap = plt.get_cmap('inferno')
+    heatmap = cmap(cam_resized)[..., :3]
+
+    overlay = (heatmap * alpha) + (orig * (1 - alpha))
+    overlay = np.clip(overlay, 0, 1)
+    overlay_uint8 = (overlay * 255).astype(np.uint8)
+
+    Image.fromarray(overlay_uint8).save(out_path)
     return out_path
+
+def clear_upload_folder(folder_path):
+    if not os.path.isdir(folder_path):
+        return
+    for filename in os.listdir(folder_path):
+        file_path = os.path.join(folder_path, filename)
+        if os.path.isfile(file_path):
+            try:
+                os.remove(file_path)
+            except OSError:
+                pass
+
+
+@bp.route('/instance/<path:filename>')
+def instance_file(filename):
+    _ensure_instance_dir()
+    return send_from_directory(INSTANCE_DIR, filename)
 
 # ------------------------
 # Main route
@@ -163,14 +194,24 @@ def page():
         if len(files) == 0:
             return render_template('home3.html', error="No image selected")
 
+        upload_folder = os.path.join(current_app.static_folder, 'uploads')
+        os.makedirs(upload_folder, exist_ok=True)
+        clear_upload_folder(upload_folder)
+        _clear_instance_dir()
+
         results = []
 
         for file in files:
             if file and file.filename != '':
                 try:
+                    file.stream.seek(0, os.SEEK_END)
+                    file_size = file.stream.tell()
+                    file.stream.seek(0)
+                    if file_size > MAX_IMAGE_SIZE:
+                        flash(f"File too large: {file.filename} exceeds 10 MB limit.")
+                        continue
+
                     # Save uploaded image
-                    upload_folder = os.path.join(current_app.static_folder, 'uploads')
-                    os.makedirs(upload_folder, exist_ok=True)
                     image_filename = file.filename
                     image_path = os.path.join(upload_folder, image_filename)
                     file.save(image_path)
@@ -192,11 +233,8 @@ def page():
                         prob_idc_neg, prob_idc_pos = probs[0][0].item(), probs[0][1].item()
 
                     # Grad-CAM
-                    input_tensor_for_grad = preprocessed_image.clone().detach().to(device)
-                    input_tensor_for_grad.requires_grad = True
-                    outputs_for_grad = model(input_tensor_for_grad)
-                    pred_idx = int(outputs_for_grad.argmax(dim=1).item())
-                    cam_map = gradcam.generate_cam(input_tensor_for_grad, target_class=pred_idx)
+                    pred_idx = int(predicted.item())
+                    cam_map = gradcam(preprocessed_image, class_idx=pred_idx)
                     cam_filename = f"cam_{os.path.splitext(image_filename)[0]}.png"
                     cam_path = os.path.join(upload_folder, cam_filename)
                     create_cam_overlay(image, cam_map, cam_path, alpha=0.5)
@@ -206,7 +244,7 @@ def page():
                     heat_phrase = "strong localized regions" if heat_strength > 0.35 else "moderate regions" if heat_strength > 0.15 else "diffuse regions"
                     if predicted_class == "IDC(+)":
                         explanation_text = (
-                            f"The model predicts **Cancer Positive (IDC+)** with a confidence of {confidence.item()*100:.2f}%. "
+                            f"The model predicts Cancer Positive (IDC+) with a confidence of {confidence.item()*100:.2f}%. "
                             f"This indicates the presence of Invasive Ductal Carcinoma (IDC), a common type of breast cancer where abnormal cells are detected in the breast tissue. "
                             f"The prediction is based on patterns identified in the image by a deep learning model (ResNet-18), which was trained on histopathology images to distinguish between cancerous and non-cancerous tissues. "
                             f"The Grad-CAM visualization shows {heat_phrase} of focus, highlighting areas in the image that the model considers most indicative of cancer. "
@@ -215,7 +253,7 @@ def page():
                         )
                     else:
                         explanation_text = (
-                            f"The model predicts **Cancer Negative (IDC-)** with a confidence of {confidence.item()*100:.2f}%. "
+                            f"The model predicts Cancer Negative (IDC-) with a confidence of {confidence.item()*100:.2f}%. "
                             f"This suggests that the image does not show signs of Invasive Ductal Carcinoma (IDC), indicating the absence of cancerous cells in the analyzed tissue. "
                             f"The prediction is made by a deep learning model (ResNet-18) trained to identify patterns in histopathology images. "
                             f"The Grad-CAM visualization shows {heat_phrase} of focus, indicating the areas the model analyzed to make this prediction. "
@@ -224,10 +262,10 @@ def page():
                         )
 
                     # Image plots
-                    fig_img = plt.figure(figsize=(8, 4))
+                    fig_img = plt.figure(figsize=(12, 4.5), facecolor="#0a0a0a")
                     plt.subplot(1, 3, 1)
                     plt.imshow(image)
-                    plt.title(f"Original Image\nPrediction: {predicted_class} ({confidence.item():.2f})")
+                    plt.title(f"Original Image\nPrediction: {predicted_class} ({confidence.item():.2f})", color="#f4f2ef")
                     plt.axis('off')
 
                     preprocessed_img_np = preprocessed_image.squeeze(0).permute(1, 2, 0).cpu().numpy()
@@ -235,29 +273,33 @@ def page():
                     preprocessed_img_np = np.clip(preprocessed_img_np, 0, 1)
                     plt.subplot(1, 3, 2)
                     plt.imshow(preprocessed_img_np)
-                    plt.title("Preprocessed Image")
+                    plt.title("Preprocessed Image", color="#f4f2ef")
                     plt.axis('off')
 
                     cam_display = Image.open(cam_path).convert('RGB')
                     plt.subplot(1, 3, 3)
                     plt.imshow(cam_display)
-                    plt.title("Grad-CAM Overlay")
+                    plt.title("Grad-CAM Overlay", color="#f4f2ef")
                     plt.axis('off')
 
                     plt.tight_layout()
-                    image_plot = plot_to_base64(fig_img)
-                    plt.close(fig_img)
+                    image_plot_name = f"image_plot_{uuid.uuid4().hex}.png"
+                    _save_plot(fig_img, image_plot_name)
 
                     # Probability plot
-                    fig_prob = plt.figure(figsize=(5, 3))
+                    fig_prob = plt.figure(figsize=(7, 3.5), facecolor="#0a0a0a")
                     classes = ['IDC(-)', 'IDC(+)']
                     probabilities = [prob_idc_neg, prob_idc_pos]
-                    sns.barplot(x=probabilities, y=classes)
+                    ax = sns.barplot(x=probabilities, y=classes, color="#00e5ff")
+                    ax.set_facecolor("#0a0a0a")
                     plt.xlim(0, 1)
-                    plt.xlabel("Probability")
-                    plt.title("Prediction Probability Distribution")
-                    prob_plot = plot_to_base64(fig_prob)
-                    plt.close(fig_prob)
+                    plt.xlabel("Probability", color="#f4f2ef")
+                    plt.title("Prediction Probability Distribution", color="#f4f2ef")
+                    ax.tick_params(colors="#d7d2cc")
+                    for spine in ax.spines.values():
+                        spine.set_color("#2a221b")
+                    prob_plot_name = f"prob_plot_{uuid.uuid4().hex}.png"
+                    _save_plot(fig_prob, prob_plot_name)
 
                     # Append result
                     results.append({
@@ -267,8 +309,8 @@ def page():
                         "confidence": f"{confidence.item():.4f}",
                         "prob_idc_neg": f"{prob_idc_neg:.4f}",
                         "prob_idc_pos": f"{prob_idc_pos:.4f}",
-                        "image_plot": image_plot,
-                        "prob_plot": prob_plot,
+                        "image_plot": url_for('app4.instance_file', filename=image_plot_name),
+                        "prob_plot": url_for('app4.instance_file', filename=prob_plot_name),
                         "uploaded_image": f"uploads/{image_filename}",
                         "cam_image": f"uploads/{cam_filename}",
                         "explanation_text": explanation_text
