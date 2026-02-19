@@ -123,7 +123,7 @@ Modular Flask application using Blueprints for clean separation of concerns, con
 
 ```
 aura-ai/
-├── app1/                  # Home/Dashboard (after login)
+├── app1/                  # Home / Dashboard (post-login)
 │   ├── templates/home.html
 │   ├── routes.py
 │   └── __init__.py
@@ -134,10 +134,10 @@ aura-ai/
 │   │   ├── signup.html
 │   │   └── verify.html
 │   ├── routes.py
-│   ├── models.py          # User model + DB
+│   ├── models.py          # User model + database schema
 │   └── __init__.py
 │
-├── app3/                  # Lung & Colon 5-class Detection
+├── app3/                  # Lung & Colon Cancer (5-class)
 │   ├── templates/home2.html
 │   ├── routes.py
 │   ├── resnet18_model_001.pth
@@ -146,14 +146,23 @@ aura-ai/
 ├── app4/                  # Breast Cancer IDC Detection
 │   ├── templates/home3.html
 │   ├── routes.py
-│   ├── static/uploads/    # Generated CAM heatmaps
+│   ├── static/uploads/    # Grad-CAM outputs
 │   ├── breast_cancer_cnn_model_updated.pth
 │   └── __init__.py
 │
+├── app5/                  # Brain Tumor MRI Classification (NEW)
+│   ├── templates/home4.html
+│   ├── routes.py          # MRI upload, prediction, Grad-CAM
+│   ├── brain_tumor_resnet101_finetuned_v00.3.keras
+│   └── __init__.py
+│
 ├── instance/              # SQLite DB (gitignored)
-├── images/                # Screenshots
-├── static/                # Global CSS/JS
+├── images/                # README / UI screenshots
+├── static/                # Global CSS / JS
 ├── templates/             # Global base.html
+│
+├── Dockerfile             # Container definition
+├── docker-compose.yml     # Multi-service setup (optional)
 ├── .env                   # Environment variables
 ├── .gitignore
 ├── requirements.txt
