@@ -1,0 +1,24 @@
+version: "3.9"
+
+services:
+  aura-ai:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    ports:
+      - "5000:5000"
+    env_file:
+      - ../.env
+    environment:
+      HF_HOME: /app/.cache/huggingface
+      HF_APP3_REPO: ""
+      HF_APP3_FILE: ""
+      HF_APP4_REPO: ""
+      HF_APP4_FILE: ""
+      HF_APP5_REPO: ""
+      HF_APP5_FILE: ""
+    volumes:
+      - hf_cache:/app/.cache/huggingface
+
+volumes:
+  hf_cache:
