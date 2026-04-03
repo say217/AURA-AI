@@ -50,11 +50,17 @@ nav{
   border-bottom:1px solid var(--gb);
 }
 .nav-logo{
-  font-family:'Syne',sans-serif;font-weight:800;font-size:1.25rem;
-  letter-spacing:-.02em;
+  font-family:'Syne',sans-serif;font-weight:600;font-size:1.18rem;
+  letter-spacing:-.01em;
   background:linear-gradient(120deg,var(--text-1) 45%,var(--red-2) 100%);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
   display:flex;align-items:center;gap:.65rem;
+}
+.nav-mark{
+  width:34px;height:34px;border-radius:50%;flex-shrink:0;
+  border:1px solid rgba(255,255,255,.18);
+  background:url("/app5/static/Gemini_Generated_Image_dfmlzzdfmlzzdfml.png") center/cover no-repeat;
+  box-shadow:0 0 14px rgba(192,57,43,.35);
 }
 .nav-links{display:flex;gap:2rem;list-style:none}
 .nav-links a{color:var(--text-2);font-size:.88rem;font-weight:400;text-decoration:none;transition:color .25s}
@@ -239,24 +245,30 @@ section{position:relative;z-index:1}
   border:1px solid var(--gb);
 }
 .album{padding:4.5rem 0 6.5rem}
-.album .container{max-width:1440px}
+.album .container{
+  max-width:1540px;
+  background:#000000;
+  border:1px solid var(--gb);
+  border-radius:18px;
+  padding:2.6rem 2.2rem 3rem;
+}
 .album-header{text-align:center;margin-bottom:2.6rem}
-.album-row{display:flex;gap:1.5rem;flex-wrap:wrap;justify-content:space-between}
+.album-row{display:flex;gap:.2rem;flex-wrap:wrap;justify-content:space-between}
 .snip1482{
   font-family:'Fauna One',Arial,sans-serif;
   position:relative;
-  margin:10px 8px;
-  min-width:280px;
-  max-width:360px;
-  min-height:260px;
+  margin:2px 0;
+  min-width:320px;
+  max-width:420px;
+  min-height:300px;
   width:100%;
   color:#ffffff;
   text-align:right;
   line-height:1.4em;
-  background-color:#1a1a1a;
+  background-color:#000000;
   font-size:16px;
-  border:1px solid var(--gb);
-  border-radius:12px;
+
+
   overflow:hidden;
 }
 .snip1482 *{
@@ -458,19 +470,7 @@ footer{background:var(--ink);border-top:1px solid var(--gb);padding:4rem 0 2rem}
 <!-- NAV -->
 <nav>
   <div class="nav-logo">
-    <svg width="20" height="20" viewBox="0 0 22 22" fill="none">
-      <circle cx="11" cy="11" r="10" stroke="url(#ngl)" stroke-width="1.4"/>
-      <circle cx="11" cy="11" r="4.5" fill="url(#ngl2)" opacity=".85"/>
-      <path d="M11 1.5v3.5M11 17v3.5M1.5 11H5M17 11h3.5" stroke="url(#ngl)" stroke-width="1.2" stroke-linecap="round"/>
-      <defs>
-        <linearGradient id="ngl" x1="0" y1="0" x2="22" y2="22" gradientUnits="userSpaceOnUse">
-          <stop stop-color="#c0392b"/><stop offset="1" stop-color="#e74c3c"/>
-        </linearGradient>
-        <radialGradient id="ngl2" cx="50%" cy="50%" r="50%">
-          <stop stop-color="#ff6b6b"/><stop offset="1" stop-color="#c0392b"/>
-        </radialGradient>
-      </defs>
-    </svg>
+    <span class="nav-mark" aria-hidden="true"></span>
     AURA AI
   </div>
   <ul class="nav-links">
@@ -721,7 +721,7 @@ footer{background:var(--ink);border-top:1px solid var(--gb);padding:4rem 0 2rem}
           <p>Patch-level detection with Grad-CAM overlay, Comlete report with accuracy model metrics</p>
         </figcaption>
         <a href="#"></a>
-        <img src="app5/static/Screenshot 2026-04-04 010257.png" alt="Lung Cancer preview">
+        <img src="/app5/static/Screenshot%202026-04-04%20010257.png" alt="Lung Cancer preview">
       </figure>
       <figure class="snip1482 hover">
         <figcaption>
@@ -729,7 +729,7 @@ footer{background:var(--ink);border-top:1px solid var(--gb);padding:4rem 0 2rem}
           <p>Provide comprehensive report with classification chart prediction probablity.</p>
         </figcaption>
         <a href="#"></a>
-        <img src="/app5/static/Screenshot 2026-04-04 010502.png" alt="Lung preview">
+        <img src="/app5/static/Screenshot%202026-04-04%20010502.png" alt="Lung preview">
       </figure>
       <figure class="snip1482">
         <figcaption>
