@@ -26,6 +26,17 @@ diagnostic screening for two major cancer families, Breast Cancer and Lung and C
 while combining deep learning, pathology-aligned workflows, and explainable AI to create a
 powerful tool for researchers, clinicians, and medical students.
 
+
+| |
+|:-:|
+| <img src="https://github.com/user-attachments/assets/7c3cffe1-6dbb-4daf-a80d-bc2383791624" width="900"/> |
+
+| |
+|:-:|
+| <img src="https://github.com/user-attachments/assets/1539f641-8cac-4236-b805-72badbb9bb56" width="900"/> |
+
+
+
 ## Previous Works
 Developed as a modular Flask application using the Application Factory + Blueprint pattern, the
 platform is scalable, maintainable, and easily extendable with new cancer models or diagnostic
