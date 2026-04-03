@@ -18,3 +18,4 @@ __pycache__/
 *.tflite
 *.joblib
 *.pkl
+huggingface_cache/

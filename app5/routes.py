@@ -1,6 +1,7 @@
 import io
 import os
 import uuid
+from pathlib import Path
 
 import matplotlib
 import numpy as np
@@ -8,6 +9,11 @@ import tensorflow as tf
 from flask import Blueprint, flash, redirect, render_template, request, send_from_directory, session, url_for
 from functools import wraps
 from keras.preprocessing import image #ignore
+
+try:
+    from huggingface_hub import hf_hub_download
+except ImportError:
+    hf_hub_download = None
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
@@ -19,14 +25,44 @@ bp = Blueprint(
     template_folder='templates'
 )
 
-MODEL_PATH = "app5/brain_tumor_resnet101_finetuned_v00.3.keras"
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+HF_CACHE_DIR = Path(os.getenv("HF_CACHE_DIR", PROJECT_ROOT / "huggingface_cache"))
+HF_REPO_ID = os.getenv("HF_APP5_REPO", "say89/BrainTumour90MNH6602")
+HF_MODEL_FILE = os.getenv("HF_APP5_FILE", "brain_tumor_resnet101_finetuned_v00.3.keras")
+MODEL_PATH = HF_CACHE_DIR / HF_MODEL_FILE
 INSTANCE_DIR = os.path.join(os.path.dirname(__file__), "instance")
 MAX_IMAGE_SIZE = 10 * 1024 * 1024
 IMG_SIZE = (224, 224)
 CLASS_NAMES = ["brain_glioma", "brain_menin", "brain_tumor"]
 LAST_CONV_LAYER = "conv5_block3_out"
 
-model = tf.keras.models.load_model(MODEL_PATH)
+def _ensure_model_available() -> Path:
+    if MODEL_PATH.exists():
+        return MODEL_PATH
+
+    if hf_hub_download is None:
+        raise RuntimeError(
+            "huggingface_hub is not installed. Add it to requirements.txt to download the model."
+        )
+
+    HF_CACHE_DIR.mkdir(parents=True, exist_ok=True)
+    token = os.getenv("HF_API_TOKEN")
+
+    downloaded = hf_hub_download(
+        repo_id=HF_REPO_ID,
+        filename=HF_MODEL_FILE,
+        cache_dir=str(HF_CACHE_DIR),
+        token=token
+    )
+
+    downloaded_path = Path(downloaded)
+    if downloaded_path != MODEL_PATH and not MODEL_PATH.exists():
+        MODEL_PATH.write_bytes(downloaded_path.read_bytes())
+
+    return MODEL_PATH
+
+
+model = tf.keras.models.load_model(str(_ensure_model_available()))
 model.trainable = False
 
 assert LAST_CONV_LAYER in [l.name for l in model.layers]
