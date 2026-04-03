@@ -1,6 +1,6 @@
 
 .env
-
+huggingface_cache/
 *.db
 *.keras
 *.pth

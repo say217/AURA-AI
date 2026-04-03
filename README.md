@@ -308,6 +308,26 @@ pip install -r requirements.txt
 python run.py
 ```
 
+## Render Deployment (Free Tier, Web Service)
+1. Create a new Web Service from this repo.
+2. Runtime: Python 3.10.
+3. Build Command:
+    - `pip install -r requirements.txt`
+4. Start Command:
+    - `python run.py`
+5. Environment Variables:
+    - `SECRET_KEY`
+    - `MAIL_USERNAME`
+    - `MAIL_PASSWORD`
+    - `MAIL_DEFAULT_SENDER`
+    - `HF_APP5_REPO=say89/BrainTumour90MNH6602`
+    - `HF_APP5_REPO_TYPE=space`
+    - `HF_APP5_FILE=brain_tumor_resnet101_finetuned_v00.3.keras`
+    - `HF_TOKEN` (required for private or gated repos)
+    - `HF_CACHE_DIR=/tmp/huggingface_cache`
+
+Free tier uses ephemeral storage. The model will re-download on each deploy or restart. If you upgrade to a persistent disk, set `HF_CACHE_DIR` to the mounted path (for example `/var/data/huggingface_cache`).
+
 
 
 

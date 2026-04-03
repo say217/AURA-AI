@@ -28,6 +28,7 @@ bp = Blueprint(
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 HF_CACHE_DIR = Path(os.getenv("HF_CACHE_DIR", PROJECT_ROOT / "huggingface_cache"))
 HF_REPO_ID = os.getenv("HF_APP5_REPO", "say89/BrainTumour90MNH6602")
+HF_REPO_TYPE = os.getenv("HF_APP5_REPO_TYPE", "space")
 HF_MODEL_FILE = os.getenv("HF_APP5_FILE", "brain_tumor_resnet101_finetuned_v00.3.keras")
 MODEL_PATH = HF_CACHE_DIR / HF_MODEL_FILE
 INSTANCE_DIR = os.path.join(os.path.dirname(__file__), "instance")
@@ -50,6 +51,7 @@ def _ensure_model_available() -> Path:
 
     downloaded = hf_hub_download(
         repo_id=HF_REPO_ID,
+        repo_type=HF_REPO_TYPE,
         filename=HF_MODEL_FILE,
         cache_dir=str(HF_CACHE_DIR),
         token=token

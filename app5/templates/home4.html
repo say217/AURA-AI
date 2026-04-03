@@ -22,31 +22,31 @@ html {
 }
 
 :root {
-        --ink: #060608;
-        --ink-1: #0d0d11;
-        --ink-2: #111116;
-        --ink-3: #18181f;
-        --red: #c0392b;
-        --red-2: #e74c3c;
-        --red-soft: rgba(192,57,43,.16);
-        --text-1: #eeeef5;
-        --text-2: #c3c3d9;
-        --text-3: #8f8fa8;
-        --text-4: #5f5f77;
-        --bg-0: var(--ink);
-        --bg-1: var(--ink-1);
-        --bg-2: var(--ink-2);
-        --stroke-1: rgba(255,255,255,.08);
-        --stroke-2: rgba(255,255,255,.16);
-        --accent: var(--red);
-        --accent-soft: var(--red-soft);
-        --glass-bg: rgba(14,14,20,.72);
-        --glass-bg-strong: rgba(10,10,14,.9);
-        --shadow-soft: 0 30px 60px rgba(0,0,0,.45);
-        --shadow-glow: 0 12px 30px rgba(192,57,43,.24);
-        --radius-lg: 16px;
-        --radius-md: 12px;
-        --radius-sm: 10px;
+    --ink: #060608;
+    --ink-1: #0d0d11;
+    --ink-2: #111116;
+    --ink-3: #18181f;
+    --red: #c0392b;
+    --red-2: #e74c3c;
+    --red-soft: rgba(192,57,43,.13);
+    --text-1: #eeeef5;
+    --text-2: #8f8fa8;
+    --text-3: #4a4a60;
+    --text-4: #5f5f77;
+    --bg-0: var(--ink);
+    --bg-1: var(--ink-1);
+    --bg-2: var(--ink-2);
+    --stroke-1: rgba(255,255,255,.055);
+    --stroke-2: rgba(192,57,43,.28);
+    --accent: var(--red);
+    --accent-soft: var(--red-soft);
+    --glass-bg: rgba(14,14,20,.75);
+    --glass-bg-strong: rgba(6,6,8,.9);
+    --shadow-soft: 0 30px 60px rgba(0,0,0,.45);
+    --shadow-glow: 0 12px 30px rgba(192,57,43,.28);
+    --radius-lg: 16px;
+    --radius-md: 12px;
+    --radius-sm: 10px;
 }
 
 body {
@@ -58,8 +58,12 @@ body {
     overflow-x: hidden;
     min-height: 100vh;
     font-size: 14px;
-    letter-spacing: 0.1px;
+    letter-spacing: 0.15px;
     position: relative;
+}
+
+body.is-loading {
+    overflow: hidden;
 }
 
 body::before {
@@ -70,6 +74,57 @@ body::before {
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
     opacity: 0.45;
     z-index: 0;
+}
+
+.app-loader {
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(900px 600px at 20% 0%, rgba(231, 76, 60, 0.18), transparent 60%),
+                rgba(6, 6, 8, 0.96);
+    display: grid;
+    place-items: center;
+    z-index: 2500;
+    transition: opacity 0.35s ease, visibility 0.35s ease;
+}
+
+.app-loader.is-hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.loader-panel {
+    background: var(--glass-bg-strong);
+    border: 1px solid var(--stroke-1);
+    border-radius: var(--radius-lg);
+    padding: 28px 32px;
+    min-width: 280px;
+    text-align: center;
+    box-shadow: var(--shadow-soft);
+    backdrop-filter: blur(18px);
+}
+
+.loader-title {
+    font-family: 'Syne', sans-serif;
+    color: var(--text-1);
+    font-size: 16px;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+}
+
+.loader-text {
+    color: var(--text-3);
+    font-size: 12px;
+    margin-bottom: 16px;
+}
+
+.loader-ring {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    border: 3px solid rgba(255, 255, 255, 0.1);
+    border-top-color: var(--accent);
+    margin: 0 auto 12px;
+    animation: spin 0.9s linear infinite;
 }
 
 .nav-header {
@@ -110,7 +165,7 @@ body::before {
 
 .logo-text {
     font-size: 18px;
-    font-weight: 600;
+    font-weight: 500;
     color: var(--text-1);
     letter-spacing: 3px;
     font-family: 'Syne', sans-serif;
@@ -136,6 +191,20 @@ body::before {
     border: 1px solid transparent;
 }
 
+.nav-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(143, 143, 168, 0.6);
+    box-shadow: 0 0 6px rgba(143, 143, 168, 0.35);
+    flex-shrink: 0;
+}
+
+.nav-link.active .nav-dot {
+    background: #34d399;
+    box-shadow: 0 0 8px rgba(52, 211, 153, 0.6);
+}
+
 .nav-link i {
     font-size: 12px;
 }
@@ -149,7 +218,7 @@ body::before {
 .nav-link.active {
     background: var(--accent-soft);
     color: var(--text-1);
-    border-color: rgba(178, 138, 91, 0.5);
+    border-color: rgba(192, 57, 43, 0.5);
     box-shadow: var(--shadow-glow);
 }
 
@@ -251,7 +320,7 @@ body::before {
 }
 
 .section-title {
-    font-size: 12px;
+    font-size: 11px;
     text-transform: uppercase;
     letter-spacing: 1.2px;
     color: var(--text-4);
@@ -366,23 +435,42 @@ body::before {
 
 h1, h2, h3 {
     color: var(--text-1);
-    font-weight: 600;
+    font-weight: 500;
     font-family: 'Roboto', sans-serif;
 }
 
 h1 {
-    font-size: 20px;
+    font-size: 19px;
     margin-bottom: 8px;
 }
 
 h2 {
-    font-size: 16px;
+    font-size: 15px;
     margin-bottom: 14px;
 }
 
 h3 {
-    font-size: 14px;
+    font-size: 13px;
     margin-bottom: 10px;
+}
+
+.ui-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 9px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--stroke-1);
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+.ui-icon svg {
+    width: 14px;
+    height: 14px;
+    stroke: var(--text-2);
 }
 
 .guide-box {
@@ -496,13 +584,13 @@ input[type="file"] {
 
 input[type="file"]:focus {
     outline: none;
-    border-color: rgba(178, 138, 91, 0.6);
-    box-shadow: 0 0 0 3px rgba(178, 138, 91, 0.16);
+    border-color: rgba(192, 57, 43, 0.6);
+    box-shadow: 0 0 0 3px rgba(192, 57, 43, 0.16);
 }
 
 input[type="submit"] {
-    background: linear-gradient(135deg, rgba(178, 138, 91, 0.95) 0%, rgba(178, 138, 91, 0.75) 100%);
-    color: #120e0a;
+    background: linear-gradient(135deg, rgba(192, 57, 43, 0.95) 0%, rgba(139, 26, 20, 0.95) 100%);
+    color: #f8f4f2;
     padding: 12px 24px;
     border: none;
     border-radius: 4px;
@@ -516,7 +604,7 @@ input[type="submit"] {
 }
 
 input[type="submit"]:hover {
-    background: linear-gradient(135deg, rgba(178, 138, 91, 1) 0%, rgba(178, 138, 91, 0.82) 100%);
+    background: linear-gradient(135deg, rgba(231, 76, 60, 1) 0%, rgba(139, 26, 20, 1) 100%);
     transform: translateY(-1px);
 }
 
@@ -534,8 +622,8 @@ input[type="submit"]:hover {
 .btn-loader {
     width: 14px;
     height: 14px;
-    border: 2px solid rgba(18, 14, 10, 0.35);
-    border-top-color: #120e0a;
+    border: 2px solid rgba(248, 244, 242, 0.35);
+    border-top-color: #f8f4f2;
     border-radius: 50%;
     animation: spin 0.8s linear infinite;
     display: none;
@@ -552,8 +640,8 @@ input[type="submit"]:hover {
 }
 
 button {
-    background: linear-gradient(135deg, rgba(178, 138, 91, 0.95) 0%, rgba(178, 138, 91, 0.75) 100%);
-    color: #120e0a;
+    background: linear-gradient(135deg, rgba(192, 57, 43, 0.95) 0%, rgba(139, 26, 20, 0.95) 100%);
+    color: #f8f4f2;
     padding: 10px 20px;
     border: none;
     border-radius: 4px;
@@ -567,7 +655,7 @@ button {
 }
 
 button:hover {
-    background: linear-gradient(135deg, rgba(178, 138, 91, 1) 0%, rgba(178, 138, 91, 0.82) 100%);
+    background: linear-gradient(135deg, rgba(231, 76, 60, 1) 0%, rgba(139, 26, 20, 1) 100%);
     transform: translateY(-1px);
 }
 
@@ -840,7 +928,7 @@ hr {
 button:focus-visible,
 input[type="file"]:focus-visible,
 input[type="submit"]:focus-visible {
-    outline: 2px solid rgba(178, 138, 91, 0.6);
+    outline: 2px solid rgba(192, 57, 43, 0.6);
     outline-offset: 2px;
 }
 
@@ -996,7 +1084,14 @@ input[type="submit"]:focus-visible {
 }
     </style>
 </head>
-<body>
+<body class="is-loading">
+    <div class="app-loader" id="appLoader" role="status" aria-live="polite">
+        <div class="loader-panel">
+            <div class="loader-ring" aria-hidden="true"></div>
+            <div class="loader-title">AURA AI</div>
+            <div class="loader-text">Loading models and modules</div>
+        </div>
+    </div>
     <div class="nav-header">
         <div class="logo-section">
             <div class="logo-icon">
@@ -1005,16 +1100,14 @@ input[type="submit"]:focus-visible {
             <div class="logo-text">AURA</div>
         </div>
         <nav class="nav-menu">
-         <a href="{{ url_for('app1.home') }}" class="nav-link"><i class="fas fa-home"></i> Home</a>
-            <a href="#results" class="nav-link active"><i class="fas fa-chart-line"></i> Results</a>
-            <a href="{{ url_for('app3.page') }}" class="nav-link"><i class="fas fa-dna"></i> Lung</a>
-            <a href="{{ url_for('app4.page') }}" class="nav-link"><i class="fas fa-flask"></i>Breast </a>
-         
-            <a href="{{ url_for('app5.page') }}" class="nav-link"><i class="fas fa-pills"></i> App5</a>
-            <a href="{{ url_for('app6.page') }}" class="nav-link"><i class="fas fa-vial"></i> App6</a>
-            <a href="{{ url_for('app7.page') }}" class="nav-link"><i class="fas fa-notes-medical"></i> App7</a>
-            <a href="{{ url_for('app2.logout') }}" class="nav-link logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
-           </nav>
+            <a href="{{ url_for('app1.home') }}" class="nav-link{% if request.path.startswith('/app1') %} active{% endif %}"><span class="nav-dot" aria-hidden="true"></span> Home</a>
+            <a href="{{ url_for('app3.page') }}" class="nav-link{% if request.path.startswith('/app3') %} active{% endif %}"><span class="nav-dot" aria-hidden="true"></span> Lung</a>
+            <a href="{{ url_for('app4.page') }}" class="nav-link{% if request.path.startswith('/app4') %} active{% endif %}"><span class="nav-dot" aria-hidden="true"></span> Breast</a>
+            <a href="{{ url_for('app5.page') }}" class="nav-link{% if request.path.startswith('/app5') %} active{% endif %}"><span class="nav-dot" aria-hidden="true"></span> App5</a>
+            <a href="{{ url_for('app6.page') }}" class="nav-link{% if request.path.startswith('/app6') %} active{% endif %}"><span class="nav-dot" aria-hidden="true"></span> App6</a>
+            <a href="{{ url_for('app7.page') }}" class="nav-link{% if request.path.startswith('/app7') %} active{% endif %}"><span class="nav-dot" aria-hidden="true"></span> App7</a>
+            <a href="{{ url_for('app2.logout') }}" class="nav-link logout-btn"><span class="nav-dot" aria-hidden="true"></span> Logout</a>
+        </nav>
     </div>
 
     <div class="main-container">
@@ -1063,7 +1156,7 @@ input[type="submit"]:focus-visible {
                 <div class="results">
                     {% for result in results %}
                         <div class="result-item">
-                            <h2><i class="fas fa-file-medical"></i> Analysis for {{ result.filename }}</h2>
+                            <h2><span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><rect x="4" y="3" width="16" height="18" rx="2" stroke-width="1.4"/><path d="M8 8h8M8 12h8M8 16h5" stroke-width="1.4" stroke-linecap="round"/></svg></span>Analysis for {{ result.filename }}</h2>
                             <p class="result-intro">This report summarizes the model findings for the uploaded brain MRI. It highlights the predicted class, confidence score, and the regions that influenced the decision.</p>
                             <div class="summary-grid mini-metrics">
                                 <div class="summary-card">
@@ -1083,7 +1176,7 @@ input[type="submit"]:focus-visible {
                                 </div>
                             </div>
                             <div class="explanation">
-                                <h3><i class="fas fa-clipboard-list"></i> Analysis Result</h3>
+                                <h3><span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M8 4h8" stroke-width="1.4" stroke-linecap="round"/><rect x="6" y="4" width="12" height="16" rx="2" stroke-width="1.4"/><path d="M9 10h6M9 14h6" stroke-width="1.4" stroke-linecap="round"/></svg></span>Analysis Result</h3>
                                 <p>{{ result.explanation | safe }}</p>
                             </div>
                             <div class="explanation">
@@ -1091,16 +1184,16 @@ input[type="submit"]:focus-visible {
                             </div>
                             <div class="image-pair">
                                 <div class="image-card">
-                                    <h3><i class="fas fa-image"></i> Original Image</h3>
+                                    <h3><span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><rect x="4" y="4" width="16" height="16" rx="2" stroke-width="1.4"/><path d="M8 14l2-2 3 3 3-4 4 5" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Original Image</h3>
                                     <img src="{{ result.original_image }}" alt="Original Image for {{ result.filename }}">
                                 </div>
                                 <div class="image-card">
-                                    <h3><i class="fas fa-microscope"></i> Grad-CAM Overlay</h3>
+                                    <h3><span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="4" stroke-width="1.4"/><path d="M4 20h16" stroke-width="1.4" stroke-linecap="round"/><path d="M14 14l5 5" stroke-width="1.4" stroke-linecap="round"/></svg></span>Grad-CAM Overlay</h3>
                                     <img src="{{ result.results_plot }}" alt="Results Plot with Grad-CAM for {{ result.filename }}">
                                 </div>
                             </div>
                             <div class="plot-large">
-                                <h3><i class="fas fa-chart-bar"></i> Prediction Probability Plot</h3>
+                                <h3><span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M6 18V10M12 18V6M18 18v-4" stroke-width="1.6" stroke-linecap="round"/><path d="M4 18h16" stroke-width="1.4" stroke-linecap="round"/></svg></span>Prediction Probability Plot</h3>
                                 <img src="{{ result.prob_plot }}" alt="Probability Distribution Plot for {{ result.filename }}">
                             </div>
                             <div class="result-note">
@@ -1111,7 +1204,7 @@ input[type="submit"]:focus-visible {
                 </div>
             {% else %}
                 <div class="empty-state">
-                    <i class="fas fa-file-medical-alt"></i>
+                    <span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><rect x="5" y="3" width="14" height="18" rx="2" stroke-width="1.4"/><path d="M8 8h8M8 12h8M8 16h5" stroke-width="1.4" stroke-linecap="round"/></svg></span>
                     <h3>No Analysis Results Yet</h3>
                     <p>Upload brain MRI images to get started with AI-powered brain tumor classification.</p>
                 </div>
@@ -1120,13 +1213,13 @@ input[type="submit"]:focus-visible {
 
         <div class="input-container">
             <div class="input-card" id="description">
-                <h1><i class="fas fa-brain"></i> Brain Tumor Classification</h1>
+                <h1><span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M8 7c0-2 1.5-3.5 3.5-3.5S15 5 15 7" stroke-width="1.4" stroke-linecap="round"/><path d="M6 9c-1.5 0-3 1-3 2.5S4.5 14 6 14" stroke-width="1.4" stroke-linecap="round"/><path d="M18 9c1.5 0 3 1 3 2.5S19.5 14 18 14" stroke-width="1.4" stroke-linecap="round"/><path d="M9 9v6M15 9v6M9 12h6" stroke-width="1.4" stroke-linecap="round"/></svg></span>Brain Tumor Classification</h1>
                 <p style="margin-bottom: 24px;">Upload brain MRI images to classify into three classes: brain glioma, brain menin, or brain tumor. The model uses a ResNet-101 backbone and provides Grad-CAM heatmaps plus probability scores.</p>
                 
                 <form method="POST" enctype="multipart/form-data" id="uploadForm">
                     <div class="file-input-wrapper">
                         <label for="imageInput" class="file-input-label">
-                            <i class="fas fa-cloud-upload-alt"></i>
+                            <span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 4v10" stroke-width="1.6" stroke-linecap="round"/><path d="M8 8l4-4 4 4" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 14v3a3 3 0 003 3h10a3 3 0 003-3v-3" stroke-width="1.4" stroke-linecap="round"/></svg></span>
                             <strong>Choose Images</strong><br>
                             <small>Select multiple brain MRI images</small>
                             <input type="file" id="imageInput" name="images" accept="image/*" multiple required>
@@ -1134,18 +1227,18 @@ input[type="submit"]:focus-visible {
                     </div>
                     
                     <div class="preview-gallery" id="previewGallery" style="display: none;">
-                        <h3><i class="fas fa-images"></i> Selected Images</h3>
+                        <h3><span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><rect x="4" y="6" width="16" height="12" rx="2" stroke-width="1.4"/><path d="M7 12l2-2 3 3 3-4 2 3" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Selected Images</h3>
                         <div class="preview-grid" id="previewGrid"></div>
                     </div>
                     
                     <button type="submit" id="classifyBtn" class="submit-btn">
-                        <span class="btn-text"><i class="fas fa-magic"></i> Classify Images</span>
+                        <span class="btn-text"><span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M7 12h10" stroke-width="1.6" stroke-linecap="round"/><path d="M13 7l4 5-4 5" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Classify Images</span>
                         <span class="btn-loader" aria-hidden="true"></span>
                     </button>
                 </form>
 
                 <div id="about" style="margin-top: 24px; padding-top: 20px; border-top: 1px solid #1a1a1a;">
-                    <h3 style="font-size: 14px; color: #999999;"><i class="fas fa-info-circle"></i> About This Tool</h3>
+                    <h3 style="font-size: 13px; color: #999999;"><span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke-width="1.4"/><path d="M12 10v6" stroke-width="1.4" stroke-linecap="round"/><circle cx="12" cy="7" r="1" fill="currentColor"/></svg></span>About This Tool</h3>
                     <p style="font-size: 13px; color: #666666; margin: 8px 0;">
                         This deep learning model (ResNet-101) analyzes brain MRI images to detect three classes: brain glioma, brain menin, and brain tumor. Results include probability scores and Grad-CAM heatmaps highlighting regions of diagnostic importance.
                     </p>
@@ -1284,6 +1377,14 @@ input[type="submit"]:focus-visible {
         }
         if (resultsDiv) {
             resultsDiv.style.display = 'none';
+        }
+    });
+
+    window.addEventListener('load', () => {
+        const appLoader = document.getElementById('appLoader');
+        document.body.classList.remove('is-loading');
+        if (appLoader) {
+            appLoader.classList.add('is-hidden');
         }
     });
 </script>

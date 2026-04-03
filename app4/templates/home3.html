@@ -135,6 +135,34 @@ body::before {
     border: 1px solid transparent;
 }
 
+.nav-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(143, 143, 168, 0.6);
+    box-shadow: 0 0 6px rgba(143, 143, 168, 0.35);
+    flex-shrink: 0;
+}
+
+.nav-link.active .nav-dot {
+    background: #34d399;
+    box-shadow: 0 0 8px rgba(52, 211, 153, 0.6);
+}
+
+.nav-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(143, 143, 168, 0.6);
+    box-shadow: 0 0 6px rgba(143, 143, 168, 0.35);
+    flex-shrink: 0;
+}
+
+.nav-link.active .nav-dot {
+    background: #34d399;
+    box-shadow: 0 0 8px rgba(52, 211, 153, 0.6);
+}
+
 .nav-link i {
     font-size: 12px;
 }
@@ -886,16 +914,14 @@ input[type="submit"]:focus-visible {
             <div class="logo-text">AURA</div>
         </div>
         <nav class="nav-menu">
-        <a href="{{ url_for('app1.home') }}" class="nav-link"><i class="fas fa-home"></i> Home</a>
-            <a href="#results" class="nav-link active"><i class="fas fa-chart-line"></i> Results</a>
-            <a href="{{ url_for('app3.page') }}" class="nav-link"><i class="fas fa-dna"></i> Lung</a>
-            <a href="{{ url_for('app4.page') }}" class="nav-link"><i class="fas fa-flask"></i>Breast </a>
-         
-            <a href="{{ url_for('app5.page') }}" class="nav-link"><i class="fas fa-pills"></i> App5</a>
-            <a href="{{ url_for('app6.page') }}" class="nav-link"><i class="fas fa-vial"></i> App6</a>
-            <a href="{{ url_for('app7.page') }}" class="nav-link"><i class="fas fa-notes-medical"></i> App7</a>
-            <a href="{{ url_for('app2.logout') }}" class="nav-link logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
-           </nav>
+            <a href="{{ url_for('app1.home') }}" class="nav-link{% if request.path.startswith('/app1') %} active{% endif %}"><span class="nav-dot" aria-hidden="true"></span> Home</a>
+            <a href="{{ url_for('app3.page') }}" class="nav-link{% if request.path.startswith('/app3') %} active{% endif %}"><span class="nav-dot" aria-hidden="true"></span> Lung</a>
+            <a href="{{ url_for('app4.page') }}" class="nav-link{% if request.path.startswith('/app4') %} active{% endif %}"><span class="nav-dot" aria-hidden="true"></span> Breast</a>
+            <a href="{{ url_for('app5.page') }}" class="nav-link{% if request.path.startswith('/app5') %} active{% endif %}"><span class="nav-dot" aria-hidden="true"></span> App5</a>
+            <a href="{{ url_for('app6.page') }}" class="nav-link{% if request.path.startswith('/app6') %} active{% endif %}"><span class="nav-dot" aria-hidden="true"></span> App6</a>
+            <a href="{{ url_for('app7.page') }}" class="nav-link{% if request.path.startswith('/app7') %} active{% endif %}"><span class="nav-dot" aria-hidden="true"></span> App7</a>
+            <a href="{{ url_for('app2.logout') }}" class="nav-link logout-btn"><span class="nav-dot" aria-hidden="true"></span> Logout</a>
+        </nav>
     </div>
 
     <div class="main-container">
