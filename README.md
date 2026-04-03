@@ -6,7 +6,7 @@ AURA AI is a multi-module Flask web application for AI-assisted radiology workfl
 ## Key Features
 - User authentication with email verification and welcome messaging.
 - Central dashboard with routed access to each AI module.
-- Image upload, preprocessing, and inference with per-class confidence.
+- Image upload, preprocessing, and inference with per-class confidence. 
 - Grad-CAM overlays and probability charts for interpretability.
 - Modular Flask blueprints for easy extension.
 
