@@ -1,374 +1,128 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Email Verification</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Email · AURA</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500;700&family=Syne:wght@600;700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
     <style>
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-html {
-        scroll-behavior: smooth;
-}
-
 :root {
-        --bg-0: #070605;
-        --bg-1: #0e0c0a;
-        --bg-2: #14110e;
-        --stroke-1: rgba(255, 255, 255, 0.08);
-        --stroke-2: rgba(255, 255, 255, 0.16);
-        --text-1: #f4f2ef;
-        --text-2: #d7d2cc;
-        --text-3: #a69f97;
-        --text-4: #7a7268;
-        --accent: #b28a5b;
-        --accent-soft: rgba(178, 138, 91, 0.18);
-        --glass-bg: rgba(20, 16, 12, 0.66);
-        --glass-bg-strong: rgba(20, 16, 12, 0.84);
-        --shadow-soft: 0 20px 50px rgba(0, 0, 0, 0.45);
-        --shadow-glow: 0 12px 30px rgba(178, 138, 91, 0.18);
-        --radius-lg: 16px;
-        --radius-md: 12px;
-        --radius-sm: 10px;
+  --ink:#060608;
+  --ink-1:#0d0d11;
+  --ink-2:#111116;
+  --ink-3:#18181f;
+  --red:#c0392b;
+  --red-2:#e74c3c;
+  --red-soft:rgba(192,57,43,.13);
+  --red-dim:rgba(192,57,43,.06);
+  --rose:#ff6b6b;
+  --text-1:#eeeef5;
+  --text-2:#aaaac4;
+  --text-3:#55556d;
+  --glass:rgba(14,14,20,.8);
+  --glass-strong:rgba(10,10,14,.92);
+  --stroke:rgba(255,255,255,.08);
+  --stroke-strong:rgba(255,255,255,.18);
+  --radius-lg:18px;
+  --radius-md:12px;
+  --shadow:0 30px 60px rgba(0,0,0,.45);
+  --shadow-red:0 8px 40px rgba(192,57,43,.35);
+  --bg-gradient:radial-gradient(1400px 900px at 12% -15%,rgba(231,76,60,.14),transparent 55%),radial-gradient(1000px 700px at 90% -10%,rgba(255,255,255,.06),transparent 65%),linear-gradient(180deg,#060608 0%,#08080d 70%,#0b0b12 100%);
 }
-
-body {
-    font-family: 'Sora', "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    background: radial-gradient(1400px 900px at 10% -15%, rgba(178, 138, 91, 0.08), transparent 60%),
-                radial-gradient(1000px 700px at 90% 0%, rgba(255, 255, 255, 0.05), transparent 65%),
-                linear-gradient(180deg, #070605 0%, #0b0907 45%, #0f0c09 100%);
-    color: var(--text-2);
-    overflow-x: hidden;
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 14px;
-    letter-spacing: 0.1px;
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--bg-gradient);
+  color:var(--text-1);
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:3.5rem 1.5rem;
+  position:relative;
+  overflow:hidden;
 }
-
-#glow-canvas {
-    position: fixed;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    display: block;
-    z-index: 0;
-    pointer-events: none;
-}
-
-.verify-container {
-    background: transparent;
-    border: none;
-    border-radius: var(--radius-lg);
-    padding: 1.1rem 1.25rem;
-    width: 100%;
-    max-width: 360px;
-    box-shadow: none;
-    position: relative;
-    z-index: 1;
-    backdrop-filter: none;
-}
-
-form {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-}
-
-h2 {
-    font-size: 1.6rem;
-    font-weight: 600;
-    text-align: center;
-    margin-bottom: 1.25rem;
-    color: var(--text-1);
-    letter-spacing: 0.6px;
-}
-
-.flash-messages {
-    margin-bottom: 1rem;
-    text-align: center;
-}
-
-.flash-messages p {
-    color: #f4b7b7;
-    font-size: 0.95rem;
-    background: transparent;
-    padding: 0.25rem 0;
-    border-radius: var(--radius-sm);
-    border: none;
-}
-
-label {
-    font-size: 0.95rem;
-    color: var(--text-3);
-    margin-bottom: 0.2rem;
-    font-weight: 500;
-    display: block;
-}
-
-.code-input-container {
-    display: flex;
-    justify-content: center;
-    gap: 0.75rem;
-    margin-bottom: 1.25rem;
-}
-
-.code-input {
-    width: 3rem;
-    height: 3.3rem;
-    text-align: center;
-    font-size: 1.25rem;
-    font-weight: 600;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid var(--stroke-1);
-    border-radius: var(--radius-sm);
-    color: var(--text-1);
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
-    text-transform: uppercase;
-}
-
-.code-input:focus {
-    outline: none;
-    border-color: rgba(178, 138, 91, 0.7);
-    box-shadow: 0 0 0 3px rgba(178, 138, 91, 0.2);
-}
-
-input[type="submit"] {
-    padding: 0.7rem 0.75rem;
-    font-size: 0.95rem;
-    font-weight: 600;
-    background: linear-gradient(135deg, rgba(178, 138, 91, 0.95) 0%, rgba(178, 138, 91, 0.75) 100%);
-    border: none;
-    border-radius: var(--radius-sm);
-    color: #120e0a;
-    cursor: pointer;
-    width: 100%;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    box-shadow: var(--shadow-glow);
-}
-
-input[type="submit"]:hover {
-    transform: translateY(-1px);
-}
-
-p {
-    text-align: center;
-    margin-top: 1rem;
-    font-size: 0.9rem;
-    color: var(--text-3);
-}
-
-@media (max-width: 600px) {
-    .verify-container {
-        max-width: 92%;
-        padding: 1rem;
-    }
-
-    h2 {
-        font-size: 1.4rem;
-    }
-
-    .code-input {
-        width: 2.5rem;
-        height: 3rem;
-        font-size: 1.1rem;
-    }
-}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");opacity:.45}
+.orb{position:fixed;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,rgba(231,76,60,.2),transparent 65%);filter:blur(45px);z-index:0;opacity:.75}
+.orb.left{top:-140px;left:-90px}
+.orb.right{bottom:-160px;right:-120px}
+.verify-shell{position:relative;z-index:1;width:100%;max-width:760px;display:grid;grid-template-columns:1fr 1fr;gap:2.4rem;align-items:center}
+.verify-copy{background:var(--glass);border:1px solid var(--stroke);border-radius:var(--radius-lg);padding:2.4rem 2.6rem;box-shadow:var(--shadow);backdrop-filter:blur(26px);display:flex;flex-direction:column;gap:1rem}
+.verify-copy h1{font-family:'Syne',sans-serif;font-size:clamp(1.8rem,3vw,2.55rem);font-weight:700;line-height:1.2}
+.verify-copy h1 span{background:linear-gradient(120deg,var(--red-2),var(--rose));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.verify-copy p{font-size:.98rem;color:var(--text-2);line-height:1.8}
+.pill-row{display:flex;flex-wrap:wrap;gap:.6rem}
+.pill{background:var(--red-dim);border:1px solid rgba(231,76,60,.24);border-radius:10px;padding:.4rem .85rem;font-size:.75rem;color:var(--text-2);letter-spacing:.05em;text-transform:uppercase}
+.verify-card{background:var(--glass-strong);border:1px solid var(--stroke-strong);border-radius:var(--radius-lg);padding:2.3rem 2.4rem;box-shadow:var(--shadow);backdrop-filter:blur(34px)}
+.card-title{font-family:'Roboto',sans-serif;font-size:1.5rem;font-weight:700;margin-bottom:.35rem}
+.card-sub{font-size:.9rem;color:var(--text-2);margin-bottom:1.4rem}
+.flash-messages{margin-bottom:1rem}
+.flash-messages p{background:rgba(231,76,60,.12);border:1px solid rgba(231,76,60,.45);color:var(--text-1);padding:.55rem .8rem;border-radius:var(--radius-md);font-size:.86rem;text-align:center}
+label{font-size:.78rem;color:var(--text-2);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.35rem;display:block}
+.code-input-container{display:flex;justify-content:space-between;gap:.65rem;margin-bottom:1.4rem}
+.code-input{width:52px;height:60px;border-radius:14px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);color:var(--text-1);font-size:1.25rem;font-weight:600;text-align:center;transition:border-color .2s,box-shadow .2s;text-transform:uppercase}
+.code-input:focus{outline:none;border-color:rgba(231,76,60,.6);box-shadow:0 0 0 3px rgba(231,76,60,.18)}
+.btn-red{width:100%;display:inline-flex;align-items:center;justify-content:center;padding:.9rem 1.2rem;border-radius:50px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:600;background:linear-gradient(130deg,var(--red),#8b1a14);color:#fff;box-shadow:var(--shadow-red);transition:transform .25s,box-shadow .25s}
+.btn-red:hover{transform:translateY(-2px);box-shadow:0 10px 45px rgba(192,57,43,.55)}
+@media(max-width:900px){body{padding:2.8rem 1.25rem}.verify-shell{grid-template-columns:1fr;gap:2rem}}
+@media(max-width:520px){.verify-card,.verify-copy{padding:2rem 1.6rem}.code-input{width:44px;height:54px}}
     </style>
 </head>
 <body>
-    <canvas id="glow-canvas"></canvas>
-    <div class="verify-container">
-        <h2>Verify Email</h2>
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                <div class="flash-messages">
-                    {% for message in messages %}
-                        <p>{{ message }}</p>
-                    {% endfor %}
-                </div>
-            {% endif %}
-        {% endwith %}
-        <form method="POST">
-            <p>Please enter the verification code sent to your email</p>
-            <label for="code">Verification Code:</label>
-            <div class="code-input-container">
-                <input type="text" class="code-input" name="code[]" maxlength="1" required>
-                <input type="text" class="code-input" name="code[]" maxlength="1" required>
-                <input type="text" class="code-input" name="code[]" maxlength="1" required>
-                <input type="text" class="code-input" name="code[]" maxlength="1" required>
-                <input type="text" class="code-input" name="code[]" maxlength="1" required>
-                <input type="text" class="code-input" name="code[]" maxlength="1" required>
+    <div class="orb left"></div>
+    <div class="orb right"></div>
+    <div class="verify-shell">
+        <section class="verify-copy">
+            <p class="pill">Step 2 · Trust tiering</p>
+            <h1>Validate your <span>clinical identity</span></h1>
+            <p>Enter the six-character code we just delivered via secure email. This confirms that you can receive escalations from AURA.</p>
+            <div class="pill-row">
+                <div class="pill">Code expires in 10 min</div>
+                <div class="pill">Device locked</div>
             </div>
-            <input type="submit" value="Verify">
-        </form>
+        </section>
+        <div class="verify-card">
+            <h2 class="card-title">Verification code</h2>
+            <p class="card-sub">Please type the digits in order.</p>
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <div class="flash-messages">
+                        {% for message in messages %}
+                            <p>{{ message }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+            <form method="POST">
+                <label for="code">Enter code</label>
+                <div class="code-input-container">
+                    <input type="text" class="code-input" name="code[]" maxlength="1" required>
+                    <input type="text" class="code-input" name="code[]" maxlength="1" required>
+                    <input type="text" class="code-input" name="code[]" maxlength="1" required>
+                    <input type="text" class="code-input" name="code[]" maxlength="1" required>
+                    <input type="text" class="code-input" name="code[]" maxlength="1" required>
+                    <input type="text" class="code-input" name="code[]" maxlength="1" required>
+                </div>
+                <button type="submit" class="btn-red">Verify</button>
+            </form>
+        </div>
     </div>
-
     <script>
-(() => {
-    const canvas = document.getElementById("glow-canvas");
-    if (!canvas) return;
-
-    const ctx = canvas.getContext("2d");
-    const squareSize = 80;
-    const fadeDelay = 500;
-    const fadeStep = 0.02;
-
-    let dpr = window.devicePixelRatio || 1;
-    let cols = 0;
-    let rows = 0;
-    let grid = [];
-    let active = new Set();
-
-    function resize() {
-        dpr = window.devicePixelRatio || 1;
-        const width = window.innerWidth;
-        const height = window.innerHeight;
-        canvas.width = Math.floor(width * dpr);
-        canvas.height = Math.floor(height * dpr);
-        canvas.style.width = `${width}px`;
-        canvas.style.height = `${height}px`;
-        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-        cols = Math.ceil(width / squareSize);
-        rows = Math.ceil(height / squareSize);
-        grid = new Array(cols * rows).fill(null).map((_, i) => {
-            const x = (i % cols) * squareSize;
-            const y = Math.floor(i / cols) * squareSize;
-            return { x, y, alpha: 0, lastTouched: 0 };
+    document.addEventListener('DOMContentLoaded',()=>{
+      const inputs=[...document.querySelectorAll('.code-input')];
+      inputs.forEach((input,index)=>{
+        input.addEventListener('input',e=>{
+          e.target.value=e.target.value.replace(/[^A-Za-z0-9]/g,'').toUpperCase();
+          if(e.target.value && index<inputs.length-1){inputs[index+1].focus();}
         });
-        active.clear();
-    }
-
-    function touchCell(x, y) {
-        const col = Math.floor(x / squareSize);
-        const row = Math.floor(y / squareSize);
-        if (col < 0 || row < 0 || col >= cols || row >= rows) return;
-        const idx = row * cols + col;
-        const cell = grid[idx];
-        if (!cell) return;
-        cell.alpha = 1;
-        cell.lastTouched = performance.now();
-        active.add(idx);
-    }
-
-    function drawCell(cell) {
-        if (cell.alpha <= 0) return;
-        const cx = cell.x + squareSize / 2;
-        const cy = cell.y + squareSize / 2;
-        const gradient = ctx.createRadialGradient(cx, cy, 0, cx, cy, squareSize * 0.75);
-        gradient.addColorStop(0, `rgba(255, 255, 255, ${cell.alpha})`);
-        gradient.addColorStop(1, `rgba(255, 255, 255, 0)`);
-
-        ctx.strokeStyle = gradient;
-        ctx.lineWidth = 1.6;
-        ctx.strokeRect(cell.x + 0.5, cell.y + 0.5, squareSize - 1, squareSize - 1);
-    }
-
-    function drawCube(cx, cy, size, depth, alpha) {
-        const s = size;
-        const d = depth;
-        ctx.strokeStyle = `rgba(255, 255, 255, ${alpha})`;
-        ctx.lineWidth = 1;
-
-        ctx.beginPath();
-        ctx.rect(cx - s / 2, cy - s / 2, s, s);
-        ctx.rect(cx - s / 2 + d, cy - s / 2 - d, s, s);
-        ctx.moveTo(cx - s / 2, cy - s / 2);
-        ctx.lineTo(cx - s / 2 + d, cy - s / 2 - d);
-        ctx.moveTo(cx + s / 2, cy - s / 2);
-        ctx.lineTo(cx + s / 2 + d, cy - s / 2 - d);
-        ctx.moveTo(cx - s / 2, cy + s / 2);
-        ctx.lineTo(cx - s / 2 + d, cy + s / 2 - d);
-        ctx.moveTo(cx + s / 2, cy + s / 2);
-        ctx.lineTo(cx + s / 2 + d, cy + s / 2 - d);
-        ctx.stroke();
-    }
-
-    function drawCubeFormation(width, height) {
-        const centerX = width * 0.5;
-        const centerY = height * 0.5;
-        const base = Math.min(width, height) * 0.18;
-        drawCube(centerX - base * 1.2, centerY + base * 0.2, base, base * 0.28, 0.18);
-        drawCube(centerX + base * 1.1, centerY - base * 0.1, base * 0.9, base * 0.25, 0.16);
-        drawCube(centerX, centerY - base * 0.9, base * 0.75, base * 0.22, 0.14);
-        drawCube(centerX, centerY + base * 0.9, base * 0.65, base * 0.2, 0.12);
-        drawCube(centerX + base * 0.2, centerY + base * 1.6, base * 0.5, base * 0.18, 0.1);
-    }
-
-    function animate() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        drawCubeFormation(window.innerWidth, window.innerHeight);
-        const now = performance.now();
-        const nextActive = new Set();
-
-        active.forEach((idx) => {
-            const cell = grid[idx];
-            if (!cell) return;
-            if (now - cell.lastTouched > fadeDelay) {
-                cell.alpha = Math.max(0, cell.alpha - fadeStep);
-            }
-            if (cell.alpha > 0) {
-                drawCell(cell);
-                nextActive.add(idx);
-            }
+        input.addEventListener('keydown',e=>{
+          if(e.key==='Backspace' && !e.target.value && index>0){inputs[index-1].focus();}
         });
-
-        active = nextActive;
-        requestAnimationFrame(animate);
-    }
-
-    function seedPattern() {
-        const now = performance.now();
-        const maxLines = Math.min(cols, rows, 10);
-        for (let i = 0; i < maxLines; i += 2) {
-            const idxA = i * cols + i;
-            const idxB = (rows - 1 - i) * cols + i;
-            if (grid[idxA]) {
-                grid[idxA].alpha = 0.6;
-                grid[idxA].lastTouched = now;
-                active.add(idxA);
-            }
-            if (grid[idxB]) {
-                grid[idxB].alpha = 0.45;
-                grid[idxB].lastTouched = now;
-                active.add(idxB);
-            }
-        }
-    }
-
-    window.addEventListener("resize", resize, { passive: true });
-    window.addEventListener("mousemove", (event) => {
-        touchCell(event.clientX, event.clientY);
-    }, { passive: true });
-    window.addEventListener("touchmove", (event) => {
-        if (event.touches && event.touches.length > 0) {
-            const touch = event.touches[0];
-            touchCell(touch.clientX, touch.clientY);
-        }
-    }, { passive: true });
-
-    resize();
-    seedPattern();
-    animate();
-
-    const inputs = document.querySelectorAll('.code-input');
-    inputs.forEach((input, index) => {
-        input.addEventListener('input', (e) => {
-            if (e.target.value.length === 1 && index < inputs.length - 1) {
-                inputs[index + 1].focus();
-            }
-        });
-        input.addEventListener('keydown', (e) => {
-            if (e.key === 'Backspace' && e.target.value.length === 0 && index > 0) {
-                inputs[index - 1].focus();
-            }
-        });
+      });
     });
-})();
     </script>
 </body>
 </html>

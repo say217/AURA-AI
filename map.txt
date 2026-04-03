@@ -1,0 +1,31 @@
+loads a light ResNet-18 (
+≈
+12
+≈12 M params) via PyTorch, pushes a single 224x224 tensor 
+through model.eval() with gradients disabled, and returns immediately. 
+The only extra work is one Grad-CAM pass built once at module import, so 
+each request is just a forward pass plus a cached hook-based backward
+ sweep—fast even on CPU.
+
+In contrast, routes.py brings in a fine-tuned ResNet-101 (
+≈
+44
+≈44 M params) through TensorFlow/Keras. That architecture is ~3–4× 
+deeper, so every inference involves significantly more FLOPs and memory, 
+which alone explains the slower wall time.
+
+Each uploaded image in app 5 triggers _predict_image() → _gradcam().
+_gradcam() rebuilds a new Model graph and runs a full gradient tape backward 
+pass per image to obtain the heatmap. Computing gradients roughly doubles the 
+cost versus a pure forward pass, so Grad-CAM dominates latency there.
+
+The page accepts multiple files at once and loops over them, doing synchronous
+ work (load bytes → preprocess → predict → Grad-CAM → create two matplotlib 
+ figures → write PNGs) for every file. When several files are selected, the
+  user experiences the accumulated latency because everything runs serially 
+  before the response is sent.
+
+TensorFlow defaults to eager execution on CPU unless you have a configured
+ GPU; PyTorch in app 3 may be picking up CUDA automatically via
+  torch.device('cuda' ...). If TensorFlow is still on CPU, 
+  ResNet-101 + Grad-CAM becomes noticeably slower than the PyTorch path.

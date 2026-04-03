@@ -1,317 +1,152 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Login</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign in · AURA</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500;700&family=Syne:wght@600;700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
     <style>
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-html {
-        scroll-behavior: smooth;
-}
-
 :root {
-        --bg-0: #070605;
-        --bg-1: #0e0c0a;
-        --bg-2: #14110e;
-        --stroke-1: rgba(255, 255, 255, 0.08);
-        --stroke-2: rgba(255, 255, 255, 0.16);
-        --text-1: #f4f2ef;
-        --text-2: #d7d2cc;
-        --text-3: #a69f97;
-        --text-4: #7a7268;
-        --accent: #b28a5b;
-        --accent-soft: rgba(178, 138, 91, 0.18);
-        --glass-bg: rgba(20, 16, 12, 0.66);
-        --glass-bg-strong: rgba(20, 16, 12, 0.84);
-        --shadow-soft: 0 20px 50px rgba(0, 0, 0, 0.45);
-        --shadow-glow: 0 12px 30px rgba(178, 138, 91, 0.18);
-        --radius-lg: 16px;
-        --radius-md: 12px;
-        --radius-sm: 10px;
+  --ink:#060608;
+  --ink-1:#0d0d11;
+  --ink-2:#111116;
+  --ink-3:#18181f;
+  --red:#c0392b;
+  --red-2:#e74c3c;
+  --red-soft:rgba(192,57,43,.13);
+  --red-dim:rgba(192,57,43,.06);
+  --rose:#ff6b6b;
+  --text-1:#eeeef5;
+  --text-2:#aaaac4;
+  --text-3:#55556d;
+  --glass:rgba(14,14,20,.8);
+  --glass-strong:rgba(10,10,14,.9);
+  --stroke:rgba(255,255,255,.08);
+  --stroke-strong:rgba(255,255,255,.16);
+  --blur:28px;
+  --radius-lg:18px;
+  --radius-md:12px;
+  --radius-sm:9px;
+  --shadow:0 30px 60px rgba(0,0,0,.45);
+  --shadow-red:0 8px 40px rgba(192,57,43,.35);
+  --bg-gradient:radial-gradient(1400px 900px at 12% -15%,rgba(231,76,60,.14),transparent 55%),radial-gradient(1000px 700px at 90% -10%,rgba(255,255,255,.06),transparent 65%),linear-gradient(180deg,#060608 0%,#08080d 70%,#0b0b12 100%);
 }
-
-body {
-    font-family: 'Sora', "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    background: radial-gradient(1400px 900px at 10% -15%, rgba(178, 138, 91, 0.08), transparent 60%),
-                radial-gradient(1000px 700px at 90% 0%, rgba(255, 255, 255, 0.05), transparent 65%),
-                linear-gradient(180deg, #070605 0%, #0b0907 45%, #0f0c09 100%);
-    color: var(--text-2);
-    overflow-x: hidden;
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 14px;
-    letter-spacing: 0.1px;
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--bg-gradient);
+  color:var(--text-1);
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:3rem 1.5rem;
+  position:relative;
+  overflow:hidden;
 }
-
-#glow-canvas {
-    position: fixed;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    display: block;
-    z-index: 0;
-    pointer-events: none;
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  opacity:.45;
 }
-
-.login-container {
-    background: var(--glass-bg);
-    border: 1px solid var(--stroke-1);
-    border-radius: var(--radius-lg);
-    padding: 1.1rem 1.25rem;
-    width: 100%;
-    max-width: 360px;
-    box-shadow: var(--shadow-soft);
-    position: relative;
-    z-index: 1;
-    backdrop-filter: blur(14px);
+.orb{
+  position:fixed;width:580px;height:580px;border-radius:50%;
+  background:radial-gradient(circle,rgba(231,76,60,.18),transparent 65%);
+  filter:blur(50px);z-index:0;opacity:.85;
 }
-
-form {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
+.orb.left{top:-120px;left:-160px}
+.orb.right{bottom:-180px;right:-120px}
+.auth-shell{position:relative;z-index:1;width:100%;max-width:980px;display:grid;grid-template-columns:1.2fr 0.8fr;gap:2.4rem;align-items:center}
+.auth-panel{
+  background:var(--glass);
+  border:1px solid var(--stroke);
+  border-radius:var(--radius-lg);
+  padding:2.8rem 3rem;
+  box-shadow:var(--shadow);
+  backdrop-filter:blur(var(--blur));
 }
-
-h2 {
-    font-size: 1.6rem;
-    font-weight: 600;
-    text-align: center;
-    margin-bottom: 1.25rem;
-    color: var(--text-1);
-    letter-spacing: 0.6px;
+.hero-copy{display:flex;flex-direction:column;gap:1.2rem}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:.45rem;padding:.35rem 1rem;
+  border-radius:50px;font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--red-2);
+  background:var(--red-soft);border:1px solid rgba(231,76,60,.35);
 }
-
-.flash-messages {
-    margin-bottom: 1rem;
-    text-align: center;
+.hero-title{
+  font-family:'Syne',sans-serif;font-size:clamp(1.8rem,3vw,2.75rem);
+  font-weight:700;line-height:1.2;letter-spacing:-.02em;
 }
-
-.flash-messages p {
-    color: #f4b7b7;
-    font-size: 0.95rem;
-    background: rgba(244, 183, 183, 0.1);
-    padding: 0.5rem 0.75rem;
-    border-radius: var(--radius-sm);
-    border: 1px solid rgba(244, 183, 183, 0.3);
+.hero-title span{
+  background:linear-gradient(120deg,var(--red-2),var(--rose));
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
 }
-
-label {
-    font-size: 0.95rem;
-    color: var(--text-3);
-    margin-bottom: 0.2rem;
-    font-weight: 500;
+.hero-sub{font-size:1rem;color:var(--text-2);line-height:1.8;max-width:440px}
+.pill-row{display:flex;flex-wrap:wrap;gap:.6rem}
+.pill{background:var(--red-dim);border:1px solid rgba(231,76,60,.22);border-radius:999px;padding:.35rem .85rem;font-size:.75rem;color:var(--text-2);letter-spacing:.05em}
+.auth-card{background:var(--glass-strong);border:1px solid var(--stroke-strong);border-radius:var(--radius-lg);padding:2.35rem 2.5rem;backdrop-filter:blur(32px);box-shadow:var(--shadow);position:relative;overflow:hidden}
+.auth-card::after{content:'';position:absolute;inset:0;border-radius:inherit;background:linear-gradient(135deg,rgba(231,76,60,.08),transparent 70%);pointer-events:none}
+.card-title{font-family:'Roboto',sans-serif;font-weight:700;font-size:1.55rem;margin-bottom:.4rem;color:var(--text-1)}
+.card-sub{font-size:.92rem;color:var(--text-2);margin-bottom:1.4rem}
+.flash-messages{margin-bottom:1rem}
+.flash-messages p{background:rgba(231,76,60,.12);border:1px solid rgba(231,76,60,.45);color:var(--text-1);padding:.55rem .8rem;border-radius:var(--radius-sm);font-size:.86rem;text-align:center}
+form{display:flex;flex-direction:column;gap:1rem}
+label{font-size:.82rem;color:var(--text-2);letter-spacing:.08em;text-transform:uppercase}
+.input-field{width:100%;padding:.85rem 1rem;border-radius:var(--radius-md);border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.03);color:var(--text-1);font-size:.95rem;transition:border-color .2s,box-shadow .2s}
+.input-field:focus{outline:none;border-color:rgba(231,76,60,.6);box-shadow:0 0 0 3px rgba(231,76,60,.18)}
+.btn-red{display:inline-flex;align-items:center;justify-content:center;gap:.35rem;padding:.9rem 1.2rem;border-radius:50px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:600;background:linear-gradient(130deg,var(--red),#8b1a14);color:#fff;box-shadow:var(--shadow-red);transition:transform .25s,box-shadow .25s}
+.btn-red:hover{transform:translateY(-2px);box-shadow:0 10px 45px rgba(192,57,43,.55)}
+.link-line{margin-top:1.4rem;font-size:.9rem;color:var(--text-2);text-align:center}
+.link-line a{color:var(--red-2);text-decoration:none;font-weight:600}
+.link-line a:hover{text-decoration:underline}
+@media(max-width:960px){
+  body{padding:2.5rem 1.25rem}
+  .auth-shell{grid-template-columns:1fr;gap:2rem}
+  .hero-copy{text-align:center;align-items:center}
+  .hero-sub{max-width:none}
+  .pill-row{justify-content:center}
 }
-
-input[type="email"],
-input[type="password"] {
-    padding: 0.7rem 0.75rem;
-    font-size: 0.95rem;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid var(--stroke-1);
-    border-radius: var(--radius-sm);
-    color: var(--text-1);
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-input[type="email"]:focus,
-input[type="password"]:focus {
-    outline: none;
-    border-color: rgba(178, 138, 91, 0.7);
-    box-shadow: 0 0 0 3px rgba(178, 138, 91, 0.2);
-}
-
-input[type="submit"] {
-    padding: 0.7rem 0.75rem;
-    font-size: 0.95rem;
-    font-weight: 600;
-    background: linear-gradient(135deg, rgba(178, 138, 91, 0.95) 0%, rgba(178, 138, 91, 0.75) 100%);
-    border: none;
-    border-radius: var(--radius-sm);
-    color: #120e0a;
-    cursor: pointer;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    box-shadow: var(--shadow-glow);
-}
-
-input[type="submit"]:hover {
-    transform: translateY(-1px);
-}
-
-p {
-    text-align: center;
-    margin-top: 1rem;
-    font-size: 0.9rem;
-    color: var(--text-3);
-}
-
-a {
-    color: var(--accent);
-    text-decoration: none;
-    font-weight: 600;
-}
-
-a:hover {
-    color: #d3a975;
-    text-decoration: underline;
-}
-
-@media (max-width: 600px) {
-    .login-container {
-        max-width: 92%;
-        padding: 1rem;
-    }
-
-    h2 {
-        font-size: 1.4rem;
-    }
+@media(max-width:520px){
+  .auth-card,.auth-panel{padding:2rem 1.6rem}
 }
     </style>
 </head>
 <body>
-    <canvas id="glow-canvas"></canvas>
-    <div class="login-container">
-        <h2>Login</h2>
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                <div class="flash-messages">
-                    {% for message in messages %}
-                        <p>{{ message }}</p>
-                    {% endfor %}
-                </div>
-            {% endif %}
-        {% endwith %}
-        <form method="POST">
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
-            <input type="submit" value="Login">
-        </form>
-        <p>Don't have an account? <a href="{{ url_for('app2.signup') }}">Sign up</a></p>
+    <div class="orb left"></div>
+    <div class="orb right"></div>
+    <div class="auth-shell">
+        <div class="hero-copy auth-panel">
+            <div class="eyebrow">AURA · ACCESS</div>
+            <h1 class="hero-title">Unified Radiology <span>Workspace</span></h1>
+            <p class="hero-sub">Sign in to orchestrate scans, review insights, and keep every oncological workflow synchronized across the AURA suite.</p>
+            <div class="pill-row">
+                <div class="pill">Real-time triage</div>
+                <div class="pill">Audit-ready</div>
+                <div class="pill">HIPAA Safe</div>
+            </div>
+        </div>
+        <div class="auth-card">
+            <h2 class="card-title">Welcome back</h2>
+            <p class="card-sub">Use your clinical credentials to continue.</p>
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <div class="flash-messages">
+                        {% for message in messages %}
+                            <p>{{ message }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+            <form method="POST">
+                <label for="email">Email</label>
+                <input class="input-field" type="email" id="email" name="email" required>
+                <label for="password">Password</label>
+                <input class="input-field" type="password" id="password" name="password" required>
+                <button type="submit" class="btn-red">Login</button>
+            </form>
+            <p class="link-line">Don't have an account? <a href="{{ url_for('app2.signup') }}">Start here</a></p>
+        </div>
     </div>
-
-    <script>
-(() => {
-    const canvas = document.getElementById("glow-canvas");
-    if (!canvas) return;
-
-    const ctx = canvas.getContext("2d");
-    const squareSize = 80;
-    const fadeDelay = 500;
-    const fadeStep = 0.02;
-
-    let dpr = window.devicePixelRatio || 1;
-    let cols = 0;
-    let rows = 0;
-    let grid = [];
-    let active = new Set();
-
-    function resize() {
-        dpr = window.devicePixelRatio || 1;
-        const width = window.innerWidth;
-        const height = window.innerHeight;
-        canvas.width = Math.floor(width * dpr);
-        canvas.height = Math.floor(height * dpr);
-        canvas.style.width = `${width}px`;
-        canvas.style.height = `${height}px`;
-        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-        cols = Math.ceil(width / squareSize);
-        rows = Math.ceil(height / squareSize);
-        grid = new Array(cols * rows).fill(null).map((_, i) => {
-            const x = (i % cols) * squareSize;
-            const y = Math.floor(i / cols) * squareSize;
-            return { x, y, alpha: 0, lastTouched: 0 };
-        });
-        active.clear();
-    }
-
-    function touchCell(x, y) {
-        const col = Math.floor(x / squareSize);
-        const row = Math.floor(y / squareSize);
-        if (col < 0 || row < 0 || col >= cols || row >= rows) return;
-        const idx = row * cols + col;
-        const cell = grid[idx];
-        if (!cell) return;
-        cell.alpha = 1;
-        cell.lastTouched = performance.now();
-        active.add(idx);
-    }
-
-    function drawCell(cell) {
-        if (cell.alpha <= 0) return;
-        const cx = cell.x + squareSize / 2;
-        const cy = cell.y + squareSize / 2;
-        const gradient = ctx.createRadialGradient(cx, cy, 0, cx, cy, squareSize * 0.75);
-        gradient.addColorStop(0, `rgba(255, 255, 255, ${cell.alpha})`);
-        gradient.addColorStop(1, `rgba(255, 255, 255, 0)`);
-
-        ctx.strokeStyle = gradient;
-        ctx.lineWidth = 1.6;
-        ctx.strokeRect(cell.x + 0.5, cell.y + 0.5, squareSize - 1, squareSize - 1);
-    }
-
-    function animate() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        const now = performance.now();
-        const nextActive = new Set();
-
-        active.forEach((idx) => {
-            const cell = grid[idx];
-            if (!cell) return;
-            if (now - cell.lastTouched > fadeDelay) {
-                cell.alpha = Math.max(0, cell.alpha - fadeStep);
-            }
-            if (cell.alpha > 0) {
-                drawCell(cell);
-                nextActive.add(idx);
-            }
-        });
-
-        active = nextActive;
-        requestAnimationFrame(animate);
-    }
-
-    function seedPattern() {
-        const now = performance.now();
-        const maxLines = Math.min(cols, rows, 10);
-        for (let i = 0; i < maxLines; i += 2) {
-            const idxA = i * cols + i;
-            const idxB = (rows - 1 - i) * cols + i;
-            if (grid[idxA]) {
-                grid[idxA].alpha = 0.6;
-                grid[idxA].lastTouched = now;
-                active.add(idxA);
-            }
-            if (grid[idxB]) {
-                grid[idxB].alpha = 0.45;
-                grid[idxB].lastTouched = now;
-                active.add(idxB);
-            }
-        }
-    }
-
-    window.addEventListener("resize", resize, { passive: true });
-    window.addEventListener("mousemove", (event) => {
-        touchCell(event.clientX, event.clientY);
-    }, { passive: true });
-    window.addEventListener("touchmove", (event) => {
-        if (event.touches && event.touches.length > 0) {
-            const touch = event.touches[0];
-            touchCell(touch.clientX, touch.clientY);
-        }
-    }, { passive: true });
-
-    resize();
-    seedPattern();
-    animate();
-})();
-    </script>
 </body>
 </html>

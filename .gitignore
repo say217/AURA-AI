@@ -4,7 +4,8 @@
 *.db
 
 instance/
-
+.keras
+.pth
 __pycache__/
 *.pyc
 *.pyo
@@ -13,4 +14,7 @@ __pycache__/
 *.pth
 *.h5
 *.pt
+app5\brain_tumor_resnet101_finetuned_v00.3.keras
+app4\breast_cancer_cnn_model_updated.pth
 
+app3\resnet18_model_001.pth

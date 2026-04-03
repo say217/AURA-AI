@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500;700&family=Syne:wght@600;700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
     
     <style>
 * {
@@ -21,36 +21,54 @@ html {
 }
 
 :root {
-    --bg-0: #070605;
-    --bg-1: #0e0c0a;
-    --bg-2: #14110e;
-    --stroke-1: rgba(255, 255, 255, 0.08);
-    --stroke-2: rgba(255, 255, 255, 0.16);
-    --text-1: #f4f2ef;
-    --text-2: #d7d2cc;
-    --text-3: #a69f97;
-    --text-4: #7a7268;
-    --accent: #b28a5b;
-    --accent-soft: rgba(178, 138, 91, 0.18);
-    --glass-bg: rgba(20, 16, 12, 0.66);
-    --glass-bg-strong: rgba(20, 16, 12, 0.84);
-    --shadow-soft: 0 20px 50px rgba(0, 0, 0, 0.45);
-    --shadow-glow: 0 12px 30px rgba(178, 138, 91, 0.18);
+    --ink: #060608;
+    --ink-1: #0d0d11;
+    --ink-2: #111116;
+    --ink-3: #18181f;
+    --red: #c0392b;
+    --red-2: #e74c3c;
+    --red-soft: rgba(192,57,43,.16);
+    --text-1: #eeeef5;
+    --text-2: #c3c3d9;
+    --text-3: #8f8fa8;
+    --text-4: #5f5f77;
+    --bg-0: var(--ink);
+    --bg-1: var(--ink-1);
+    --bg-2: var(--ink-2);
+    --stroke-1: rgba(255,255,255,.08);
+    --stroke-2: rgba(255,255,255,.16);
+    --accent: var(--red);
+    --accent-soft: var(--red-soft);
+    --glass-bg: rgba(14,14,20,.72);
+    --glass-bg-strong: rgba(10,10,14,.9);
+    --shadow-soft: 0 30px 60px rgba(0,0,0,.45);
+    --shadow-glow: 0 12px 30px rgba(192,57,43,.24);
     --radius-lg: 16px;
     --radius-md: 12px;
     --radius-sm: 10px;
 }
 
 body {
-    font-family: 'Sora', "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    background: radial-gradient(1400px 900px at 10% -15%, rgba(178, 138, 91, 0.08), transparent 60%),
-                radial-gradient(1000px 700px at 90% 0%, rgba(255, 255, 255, 0.05), transparent 65%),
-                linear-gradient(180deg, #070605 0%, #0b0907 45%, #0f0c09 100%);
+    font-family: 'DM Sans', sans-serif;
+    background: radial-gradient(1400px 900px at 12% -15%, rgba(231, 76, 60, 0.18), transparent 55%),
+                radial-gradient(1000px 700px at 90% -10%, rgba(255, 255, 255, 0.05), transparent 65%),
+                linear-gradient(180deg, var(--bg-0) 0%, #080811 55%, #0b0b13 100%);
     color: var(--text-2);
     overflow-x: hidden;
     min-height: 100vh;
     font-size: 14px;
     letter-spacing: 0.1px;
+    position: relative;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+    opacity: 0.45;
+    z-index: 0;
 }
 
 .nav-header {
@@ -94,6 +112,7 @@ body {
     font-weight: 600;
     color: var(--text-1);
     letter-spacing: 3px;
+    font-family: 'Syne', sans-serif;
 }
 
 .nav-menu {
@@ -129,7 +148,7 @@ body {
 .nav-link.active {
     background: var(--accent-soft);
     color: var(--text-1);
-    border-color: rgba(178, 138, 91, 0.5);
+    border-color: rgba(231, 76, 60, 0.45);
     box-shadow: var(--shadow-glow);
 }
 
@@ -227,6 +246,7 @@ body {
 h1, h2, h3 {
     color: var(--text-1);
     font-weight: 600;
+    font-family: 'Roboto', sans-serif;
 }
 
 h1 {
@@ -258,13 +278,13 @@ input[type="file"] {
 
 input[type="file"]:focus {
     outline: none;
-    border-color: rgba(178, 138, 91, 0.6);
-    box-shadow: 0 0 0 3px rgba(178, 138, 91, 0.16);
+    border-color: rgba(231, 76, 60, 0.65);
+    box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.2);
 }
 
 button {
-    background: linear-gradient(135deg, rgba(178, 138, 91, 0.95) 0%, rgba(178, 138, 91, 0.75) 100%);
-    color: #120e0a;
+    background: linear-gradient(135deg, var(--red) 0%, #8b1a14 100%);
+    color: #fff;
     padding: 12px 24px;
     border: none;
     border-radius: 4px;
@@ -282,7 +302,7 @@ button {
 }
 
 button:hover {
-    background: linear-gradient(135deg, rgba(178, 138, 91, 1) 0%, rgba(178, 138, 91, 0.82) 100%);
+    background: linear-gradient(135deg, var(--red-2) 0%, #a32016 100%);
     transform: translateY(-1px);
 }
 
@@ -618,7 +638,7 @@ small {
     padding: 6px 10px;
     border-radius: 8px;
     font-weight: 600;
-    border: 1px solid rgba(178, 138, 91, 0.5);
+    border: 1px solid rgba(231, 76, 60, 0.45);
 }
 
 .info-box {
@@ -663,7 +683,7 @@ tr:hover {
 }
 
 tr.highlight-row {
-    background: rgba(178, 138, 91, 0.12) !important;
+    background: rgba(231, 76, 60, 0.16) !important;
     font-weight: 600;
     color: var(--text-1);
 }
@@ -672,8 +692,8 @@ tr.highlight-row {
     display: inline-block;
     margin: 25px auto;
     padding: 12px 24px;
-    background: linear-gradient(135deg, rgba(178, 138, 91, 0.95) 0%, rgba(178, 138, 91, 0.75) 100%);
-    color: #120e0a;
+    background: linear-gradient(135deg, var(--red) 0%, #8b1a14 100%);
+    color: #fff;
     text-decoration: none;
     border-radius: var(--radius-sm);
     font-weight: 600;
@@ -684,7 +704,7 @@ tr.highlight-row {
 }
 
 .back:hover {
-    background: linear-gradient(135deg, rgba(178, 138, 91, 1) 0%, rgba(178, 138, 91, 0.82) 100%);
+    background: linear-gradient(135deg, var(--red-2) 0%, #a32016 100%);
     transform: translateY(-1px);
 }
 
@@ -984,7 +1004,7 @@ tr.highlight-row {
 button:focus-visible,
 input[type="file"]:focus-visible,
 .file-input-label:focus-within {
-    outline: 2px solid rgba(178, 138, 91, 0.6);
+    outline: 2px solid rgba(231, 76, 60, 0.55);
     outline-offset: 2px;
 }
 
@@ -1047,8 +1067,8 @@ input[type="file"]:focus-visible,
             <a href="{{ url_for('app3.page') }}" class="nav-link"><i class="fas fa-dna"></i> Lung</a>
             <a href="{{ url_for('app4.page') }}" class="nav-link"><i class="fas fa-flask"></i>Breast </a>
          
-            <a href="{{ url_for('app5.page') }}" class="nav-link"><i class="fas fa-pills"></i> App5</a>
-            <a href="{{ url_for('app6.page') }}" class="nav-link"><i class="fas fa-vial"></i> App6</a>
+            <a href="{{ url_for('app5.page') }}" class="nav-link"><i class="fas fa-pills"></i>Brain</a>
+            <a href="{{ url_for('app6.page') }}" class="nav-link"><i class="fas fa-vial"></i> docs</a>
             <a href="{{ url_for('app7.page') }}" class="nav-link"><i class="fas fa-notes-medical"></i> App7</a>
             <a href="{{ url_for('app2.logout') }}" class="nav-link logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
         </nav>
