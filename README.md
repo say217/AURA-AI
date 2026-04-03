@@ -1,51 +1,17 @@
-﻿# AURA AI - Cancer Detection Suite
-
-## Executive Summary
-AURA AI is a multi-module Flask web application for AI-assisted radiology workflows. It provides secure user onboarding, a dashboard landing area, and three model-driven inference modules for colon and lung tissue classification, breast cancer detection, and brain tumor classification. Each module accepts image uploads, runs inference, and returns confidence charts plus Grad-CAM visualizations to support explainability.
-
-## Key Features
-- User authentication with email verification and welcome messaging.
-- Central dashboard with routed access to each AI module.
-- Image upload, preprocessing, and inference with per-class confidence. 
-- Grad-CAM overlays and probability charts for interpretability.
-- Modular Flask blueprints for easy extension.
-
-## System Flow (Chart)
-```mermaid
-flowchart TD
-    A[User] --> B[Auth and Verification: app2]
-    B -->|verified| C[Dashboard: app1]
-    C --> D[Colon and Lung Classifier: app3]
-    C --> E[Breast Cancer Classifier: app4]
-    C --> F[Brain Tumor Classifier: app5]
-    D --> G[Grad-CAM and Probability Charts]
-    E --> G
-    F --> G
-```
-
-## Module Overview (Table)
-| Module | Blueprint | Purpose | Key Outputs |
-| --- | --- | --- | --- |
-| Authentication | app2 | Signup, login, verification, email workflows | User session, verification status |
-| Dashboard | app1 | Post-login landing page | Navigation to AI modules |
-| Colon and Lung | app3 | 5-class tissue classification (ResNet-18) | Class label, confidence, Grad-CAM, bar chart |
-| Breast Cancer | app4 | IDC positive or negative (ResNet-18) | Class label, confidence, Grad-CAM, plots |
-| Brain Tumor | app5 | 3-class brain tumor classification (ResNet-101) | Class label, confidence, Grad-CAM, plots |
-| Placeholder | app6 | Reserved route | Template page |
-| Placeholder | app7 | Reserved route | Template page |
-
-## Model Artifacts (Not Tracked in Git)
-Large model files are intentionally ignored to stay within GitHub limits. Place them locally before running the app.
-
-| Module | Expected File | Location |
-| --- | --- | --- |
-| app3 | resnet18_model_001.pth | app3/resnet18_model_001.pth |
-| app4 | breast_cancer_cnn_model_updated.pth | app4/breast_cancer_cnn_model_updated.pth |
-| app5 | brain_tumor_resnet101_finetuned_v00.3.keras | app5/brain_tumor_resnet101_finetuned_v00.3.keras |
-# Aura AI - AI Unified Radiology Assistant
-
+﻿# Aura AI - AI Unified Radiology Assistant
 ## A Modular Flask-Based Web Application for AI-Powered Cancer Detection in Histopathology Images
-
+![Python](https://img.shields.io/badge/Python-3.x-blue?logo=python)
+![Flask](https://img.shields.io/badge/Flask-3.x-black?logo=flask)
+![PyTorch](https://img.shields.io/badge/PyTorch-2.x-red?logo=pytorch)
+![ResNet](https://img.shields.io/badge/Model-ResNet18%20%7C%20ResNet101-orange)
+![OpenCV](https://img.shields.io/badge/OpenCV-Enabled-green?logo=opencv)
+![NumPy](https://img.shields.io/badge/NumPy-Scientific-blue?logo=numpy)
+![Matplotlib](https://img.shields.io/badge/Matplotlib-Visualization-yellow)
+![Grad--CAM](https://img.shields.io/badge/XAI-Grad--CAM-purple)
+![SQLite](https://img.shields.io/badge/Database-SQLite-lightgrey?logo=sqlite)
+![PostgreSQL](https://img.shields.io/badge/Scalable-PostgreSQL-blue?logo=postgresql)
+![Docker](https://img.shields.io/badge/Docker-Ready-blue?logo=docker)
+![License](https://img.shields.io/badge/License-MIT-green)
 ## Introduction
 Aura AI - Unified Radiology Assistant is a next-generation, AI-powered diagnostic support
 system designed to assist pathologists, oncology researchers, and medical students in the rapid
