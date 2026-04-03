@@ -2,8 +2,6 @@
 .env
 
 *.db
-
-instance/
 *.keras
 *.pth
 __pycache__/
