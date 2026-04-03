@@ -22,7 +22,8 @@ import matplotlib.pyplot as plt
 bp = Blueprint(
     'app5',
     __name__,
-    template_folder='templates'
+    template_folder='templates',
+    static_folder='static'
 )
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
