@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AURA AI — Unified Radiology Assistant</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Syne:wght@600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Syne:wght@600;700;800&family=DM+Sans:wght@300;400;500&family=Playfair+Display:wght@600;700&family=Fauna+One&display=swap" rel="stylesheet">
 <style>
 :root {
   --ink:      #060608;
@@ -213,7 +213,7 @@ nav{
 .reveal{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s ease}
 .reveal.visible{opacity:1;transform:translateY(0)}
 section{position:relative;z-index:1}
-.container{max-width:1220px;margin:0 auto;padding:0 2.5rem}
+.container{max-width:1380px;margin:0 auto;padding:0 1.5rem}
 .section-label{
   display:inline-flex;align-items:center;gap:.5rem;
   font-size:.72rem;font-weight:500;color:var(--red-2);letter-spacing:.1em;text-transform:uppercase;
@@ -227,37 +227,89 @@ section{position:relative;z-index:1}
 
 /* SPLIT / ABOUT */
 .split{padding:7rem 0;background:var(--ink-1)}
-.split-inner{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center}
+.split-inner{display:grid;grid-template-columns:1.35fr 0.65fr;gap:5.5rem;align-items:center}
 .split-img-box{
-  background:linear-gradient(135deg,var(--ink-2),var(--ink-3));
-  border:1px solid var(--gb);border-radius:22px;padding:2rem;
-  box-shadow:0 40px 80px rgba(0,0,0,.35),0 0 50px rgba(192,57,43,.04);
-  position:relative;overflow:hidden;
+  padding:0;
 }
-.split-img-box::before{
-  content:'';position:absolute;top:0;left:0;right:0;height:1px;
-  background:linear-gradient(90deg,transparent,rgba(192,57,43,.32),transparent);
+.split-img{
+  width:100%;
+  height:auto;
+  display:block;
+  border-radius:12px;
+  border:1px solid var(--gb);
 }
-.img-placeholder{
-  width:100%;aspect-ratio:4/3;
-  background:linear-gradient(135deg,rgba(192,57,43,.06),rgba(139,26,20,.04));
-  border-radius:12px;border:1px solid rgba(192,57,43,.1);
-  display:flex;align-items:center;justify-content:center;
-  position:relative;overflow:hidden;
+.album{padding:4.5rem 0 6.5rem}
+.album .container{max-width:1440px}
+.album-header{text-align:center;margin-bottom:2.6rem}
+.album-row{display:flex;gap:1.5rem;flex-wrap:wrap;justify-content:space-between}
+.snip1482{
+  font-family:'Fauna One',Arial,sans-serif;
+  position:relative;
+  margin:10px 8px;
+  min-width:280px;
+  max-width:360px;
+  min-height:260px;
+  width:100%;
+  color:#ffffff;
+  text-align:right;
+  line-height:1.4em;
+  background-color:#1a1a1a;
+  font-size:16px;
+  border:1px solid var(--gb);
+  border-radius:12px;
+  overflow:hidden;
 }
-.img-grid{
-  display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);
-  gap:1px;width:100%;height:100%;position:absolute;inset:0;opacity:.38;
+.snip1482 *{
+  box-sizing:border-box;
+  transition:all 0.35s ease;
 }
-.img-grid-cell{border:1px solid rgba(192,57,43,.07)}
-.corner-badge{
-  position:absolute;bottom:-14px;right:-14px;
-  background:linear-gradient(135deg,var(--red),#8b1a14);
-  border-radius:12px;padding:.7rem 1rem;
-  box-shadow:0 8px 32px rgba(192,57,43,.45);
+.snip1482 img{
+  position:absolute;
+  right:0%;
+  top:50%;
+  opacity:1;
+  width:100%;
+  transform:translate(0%,-50%);
 }
-.cb-num{font-family:'Syne',sans-serif;font-size:1.35rem;font-weight:700;color:#fff;line-height:1}
-.cb-lbl{font-size:.62rem;color:rgba(255,255,255,.7);margin-top:.18rem}
+.snip1482 figcaption{
+  position:absolute;
+  width:50%;
+  top:50%;
+  left:0;
+  transform:translateY(-50%);
+  padding:20px 0 20px 20px;
+}
+.snip1482 h2,
+.snip1482 p{
+  margin:0;
+  width:100%;
+  transform:translateX(20px);
+  opacity:0;
+}
+.snip1482 h2{
+  font-family:'Playfair Display',Arial,sans-serif;
+  text-transform:uppercase;
+  margin-bottom:5px;
+  font-size:1rem;
+}
+.snip1482 p{font-size:0.8em}
+.snip1482 a{
+  position:absolute;
+  top:0;bottom:0;left:0;right:0;
+  z-index:1;
+}
+.snip1482:hover img,
+.snip1482.hover img{
+  width:55%;
+  right:-10%;
+}
+.snip1482:hover figcaption h2,
+.snip1482.hover figcaption h2,
+.snip1482:hover figcaption p,
+.snip1482.hover figcaption p{
+  transform:translateX(0px);
+  opacity:1;
+}
 .split-text .section-sub{margin-bottom:1.7rem}
 .pill-list{display:flex;flex-direction:column;gap:.7rem;margin-top:1.2rem}
 .pill{
@@ -622,24 +674,7 @@ footer{background:var(--ink);border-top:1px solid var(--gb);padding:4rem 0 2rem}
     <div class="split-inner reveal">
       <div>
         <div class="split-img-box">
-          <div class="img-placeholder">
-            <div class="img-grid">
-              <div class="img-grid-cell"></div><div class="img-grid-cell"></div><div class="img-grid-cell"></div>
-              <div class="img-grid-cell"></div><div class="img-grid-cell"></div><div class="img-grid-cell"></div>
-              <div class="img-grid-cell"></div><div class="img-grid-cell"></div><div class="img-grid-cell"></div>
-            </div>
-            <svg width="50" height="50" viewBox="0 0 52 52" fill="none" style="position:absolute;opacity:.38">
-              <rect x="6" y="6" width="40" height="40" rx="7" stroke="url(#ig)" stroke-width="1.3"/>
-              <circle cx="26" cy="26" r="10" stroke="url(#ig)" stroke-width="1.2"/>
-              <circle cx="26" cy="26" r="3.5" fill="url(#ig)" opacity=".6"/>
-              <path d="M12 12l9 9M40 12l-9 9M12 40l9-9M40 40l-9-9" stroke="url(#ig)" stroke-width=".9" stroke-linecap="round"/>
-              <defs><linearGradient id="ig" x1="6" y1="6" x2="46" y2="46" gradientUnits="userSpaceOnUse"><stop stop-color="#c0392b"/><stop offset="1" stop-color="#e74c3c"/></linearGradient></defs>
-            </svg>
-          </div>
-          <div class="corner-badge">
-            <div class="cb-num">98.4%</div>
-            <div class="cb-lbl">Specificity</div>
-          </div>
+          <img class="split-img" src="/app5/static/Screenshot%202026-04-03%20161829.png" alt="Cancer detection preview">
         </div>
       </div>
       <div class="split-text">
@@ -667,6 +702,55 @@ footer{background:var(--ink);border-top:1px solid var(--gb);padding:4rem 0 2rem}
     </div>
   </div>
 </section>
+
+<!-- ALBUM -->
+<section class="album" id="album">
+  <div class="container">
+    <div class="album-header reveal">
+      <div class="section-label" style="justify-content:center">
+        <svg width="10" height="10" fill="none" viewBox="0 0 10 10"><circle cx="5" cy="5" r="4" stroke="#c0392b" stroke-width="1.2"/><circle cx="5" cy="5" r="1.8" fill="#c0392b"/></svg>
+        Case Highlights
+      </div>
+      <h2 class="section-title" style="text-align:center">Visual album of model outputs</h2>
+      <p class="section-sub">Hover each card to reveal a short caption.</p>
+    </div>
+    <div class="album-row reveal">
+      <figure class="snip1482">
+        <figcaption>
+          <h2>Lung Cancer </h2>
+          <p>Patch-level detection with Grad-CAM overlay, Comlete report with accuracy model metrics</p>
+        </figcaption>
+        <a href="#"></a>
+        <img src="app5/static/Screenshot 2026-04-04 010257.png" alt="Lung Cancer preview">
+      </figure>
+      <figure class="snip1482 hover">
+        <figcaption>
+          <h2>Statistical Charts</h2>
+          <p>Provide comprehensive report with classification chart prediction probablity.</p>
+        </figcaption>
+        <a href="#"></a>
+        <img src="/app5/static/Screenshot 2026-04-04 010502.png" alt="Lung preview">
+      </figure>
+      <figure class="snip1482">
+        <figcaption>
+          <h2>Brain MRI</h2>
+          <p>ResNet-101 inference with XAI focus regions.</p>
+        </figcaption>
+        <a href="#"></a>
+        <img src="/app5/static/Screenshot%202026-04-03%20161829.png" alt="Brain MRI preview">
+      </figure>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+
+
+
+
 
 <!-- FEATURES -->
 <section class="features" id="features">
