@@ -616,6 +616,18 @@ input[type="submit"]:hover {
     align-items: center;
     justify-content: center;
     gap: 10px;
+    width: 100%;
+}
+
+.button-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.button-row .submit-btn {
+    padding: 8px 12px;
+    font-size: 12px;
 }
 
 .submit-btn.is-loading {
@@ -1234,10 +1246,17 @@ input[type="submit"]:focus-visible {
                         <div class="preview-grid" id="previewGrid"></div>
                     </div>
                     
-                    <button type="submit" id="classifyBtn" class="submit-btn">
-                        <span class="btn-text"><span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M7 12h10" stroke-width="1.6" stroke-linecap="round"/><path d="M13 7l4 5-4 5" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Classify Images</span>
-                        <span class="btn-loader" aria-hidden="true"></span>
-                    </button>
+                    <div class="button-row">
+                        <button type="submit" id="classifyBtn" class="submit-btn">
+                            <span class="btn-text"><span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M7 12h10" stroke-width="1.6" stroke-linecap="round"/><path d="M13 7l4 5-4 5" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Classify Images</span>
+                            <span class="btn-loader" aria-hidden="true"></span>
+                        </button>
+                        
+                        <button type="button" id="downloadBtn" class="submit-btn" style="background: rgba(52, 211, 153, 0.2); border-color: rgba(52, 211, 153, 0.5); color: #34d399;">
+                            <span class="btn-text"><span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 16v-6" stroke-width="1.6" stroke-linecap="round"/><path d="M8 12l4 4 4-4" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 20h16" stroke-width="1.4" stroke-linecap="round"/></svg></span>Download All Images</span>
+                            <span class="btn-loader" aria-hidden="true"></span>
+                        </button>
+                    </div>
                 </form>
 
                 <div id="about" style="margin-top: 24px; padding-top: 20px; border-top: 1px solid #1a1a1a;">
@@ -1385,10 +1404,28 @@ input[type="submit"]:focus-visible {
 
     window.addEventListener('load', () => {
         const appLoader = document.getElementById('appLoader');
-        document.body.classList.remove('is-loading');
         if (appLoader) {
             appLoader.classList.add('is-hidden');
         }
+    });
+</script>
+
+<script>
+    document.getElementById('downloadBtn').addEventListener('click', function() {
+        const downloadBtn = this;
+        const originalText = downloadBtn.innerHTML;
+
+        downloadBtn.disabled = true;
+        downloadBtn.style.opacity = '0.6';
+        downloadBtn.innerHTML = '<span class="btn-text"><span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke-width="1.4"/><path d="M8 12a4 4 0 004-4" stroke-width="1.4" stroke-linecap="round"/></svg></span>Preparing...</span>';
+
+        window.location.href = '/app5/download-images';
+
+        setTimeout(() => {
+            downloadBtn.disabled = false;
+            downloadBtn.style.opacity = '1';
+            downloadBtn.innerHTML = originalText;
+        }, 1200);
     });
 </script>
 </body>

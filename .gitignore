@@ -19,3 +19,4 @@ __pycache__/
 *.joblib
 *.pkl
 huggingface_cache/
+*.keras

@@ -1,12 +1,13 @@
 import io
 import os
 import uuid
+import zipfile
 from pathlib import Path
 
 import matplotlib
 import numpy as np
 import tensorflow as tf
-from flask import Blueprint, flash, redirect, render_template, request, send_from_directory, session, url_for
+from flask import Blueprint, flash, redirect, render_template, request, send_file, send_from_directory, session, url_for
 from functools import wraps
 from keras.preprocessing import image #ignore
 
@@ -50,19 +51,33 @@ def _ensure_model_available() -> Path:
     HF_CACHE_DIR.mkdir(parents=True, exist_ok=True)
     token = os.getenv("HF_API_TOKEN")
 
-    downloaded = hf_hub_download(
-        repo_id=HF_REPO_ID,
-        repo_type=HF_REPO_TYPE,
-        filename=HF_MODEL_FILE,
-        cache_dir=str(HF_CACHE_DIR),
-        token=token
-    )
+    try:
+        # Prefer placing the file directly under the configured cache folder
+        # so deployments that start with an empty cache will self-heal.
+        downloaded = hf_hub_download(
+            repo_id=HF_REPO_ID,
+            repo_type=HF_REPO_TYPE,
+            filename=HF_MODEL_FILE,
+            local_dir=str(HF_CACHE_DIR),
+            local_dir_use_symlinks=False,
+            token=token
+        )
+        return Path(downloaded)
+    except TypeError:
+        # Fallback for older huggingface_hub versions without local_dir.
+        downloaded = hf_hub_download(
+            repo_id=HF_REPO_ID,
+            repo_type=HF_REPO_TYPE,
+            filename=HF_MODEL_FILE,
+            cache_dir=str(HF_CACHE_DIR),
+            token=token
+        )
 
-    downloaded_path = Path(downloaded)
-    if downloaded_path != MODEL_PATH and not MODEL_PATH.exists():
-        MODEL_PATH.write_bytes(downloaded_path.read_bytes())
+        downloaded_path = Path(downloaded)
+        if downloaded_path != MODEL_PATH and not MODEL_PATH.exists():
+            MODEL_PATH.write_bytes(downloaded_path.read_bytes())
 
-    return MODEL_PATH
+        return MODEL_PATH
 
 
 model = tf.keras.models.load_model(str(_ensure_model_available()))
@@ -193,6 +208,30 @@ def _render_gradcam_overlay(img, cam, alpha=0.4):
 def instance_file(filename):
     _ensure_instance_dir()
     return send_from_directory(INSTANCE_DIR, filename)
+
+
+@bp.route('/download-images')
+@login_required
+def download_images():
+    images_dir = PROJECT_ROOT / 'images'
+    archive_name = 'all-images.zip'
+    archive_buffer = io.BytesIO()
+
+    with zipfile.ZipFile(archive_buffer, 'w', zipfile.ZIP_DEFLATED) as zipf:
+        for root, _, files in os.walk(images_dir):
+            for name in files:
+                file_path = Path(root) / name
+                if file_path.is_file():
+                    arcname = file_path.relative_to(images_dir)
+                    zipf.write(file_path, arcname.as_posix())
+
+    archive_buffer.seek(0)
+    return send_file(
+        archive_buffer,
+        as_attachment=True,
+        download_name=archive_name,
+        mimetype='application/zip'
+    )
 
 @bp.route('/', methods=['GET', 'POST'])
 @login_required

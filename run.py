@@ -5,7 +5,7 @@ from app4 import create_app as create_app4
 from app5 import create_app as create_app5
 from app6 import create_app as create_app6
 from app7 import create_app as create_app7
-from flask import Flask, redirect, url_for, session
+from flask import Flask, redirect, url_for, session, send_from_directory
 from flask_mail import Mail
 from flask_migrate import Migrate
 from app2.models import db  
@@ -44,6 +44,12 @@ app.register_blueprint(create_app4(), url_prefix='/app4')
 app.register_blueprint(create_app5(), url_prefix='/app5')
 app.register_blueprint(create_app6(), url_prefix='/app6')
 app.register_blueprint(create_app7(), url_prefix='/app7')
+
+# Serve images from the /images/ directory
+@app.route('/images/<path:filename>')
+def serve_images(filename):
+    images_dir = os.path.join(os.path.dirname(__file__), 'images')
+    return send_from_directory(images_dir, filename)
 
 @app.route('/')
 def index():

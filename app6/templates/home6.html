@@ -1,21 +1,980 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>App 6</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aura AI Documentation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-dark: #0a0a0a;
+            --bg-darker: #050505;
+            --text-light: #e8e8e8;
+            --text-muted: #a0a0a0;
+            --border-subtle: #1a1a1a;
+            --accent: #c74141;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Crimson Text', serif;
+            background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-darker) 100%);
+            color: var(--text-light);
+            line-height: 1.8;
+            font-size: 16px;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: var(--bg-darker);
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 16px 24px;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            font-size: 20px;
+            font-weight: 400;
+            letter-spacing: 1px;
+            margin: 0;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: #ffffff;
+            text-decoration: none;
+            padding: 8px 14px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border: 1px solid transparent;
+        }
+
+        .nav-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: rgba(143, 143, 168, 0.6);
+            box-shadow: 0 0 6px rgba(143, 143, 168, 0.35);
+            flex-shrink: 0;
+        }
+
+        .nav-link.active .nav-dot {
+            background: #34d399;
+            box-shadow: 0 0 8px rgba(52, 211, 153, 0.6);
+        }
+
+        .nav-link i {
+            font-size: 12px;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.04);
+            color: var(--text-light);
+            border-color: #3b332a;
+        }
+
+        .nav-link.active {
+            background: rgba(192, 57, 43, 0.13);
+            color: var(--text-light);
+            border-color: rgba(192, 57, 43, 0.5);
+            box-shadow: 0 12px 30px rgba(192, 57, 43, 0.28);
+        }
+
+        .logout-btn {
+            background: rgba(255, 255, 255, 0.04);
+            color: #4a4a60;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--text-light);
+        }
+
+        aside {
+            position: fixed;
+            left: 0;
+            top: 64px;
+            width: 220px;
+            height: calc(100vh - 64px);
+            background: var(--bg-dark);
+            border-right: 1px solid var(--border-subtle);
+            overflow-y: auto;
+            padding: 24px 0;
+        }
+
+        aside nav a {
+            display: block;
+            padding: 10px 20px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            border-left: 2px solid transparent;
+        }
+
+        aside nav a:hover {
+            color: var(--text-light);
+            border-left-color: var(--accent);
+            background: rgba(199, 65, 65, 0.08);
+        }
+
+        main {
+            margin-left: 220px;
+            margin-top: 64px;
+            flex: 1;
+            padding: 40px 60px;
+            max-width: 900px;
+        }
+
+        h2 {
+            margin: 40px 0 20px 0;
+            font-size: 22px;
+            font-weight: 400;
+            color: var(--text-light);
+            border-bottom: 1px solid var(--border-subtle);
+            padding-bottom: 12px;
+        }
+
+        h3 {
+            margin: 24px 0 12px 0;
+            font-size: 18px;
+            font-weight: 400;
+            color: var(--text-light);
+        }
+
+        p {
+            margin: 12px 0;
+            color: var(--text-muted);
+            text-align: justify;
+        }
+
+        ul, ol {
+            margin: 12px 0 12px 24px;
+            color: var(--text-muted);
+        }
+
+        li {
+            margin: 8px 0;
+        }
+
+        .section {
+            margin-bottom: 32px;
+        }
+
+        strong {
+            font-weight: 400;
+            color: var(--text-light);
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-dark);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-subtle);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent);
+        }
+
+        /* Gallery Styles */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .card {
+            overflow: hidden;
+            border-radius: 18px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+        }
+
+        .card img {
+            width: 100%;
+            height: 260px;
+            object-fit: cover;
+            display: block;
+            border-radius: 18px;
+        }
+
+        /* Modal (Zoom View) */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 999;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal img {
+            max-width: 95%;
+            max-height: 95%;
+            border-radius: 20px;
+            animation: zoom 0.3s ease;
+        }
+
+        @keyframes zoom {
+            from {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* Close Button */
+        .close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 35px;
+            color: white;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.2);
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background 0.2s ease;
+        }
+
+        .close:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+    </style>
 </head>
 <body>
-        <a href="{{ url_for('app1.home') }}" class="nav-link"><i class="fas fa-home"></i> Home</a>
-            <a href="#results" class="nav-link active"><i class="fas fa-chart-line"></i> Results</a>
-            <a href="{{ url_for('app3.page') }}" class="nav-link"><i class="fas fa-dna"></i> Lung</a>
-            <a href="{{ url_for('app4.page') }}" class="nav-link"><i class="fas fa-flask"></i>Breast </a>
-         
-            <a href="{{ url_for('app5.page') }}" class="nav-link"><i class="fas fa-pills"></i> App5</a>
-            <a href="{{ url_for('app6.page') }}" class="nav-link"><i class="fas fa-vial"></i> App6</a>
-            <a href="{{ url_for('app7.page') }}" class="nav-link"><i class="fas fa-notes-medical"></i> App7</a>
-            <a href="{{ url_for('app2.logout') }}" class="nav-link logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
-    <h1>App 6</h1>
-    <p>Blueprint is wired and ready.</p>
+    <header>
+        <h1>Aura AI Documentation</h1>
+        <nav class="nav-menu">
+            <a href="{{ url_for('app1.home') }}" class="nav-link">
+                <span class="nav-dot"></span>Home
+            </a>
+            <a href="{{ url_for('app3.page') }}" class="nav-link">
+                <span class="nav-dot"></span>Lung
+            </a>
+            <a href="{{ url_for('app4.page') }}" class="nav-link">
+                <span class="nav-dot"></span>Breast
+            </a>
+            <a href="{{ url_for('app5.page') }}" class="nav-link">
+                <span class="nav-dot"></span>Brain
+            </a>
+            <a href="{{ url_for('app7.page') }}" class="nav-link">
+                <span class="nav-dot"></span>App7
+            </a>
+            <a href="{{ url_for('app2.logout') }}" class="nav-link logout-btn">
+                <i class="fas fa-sign-out-alt"></i>Logout
+            </a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <aside>
+            <nav>
+                <a href="#introduction">Introduction</a>
+                <a href="#objectives">Objectives</a>
+                <a href="#overview">System Overview</a>
+                <a href="#technology">Technology Stack</a>
+                <a href="#modules">Core Modules</a>
+                <a href="#explainable-ai">Explainable AI</a>
+                <a href="#resnet">ResNet Architecture</a>
+                <a href="#gradcam">Grad-CAM</a>
+                <a href="#gallery">Image Gallery</a>
+                <a href="#training">Model Training</a>
+                <a href="#architecture">Architecture</a>
+                <a href="#deployment">Deployment</a>
+                <a href="#features">Features</a>
+                <a href="#limitations">Limitations</a>
+                <a href="#future">Future</a>
+            </nav>
+        </aside>
+
+        <main>
+      <section id="introduction" class="section">
+    <h2>Introduction</h2>
+    
+    <p>
+        Aura AI is a <span>modular AI-powered</span> medical imaging platform designed to assist in the 
+        <span>early detection</span> and analysis of cancer using <span>deep learning techniques</span>. 
+        The system focuses on histopathology and MRI-based image classification, providing 
+        <span>diagnostic insights</span> for healthcare professionals, researchers, and students.
+    </p>
+
+    <p>
+        It combines <span>modern AI</span> with <span>explainable outputs</span>, ensuring that predictions 
+        are not only accurate but also <span>interpretable results</span>. The platform is built using a <span>scalable architecture</span> powered by Python and Flask, 
+        integrating deep learning models such as <span>ResNet-18</span> and <span>ResNet-101</span>.  By incorporating explainable AI techniques like <span>Grad-CAM</span>, Aura AI enhances 
+        <span>model transparency</span>, which is critical in medical applications.
+    </p>
+</section>
+
+          <section id="objectives" class="section">
+    <h2>Objectives</h2>
+
+    <p>
+        The primary objective of Aura AI is to develop a <span>unified system</span> capable of 
+        analyzing medical images and providing <span>reliable results</span> with 
+        <span>clear interpretability</span>.
+    </p>
+
+    <ul>
+        <li>Enabling <span>rapid screening</span> of cancer using AI models</li>
+        <li>Supporting <span>multiple cancer types</span> and imaging modalities</li>
+        <li>Providing <span>visual explanations</span> to improve trust in predictions</li>
+        <li>Offering a <span>scalable modular system</span> for future expansion</li>
+    </ul>
+</section>
+
+         <section id="overview" class="section">
+    <h2>System Overview</h2>
+
+    <p>
+        Aura AI follows a <span>modular architecture</span> based on the Flask 
+        <span>Application Factory</span> and <span>Blueprint pattern</span>, 
+        ensuring scalability, maintainability, and clean separation of components. 
+        Each module within the system is designed to handle a specific responsibility, 
+        including authentication, dashboard navigation, and AI-powered cancer detection.
+    </p>
+
+    <p>
+        The system workflow begins with <span>user authentication</span>, after which users 
+        are directed to a centralized dashboard. From there, they can access multiple 
+        diagnostic modules. Each module processes uploaded medical images, performs 
+        <span>deep learning inference</span> using trained models, and generates predictions 
+        along with <span>visual explanations</span> to improve interpretability and trust.
+    </p>
+
+    <p>
+        Currently, the platform supports several diagnostic capabilities, including 
+        <span>breast cancer detection</span> using binary classification, 
+        <span>lung and colon cancer classification</span> using multi-class models, 
+        and <span>brain tumor detection</span> based on MRI image analysis. 
+        These modules collectively demonstrate the system’s ability to handle 
+        multiple imaging modalities within a unified framework.
+    </p>
+
+    <p>
+        The lung cancer model is trained on a <span>large-scale dataset</span> 
+        consisting of approximately <span>250,000 images (L250000)</span>, 
+        allowing the model to achieve strong generalization across different tissue types. 
+        For breast cancer detection, the system utilizes the <span>IDC dataset</span>, 
+        specifically designed to identify <span>Invasive Ductal Carcinoma</span> through 
+        binary classification.
+    </p>
+
+    <p>
+        In addition, the brain tumor classification module is built using the 
+        <span>Bangladesh Brain Cancer MRI Dataset</span>, which contains a total of 
+        <span>6056 MRI images</span> categorized into three classes: glioma, meningioma, 
+        and tumor. All images are standardized to a resolution of 512×512 pixels and 
+        were collected from multiple hospitals with the involvement of 
+        <span>medical professionals</span>, ensuring high-quality and reliable data.
+    </p>
+
+    <p>
+        This dataset plays a critical role in enabling applications such as 
+        <span>image processing</span>, <span>deep learning-based classification</span>, 
+        and <span>predictive diagnostics</span>. Its availability supports the development 
+        of accurate and efficient AI models for early detection and treatment planning. 
+        The dataset was contributed by <span>Md Mizanur Rahman</span> and published on 
+        August 5, 2024, with DOI: <span>10.17632/mk56jw9rns.1</span>.
+    </p>
+</section>
+
+
+
+
+         <section id="gallery" class="section">
+        
+<h3>Brain tumor image data MRI scans</h3>
+                <div class="gallery">
+                    <div class="card"><img src="/images/brain_glioma_0015.jpg" alt="Sample Image 1"></div>
+                    <div class="card"><img src="/images/brain_glioma_0003.jpg" alt="Sample Image 2"></div>
+                    <div class="card"><img src="/images/brain_menin.jpg" alt="Sample Image 3"></div>
+                  
+                </div>
+
+<h3>Breast Cancer iamge data Histopathological Images</h3>
+                 <div class="gallery">
+                    <div class="card"><img src="/images/10258_idx5_x551_y101_class0.png" alt="Sample Image 1"></div>
+                    <div class="card"><img src="/images/10258_idx5_x551_y201_class0.png" alt="Sample Image 2"></div>
+                    <div class="card"><img src="/images/10258_idx5_x551_y951_class0.png" alt="Sample Image 3"></div>
+                  
+                </div>
+
+                <!-- Modal -->
+                <div class="modal" id="modal">
+                    <span class="close" id="closeBtn">&times;</span>
+                    <img id="modalImg" alt="Full resolution image">
+                </div>
+            </section>
+
+
+
+
+
+
+
+
+
+
+       <section id="technology" class="section">
+    <h2>Technology Stack</h2>
+
+    <ul>
+        <li><span>Python 3.x</span> for backend development</li>
+        <li><span>Flask 3.x</span> as the web framework</li>
+        <li><span>PyTorch</span> and <span>TensorFlow</span> for deep learning models</li>
+        <li><span>OpenCV</span> for computer vision and image processing</li>
+        <li><span>Matplotlib</span> for data visualization and plots</li>
+        <li><span>SQLite</span> / <span>PostgreSQL</span> for database management</li>
+        <li><span>Docker</span> for containerized deployment</li>
+        <li><span>Hugging Face</span> for model hosting and version control</li>
+        <li><span>Render</span> for cloud deployment and web hosting</li>
+        <li><span>pyproject.toml</span> for dependency and project configuration</li>
+    </ul>
+</section>
+
+            <section id="modules" class="section">
+                <h2>Core Modules</h2>
+                
+                <h3>Authentication Module (app2)</h3>
+                <p>
+                    Handles user registration, login, and verification with secure session management
+                    to ensure controlled access to the system.
+                </p>
+
+                <h3>Dashboard Module (app1)</h3>
+                <p>
+                    Serves as the central interface where users can navigate between different
+                    diagnostic modules and manage their workflow.
+                </p>
+
+                <h3>Lung and Colon Cancer Module (app3)</h3>
+                <p>
+                    Performs five-class classification using a ResNet-18 model trained on histopathology
+                    images. Identifies Lung Adenocarcinoma, Lung Squamous Cell Carcinoma, Lung Benign,
+                    Colon Adenocarcinoma, and Colon Benign. Outputs include prediction labels,
+                    probability distributions, and Grad-CAM visualizations.
+                </p>
+
+                <h3>Breast Cancer Module (app4)</h3>
+                <p>
+                    Focused on detecting Invasive Ductal Carcinoma, this module performs binary
+                    classification between IDC Positive and IDC Negative cases. Provides heatmaps
+                    and clinical interpretation for enhanced understanding.
+                </p>
+
+                <h3>Brain Tumor Module (app5)</h3>
+                <p>
+                    Uses MRI data with a ResNet-101 model to classify tumors into three categories:
+                    Glioma, Meningioma, and Pituitary Tumor. Achieves high validation accuracy,
+                    demonstrating strong performance on these complex medical images.
+                </p>
+            </section>
+
+            <section id="explainable-ai" class="section">
+    <h2>Explainable AI Integration</h2>
+
+    <p>
+        A major strength of Aura AI lies in its integration of 
+        <span>Grad-CAM</span> (<span>Gradient-weighted Class Activation Mapping</span>), 
+        an advanced explainable AI technique that identifies and highlights the 
+        <span>most influential regions</span> in medical images contributing to model predictions. 
+        This approach enhances both <span>transparency</span> and <span>interpretability</span>, 
+        which are critical factors in medical decision-making systems.
+    </p>
+
+    <p>
+        By visually mapping model attention onto the original image, the system enables 
+        users to understand how predictions are formed, thereby improving 
+        <span>trust in AI systems</span> and supporting clinical validation. 
+        This is especially valuable for <span>medical professionals</span>, 
+        <span>researchers</span>, and <span>students</span> who rely on clear and 
+        explainable outputs.
+    </p>
+
+    <p>
+        Instead of functioning as a <span>black-box model</span>, Aura AI provides 
+        <span>visual evidence</span> for each prediction, allowing users to verify 
+        and interpret the model’s reasoning process. This significantly improves 
+        <span>confidence</span> in AI-assisted diagnostics and enhances its 
+        <span>educational value</span> in real-world applications.
+    </p>
+</section>
+
+           <section id="resnet" class="section">
+    <h2>ResNet Architecture</h2>
+
+    <p>
+        The <span>Residual Network (ResNet)</span> family, developed by 
+        <span>Kaiming He</span> and his team, addresses a major challenge in 
+        deep learning known as the <span>vanishing gradient problem</span>, 
+        where deeper neural networks tend to perform worse due to training instability. 
+        To solve this, ResNet introduced <span>residual (skip) connections</span>, 
+        allowing the input of a layer to be directly added to its output.
+    </p>
+
+    <p>
+        Instead of learning a direct mapping <span>H(x)</span>, the network learns a 
+        <span>residual function</span> defined as <span>F(x) = H(x) − x</span>, 
+        resulting in the final output <span>y = F(x) + x</span>. This design improves 
+        <span>training stability</span> and enables the construction of 
+        <span>very deep networks</span> without degradation in performance.
+    </p>
+
+    <h3>ResNet-18 Architecture</h3>
+
+    <p>
+        <span>ResNet-18</span> is a relatively lightweight version of the ResNet family, 
+        designed for <span>computational efficiency</span> and faster training. It takes 
+        an input image of size <span>224 × 224 × 3</span> and begins with a 
+        <span>7×7 convolution layer</span> followed by a <span>max-pooling layer</span>.
+    </p>
+
+    <p>
+        The architecture is built using <span>basic residual blocks</span>, each consisting 
+        of two <span>3×3 convolution layers</span> along with an 
+        <span>identity skip connection</span>. These blocks are organized into multiple 
+        stages, where <span>feature depth increases</span> while 
+        <span>spatial dimensions decrease</span>.
+    </p>
+
+    <p>
+        In total, ResNet-18 contains <span>18 layers</span>, including convolutional and 
+        fully connected layers. Due to its smaller size, it is 
+        <span>faster</span>, <span>less prone to overfitting</span>, and suitable for 
+        <span>smaller datasets</span> or environments with limited computational power.
+    </p>
+
+    <h3>ResNet-101 Architecture</h3>
+
+    <p>
+        <span>ResNet-101</span> is a much deeper network designed for 
+        <span>complex feature extraction</span>. While it shares a similar initial structure, 
+        it differs in the use of <span>bottleneck residual blocks</span>.
+    </p>
+
+    <p>
+        Each bottleneck block consists of three layers: a <span>1×1 convolution</span> 
+        for dimensionality reduction, a <span>3×3 convolution</span> for feature extraction, 
+        and another <span>1×1 convolution</span> to restore dimensionality. This design 
+        improves efficiency while enabling <span>very deep architectures</span>.
+    </p>
+
+    <p>
+        The network is organized into stages with multiple bottleneck blocks, resulting in 
+        a total of <span>101 layers</span>. This depth allows the model to learn 
+        <span>fine-grained and complex features</span>, making it highly effective for 
+        tasks such as <span>medical image analysis</span>. However, it requires 
+        <span>higher computational resources</span> and longer training time.
+    </p>
+
+    <h3>Key Differences</h3>
+
+    <p>
+        The main difference between <span>ResNet-18</span> and <span>ResNet-101</span> lies 
+        in their <span>depth</span> and <span>complexity</span>. ResNet-18 uses 
+        <span>basic residual blocks</span>, making it faster and more efficient but less 
+        capable of capturing highly complex patterns.
+    </p>
+
+    <p>
+        In contrast, ResNet-101 uses <span>bottleneck blocks</span> and a much deeper 
+        architecture, allowing it to learn more detailed features at the cost of 
+        increased computational demand. Therefore, ResNet-18 is suitable for 
+        <span>lightweight applications</span>, while ResNet-101 is preferred for 
+        <span>high-accuracy tasks</span> where computational resources are available.
+    </p>
+</section>
+
+
+
+    <section id="gallery" class="section">
+        
+<h3>RestNet18 & Restnet101 Architectures</h3>
+                <div class="gallery">
+                    <div class="card"><img src="/images/image.png" alt="Sample Image 1"></div>
+                    <div class="card"><img src="/images/architecture_restnet.png" alt="Sample Image 2"></div>
+                    <div class="card"><img src="/images/restnet101.png" alt="Sample Image 3"></div>
+                  
+                </div>
+
+
+                <!-- Modal -->
+                <div class="modal" id="modal">
+                    <span class="close" id="closeBtn">&times;</span>
+                    <img id="modalImg" alt="Full resolution image">
+                </div>
+            </section>
+
+
+
+            <section id="gradcam" class="section">
+                <h2>Grad-CAM: Gradient-weighted Class Activation Mapping</h2>
+                <p>
+                    Grad-CAM is a visualization technique for understanding how convolutional neural
+                    networks make decisions. It identifies which regions of an input image most influence
+                    predictions for a particular class. This interpretability is especially critical in
+                    medical imaging, where understanding model reasoning is as important as the prediction
+                    itself.
+                </p>
+                
+                <h3>How Grad-CAM Works</h3>
+                <p>
+                    Grad-CAM leverages gradients flowing into the final convolutional layer. When an
+                    image passes through the model, each class receives a prediction score. To understand
+                    a specific prediction, Grad-CAM computes the gradient of the target class score with
+                    respect to the feature maps of the final convolutional layer.
+                </p>
+                <p>
+                    These gradients capture the importance of each feature map for the particular class.
+                    The gradients are globally averaged to obtain weights representing each feature map's
+                    contribution to the final prediction. Feature maps are then weighted and summed to
+                    create a coarse localization map highlighting influential regions.
+                </p>
+                
+                <h3>Visualization and Interpretation</h3>
+                <p>
+                    After generating the activation map, a ReLU (Rectified Linear Unit) function removes
+                    negative values, retaining only features that positively contribute. The resulting
+                    heatmap is upsampled to match the original image size and overlaid with warm colors
+                    indicating highly important regions and cool colors showing less relevant areas.
+                </p>
+                <ul>
+                    <li>Red and warm colors: regions with strong influence on the prediction</li>
+                    <li>Blue and cool colors: regions with minimal influence</li>
+                    <li>Visual overlay shows exactly where the model focused its attention</li>
+                </ul>
+                
+                <h3>Applications in Medical Diagnosis</h3>
+                <p>
+                    In medical diagnosis systems, Grad-CAM verifies that models focus on clinically
+                    relevant regions rather than spurious patterns. For example, in tumor detection, it
+                    confirms the model attends to the actual tumor region rather than background features.
+                    This validation helps researchers and practitioners verify meaningful learning and
+                    builds confidence in model predictions.
+                </p>
+                
+                <h3>Advantages and Limitations</h3>
+                <ul>
+                    <li>Applicable across diverse CNN architectures without major modifications</li>
+                    <li>Provides interpretability and transparency for clinical validation</li>
+                    <li>Enhances trust and acceptance of AI systems in healthcare</li>
+                    <li>Heatmaps are relatively coarse and may lack pixel-level precision</li>
+                    <li>Effectiveness depends heavily on the choice of convolutional layer</li>
+                    <li>Incorrect layer selection can lead to misleading interpretations</li>
+                </ul>
+            </section>
+
+   
+
+        <section id="training" class="section">
+    <h2>Model Training and Optimization</h2>
+
+    <p>
+        The model training phase of the Aura AI system is built upon 
+        <span>transfer learning</span>, a widely adopted approach in modern 
+        deep learning workflows. Instead of training neural networks from scratch, 
+        <span>pretrained models</span>—originally trained on large-scale datasets 
+        such as <span>ImageNet</span>—are fine-tuned to perform specialized 
+        <span>medical imaging tasks</span>. This approach significantly reduces 
+        <span>training time</span> while improving performance, especially when 
+        working with limited medical datasets.
+    </p>
+
+    <p>
+        Two primary architectures were utilized for different tasks. The 
+        <span>ResNet-18</span> model was selected for 
+        <span>histopathology image classification</span> due to its lightweight 
+        structure and efficiency. In contrast, the deeper 
+        <span>ResNet-101</span> was employed for 
+        <span>MRI-based classification</span>, where capturing 
+        <span>complex spatial features</span> is essential for accurate predictions.
+    </p>
+
+    <p>
+        To optimize performance and computational efficiency, 
+        <span>selective layer freezing</span> was implemented. In this process, 
+        earlier layers of the pretrained network—responsible for 
+        <span>general feature extraction</span>—are kept unchanged, while later 
+        layers are fine-tuned for <span>domain-specific learning</span>. This 
+        strategy reduces <span>computational cost</span> and helps prevent 
+        <span>overfitting</span>, while fine-tuning improves the model’s ability 
+        to generalize across <span>unseen data</span>.
+    </p>
+
+    <p>
+        Training was conducted using <span>GPU acceleration</span>, specifically 
+        <span>NVIDIA T4 GPUs</span> available on <span>Kaggle</span>, ensuring 
+        faster computation and scalability. This setup enables the system to handle 
+        <span>large datasets efficiently</span> while maintaining practical 
+        training times for real-world applications.
+    </p>
+</section>
+
+       <section id="architecture" class="section">
+    <h2>System Architecture</h2>
+
+    <p>
+        The Aura AI system is designed with a <span>clean modular architecture</span> 
+        that emphasizes <span>scalability</span>, <span>maintainability</span>, and 
+        <span>extensibility</span>. The backend is developed using the 
+        <span>Flask framework</span>, structured with 
+        <span>modular Blueprints</span> to separate functionalities into 
+        independent components. This approach ensures that each feature—such as 
+        <span>image processing</span>, <span>model inference</span>, and 
+        <span>user interaction</span>—operates in an isolated yet coordinated manner.
+    </p>
+
+    <p>
+        The project follows a <span>well-organized directory structure</span>, 
+        with clearly defined folders for <span>trained models</span>, 
+        <span>utility scripts</span>, <span>templates</span>, and 
+        <span>static assets</span>. Uploaded images and generated outputs are handled 
+        through <span>dedicated storage directories</span>, ensuring efficient 
+        file management and smooth processing workflows.
+    </p>
+
+    <p>
+        Additionally, the system integrates <span>Docker containerization</span>, 
+        enabling <span>consistent deployment</span> across development and production 
+        environments. By encapsulating dependencies and configurations within 
+        containers, the platform minimizes <span>compatibility issues</span> and 
+        simplifies deployment processes.
+    </p>
+
+    <p>
+        This architectural design allows for seamless integration of 
+        <span>new modules</span> and features without disrupting existing components. 
+        As a result, the system remains <span>future-ready</span>, flexible, and 
+        capable of adapting to evolving requirements in AI-driven medical applications.
+    </p>
+</section>
+<section id="deployment" class="section">
+    <h2>Deployment and Execution</h2>
+
+    <p>
+        Aura AI supports <span>flexible deployment</span> options, allowing it to run 
+        both on <span>local systems</span> and <span>cloud platforms</span>. For local 
+        deployment, users must first create a <span>virtual environment</span> to isolate 
+        project dependencies. After installing the required libraries, trained 
+        <span>model files</span> are placed in designated directories, and 
+        <span>environment variables</span> are configured accordingly.
+    </p>
+
+    <p>
+        Once the setup is complete, the application can be executed using the 
+        following command:
+    </p>
+
+    <pre><code>python run.py</code></pre>
+
+    <p>
+        The system is designed to support both <span>CPU</span> and 
+        <span>GPU-based inference</span>. While CPU execution ensures 
+        <span>broader compatibility</span>, GPU acceleration significantly improves 
+        <span>performance</span>, particularly for large-scale image processing tasks.
+    </p>
+
+    <p>
+        This dual compatibility enables the platform to adapt to 
+        <span>different hardware configurations</span>, making it accessible and 
+        efficient for a wide range of users, from basic systems to 
+        <span>high-performance computing environments</span>.
+    </p>
+</section>
+         <section id="features" class="section">
+    <h2>Features</h2>
+
+    <p>
+        Aura AI offers a <span>comprehensive feature set</span> designed to enhance 
+        both usability and functionality. One of its key strengths is the ability 
+        to perform <span>multi-cancer detection</span> within a single unified platform, 
+        supporting both <span>histopathology</span> and <span>MRI image analysis</span> 
+        for diverse diagnostic applications.
+    </p>
+
+    <p>
+        The system includes <span>batch image processing</span>, allowing users to 
+        analyze multiple images simultaneously, thereby improving efficiency and 
+        workflow speed. For interpretability, it integrates 
+        <span>Grad-CAM</span> (<span>visual explanation technique</span>), which highlights 
+        important regions in images that influence model predictions.
+    </p>
+
+    <p>
+        Aura AI features a <span>clean and intuitive user interface</span>, making it 
+        accessible even to <span>non-technical users</span>. Additionally, 
+        <span>Dockerized deployment</span> ensures easy installation and execution 
+        across different environments, eliminating complex configuration requirements.
+    </p>
+</section>
+<section id="limitations" class="section">
+    <h2>Limitations</h2>
+
+    <p>
+        Despite its advanced capabilities, Aura AI has several 
+        <span>important limitations</span> that must be considered. The system is not 
+        intended for <span>clinical diagnosis</span> and should be used only as a 
+        <span>research or assistive tool</span>, rather than a replacement for 
+        medical professionals.
+    </p>
+
+    <p>
+        The system’s performance is highly dependent on the 
+        <span>quality and diversity of training data</span>. Poor or biased datasets 
+        can lead to <span>inaccurate predictions</span>. Additionally, trained 
+        <span>model files are not included</span> in the repository, requiring users 
+        to obtain or train them separately.
+    </p>
+
+    <p>
+        Aura AI is currently limited to <span>specific cancer types</span>, restricting 
+        its broader applicability in medical diagnostics. These limitations highlight 
+        the need for further <span>validation</span>, <span>testing</span>, and 
+        <span>regulatory approval</span> before real-world clinical deployment.
+    </p>
+</section>
+
+
+
+
+      <section id="future" class="section">
+    <h2>Future Enhancements</h2>
+
+    <p>
+        Future development of Aura AI can focus on expanding its 
+        <span>capabilities</span> and improving <span>scalability</span>. One major 
+        direction is the integration of <span>additional cancer types</span>, enabling 
+        the platform to evolve into a more <span>comprehensive diagnostic system</span>.
+    </p>
+
+    <p>
+        Another important enhancement is the implementation of 
+        <span>real-time processing</span>, allowing immediate analysis and feedback 
+        for uploaded medical images. Deploying the system on 
+        <span>cloud platforms</span> will further improve scalability, enabling it to 
+        handle <span>large-scale workloads</span> and support multiple users 
+        simultaneously.
+    </p>
+
+    <p>
+        Integration with <span>hospital information systems</span> can streamline 
+        clinical workflows by enabling <span>seamless data exchange</span> between 
+        healthcare professionals and the AI platform. This would enhance efficiency 
+        and reduce manual effort in medical processes.
+    </p>
+
+    <p>
+        Additionally, the development of <span>advanced reporting</span> and 
+        <span>analytics features</span> can provide deeper insights into diagnostic 
+        results, supporting <span>data-driven decision making</span> in healthcare 
+        environments.
+    </p>
+
+    <p>
+        These enhancements would significantly improve the system’s 
+        <span>practical usability</span>, bringing it closer to real-world adoption 
+        while maintaining <span>accuracy</span>, <span>reliability</span>, and 
+        <span>efficiency</span>.
+    </p>
+</section>
+        </main>
+    </div>
+
+    <script>
+        // Gallery functionality
+        const cards = document.querySelectorAll('.card img');
+        const modal = document.getElementById('modal');
+        const modalImg = document.getElementById('modalImg');
+        const closeBtn = document.getElementById('closeBtn');
+
+        // Open modal
+        cards.forEach(img => {
+            img.addEventListener('click', () => {
+                modal.style.display = 'flex';
+                modalImg.src = img.src;
+            });
+        });
+
+        // Close modal
+        closeBtn.onclick = () => {
+            modal.style.display = 'none';
+        };
+
+        // Close on outside click
+        modal.onclick = (e) => {
+            if (e.target !== modalImg) {
+                modal.style.display = 'none';
+            }
+        };
+
+        // Close on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.style.display === 'flex') {
+                modal.style.display = 'none';
+            }
+        });
+    </script>
 </body>
 </html>
+
+
+
+
