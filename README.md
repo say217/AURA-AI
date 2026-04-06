@@ -206,87 +206,130 @@ Large model files are intentionally ignored to stay within GitHub limits. Place 
 
 ## Project Structure
 ```bash
-Aura-AI/
+📦 Project Root
 │
+├── 📄 .dockerignore
+├── 📄 .env
+├── 📄 .gitignore
+├── 📄 a.py
+├── 📄 map.txt
 ├── 📄 README.md
 ├── 📄 requirements.txt
 ├── 📄 run.py
-├── 📄 .env
-├── 📄 .gitignore
-├── 📄 config.py                # central config (recommended)
 │
-├── 📁 app/                     # main application package
-│   ├── __init__.py             # app factory
-│   │
-│   ├── 📁 auth/                # app2 (Authentication)
-│   │   ├── routes.py
-│   │   ├── models.py
-│   │   ├── forms.py            # optional (recommended)
-│   │   └── templates/
-│   │       ├── login.html
-│   │       ├── signup.html
-│   │       └── verify.html
-│   │
-│   ├── 📁 dashboard/           # app1
-│   │   ├── routes.py
-│   │   └── templates/
-│   │       └── home.html
-│   │
-│   ├── 📁 lung_colon/          # app3
-│   │   ├── routes.py
-│   │   ├── model.py            # inference logic
-│   │   └── templates/
-│   │       └── home2.html
-│   │
-│   ├── 📁 breast_cancer/       # app4
-│   │   ├── routes.py
-│   │   ├── model.py
-│   │   └── templates/
-│   │       └── home3.html
-│   │
-│   ├── 📁 brain_tumor/         # app5
-│   │   ├── routes.py
-│   │   ├── model.py
-│   │   └── templates/
-│   │       └── home4.html
-│   │
-│   ├── 📁 placeholders/        # app6, app7 merged
-│   │   ├── routes.py
-│   │   └── templates/
-│   │       ├── home6.html
-│   │       └── home7.html
-│   │
+├── 📁 .vscode/
+│
+├── 📁 app1/
+│   ├── 📄 routes.py
+│   ├── 📄 __init__.py
 │   ├── 📁 static/
-│   │   ├── uploads/            # user uploads
-│   │   ├── outputs/            # Grad-CAM, plots
-│   │   └── examples/           # demo images
-│   │
-│   └── 📁 utils/               # shared logic
-│       ├── preprocessing.py
-│       ├── gradcam.py
-│       ├── plotting.py
-│       └── helpers.py
+│   │   └── 📁 css/
+│   │       └── 🎨 style.css
+│   └── 📁 templates/
+│       └── 📄 home.html
 │
-├── 📁 models/                  # NOT tracked in Git
-│   ├── lung_colon/
-│   │   └── resnet18_model.pth
-│   ├── breast/
-│   │   └── breast_model.pth
-│   └── brain/
-│       └── resnet101.keras
+├── 📁 app2/
+│   ├── 📄 models.py
+│   ├── 📄 routes.py
+│   ├── 📄 __init__.py
+│   └── 📁 templates/
+│       ├── 📄 login.html
+│       ├── 📄 signup.html
+│       └── 📄 verify.html
 │
-├── 📁 images/                    # optional dataset samples
-│   └── sample_images/
+├── 📁 app3/
+│   ├── 📄 resnet18_model_001.pth
+│   ├── 📄 routes.py
+│   ├── 📄 __init__.py
+│   ├── 📁 instance/
+│   │   ├── 🖼️ bar_91e9a46c448542c5a7cb2b4f0f5cffae.png
+│   │   ├── 🖼️ original_77c6cb17cd8649cc99aaea3f1478b804.png
+│   │   ├── 🖼️ overlay_172d939aaa154746b24366d384c72e98.png
+│   │   └── 🖼️ processed_12b20279ba844346becc9ad5812b714d.png
+│   ├── 📁 static/
+│   │   ├── 📁 css/
+│   │   │   └── 🎨 style.css
+│   │   └── 📁 js/
+│   └── 📁 templates/
+│       └── 📄 home2.html
 │
-├── 📁 instance/
-│   └── aura.db                 # SQLite database
+├── 📁 app4/
+│   ├── 📄 breast_cancer_cnn_model_updated.pth
+│   ├── 📄 routes.py
+│   ├── 📄 __init__.py
+│   ├── 📁 instance/
+│   │   ├── 🖼️ image_plot_503591f523f749dcaadb76aad300460a.png
+│   │   └── 🖼️ prob_plot_a87119caab16478fa84b48907e6668f1.png
+│   ├── 📁 static/
+│   │   ├── 📁 css/
+│   │   │   └── 🎨 style.css
+│   │   ├── 📁 examples/
+│   │   │   ├── 🖼️ example0.png
+│   │   │   └── 🖼️ example1.png
+│   │   ├── 📁 js/
+│   │   │   └── ⚙️ script.js
+│   │   └── 📁 uploads/
+│   └── 📁 templates/
+│       └── 📄 home3.html
+│
+├── 📁 app5/
+│   ├── 📄 brain_tumor_resnet101_finetuned_v00.3.keras
+│   ├── 📄 routes.py
+│   ├── 📄 __init__.py
+│   ├── 📁 instance/
+│   │   └── 📁 result images/
+│   ├── 📁 static/
+│   │   ├── 🖼️ aura-favicon.svg
+│   │   ├── 🖼️ Gemini_Generated_Image_dfmlzzdfmlzzdfml.png
+│   │   └── 📁 css/
+│   │       └── 🎨 style.css
+│   └── 📁 templates/
+│       └── 📄 home4.html
+│
+├── 📁 app6/
+│   ├── 📄 routes.py
+│   ├── 📄 __init__.py
+│   └── 📁 templates/
+│       └── 📄 home6.html
+│
+├── 📁 app7/
+│   ├── 📄 routes.py
+│   ├── 📄 __init__.py
+│   └── 📁 templates/
+│       └── 📄 home7.html
 │
 ├── 📁 docker/
-│   ├── Dockerfile
-│   └── docker-compose.yml
+│   ├── 📄 docker-compose.yml
+│   ├── 📄 Dockerfile
+│   └── 📄 entrypoint.sh
 │
-└── 📁 docs/
-    └── Aura_AI_Documentation.pdf
+├── 📁 docs/
+│   └── 📄 Documentation.pdf
+│
+├── 📁 huggingface_cache/
+│   ├── 📄 brain_tumor_resnet101_finetuned_v00.3.keras
+│   ├── 📁 .locks/
+│   │   └── 📁 spaces--say89--BrainTumour90MNH6602/
+│   └── 📁 spaces--say89--BrainTumour90MNH6602/
+│       ├── 📁 blobs/
+│       │   └── 📄 aa070adf0f6a525bcd790b2aa3e395ab6330618556f14680c708a5e4c5610e32
+│       ├── 📁 refs/
+│       │   └── 📄 main
+│       └── 📁 snapshots/
+│           └── 📁 39fd1f85e30c3b9198e2895373e052f8de516b9a/
+│               └── 📄 brain_tumor_resnet101_finetuned_v00.3.keras
+│
+├── 📁 huggingface_space/
+│
+├── 📁 images/
+│   └── 📁 test data images/
+│
+├── 📁 instance/
+│   └── 📄 aura.db
+│
+└── 📁 static/
+    └── 📁 uploads/
+        └── 📁 images/
 
 ```
 ## Environment Variables
