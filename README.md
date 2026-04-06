@@ -29,11 +29,9 @@ powerful tool for researchers, clinicians, and medical students.
 
 | |
 |:-:|
-| <img src="https://github.com/user-attachments/assets/7c3cffe1-6dbb-4daf-a80d-bc2383791624" width="900"/> |
+| <img src="https://github.com/user-attachments/assets/1618703f-e4e1-4a7f-bc2f-63eb52442bb3" width="900"/> |
 
-| |
-|:-:|
-| <img src="https://github.com/user-attachments/assets/1539f641-8cac-4236-b805-72badbb9bb56" width="900"/> |
+
 
 
 
@@ -117,6 +115,17 @@ most influential to each prediction.
 For model training, we use Kaggle T4 GPU.
 
 Note Book Link Brain Cancer - MRI CLASSIFICATION
+
+
+
+| |
+|:-:|
+| <img src="https://github.com/user-attachments/assets/7c3cffe1-6dbb-4daf-a80d-bc2383791624" width="900"/> |
+
+| |
+|:-:|
+| <img src="https://github.com/user-attachments/assets/1539f641-8cac-4236-b805-72badbb9bb56" width="900"/> |
+
 
 ## Back-end Implementation
 The trained ResNet-101 brain tumor MRI model was integrated into the main Aura AI codebase
