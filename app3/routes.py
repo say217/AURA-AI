@@ -16,7 +16,12 @@ import numpy as np
 import cv2
 from io import BytesIO
 
-bp = Blueprint('app3', __name__, template_folder='templates')
+bp = Blueprint(
+    'app3',
+    __name__,
+    template_folder='templates',
+    static_folder='static'
+)
 
 INSTANCE_DIR = os.path.join(os.path.dirname(__file__), 'instance')
 MAX_IMAGE_SIZE = 10 * 1024 * 1024
